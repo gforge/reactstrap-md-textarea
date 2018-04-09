@@ -2,16 +2,17 @@ import * as React from 'react';
 import { default as ReactMarkdown } from 'react-markdown';
 import { default as xss } from 'xss';
 
-export interface FormattedInput {
+export interface FilterInput {
   value: string;
-  allowDangerousHtml: boolean;
   whiteList?: { [propName: string]: string[] };
 }
 
-export default ({
-  value,
-  allowDangerousHtml = false,
-  whiteList = {
+export interface Props extends FilterInput {
+  allowFilteredHtml: boolean;
+}
+
+export default class FormattedText extends React.PureComponent<Props> {
+  static filterXss({ value, whiteList = {
     source: ['src', 'type'],
     img: ['src', 'alt', 'title', 'width', 'height', 'style'],
     video: [
@@ -19,11 +20,7 @@ export default ({
       'preload', 'src', 'height',
       'width', 'style',
     ],
-  },
-}: FormattedInput) => {
-  if (typeof value !== 'string') return null;
-
-  if (allowDangerousHtml && value.indexOf('<') === 0) {
+  }}: FilterInput): string {
     const options = {
       whiteList: {
         ...xss.getDefaultWhiteList(),
@@ -32,15 +29,27 @@ export default ({
       stripIgnoreTagBody: ['script'], // the script tag is a special case, we need
       // to filter out its content
     };
-    const filteredContent = xss(value, options);
-    console.log(filteredContent);
-
-    return (<div dangerouslySetInnerHTML={{ __html: filteredContent }} />);
+    return xss(value, options);
   }
 
-  return (
-    <ReactMarkdown
-      source={value}
-      escapeHtml={false}
-    />);
-};
+  render() {
+    const {
+      value,
+      allowFilteredHtml = false,
+      whiteList,
+    } = this.props;
+
+    if (typeof value !== 'string') return null;
+
+    if (allowFilteredHtml && value.indexOf('<') === 0) {
+      const filteredContent = FormattedText.filterXss({ value, whiteList });
+      return (<div dangerouslySetInnerHTML={{ __html: filteredContent }} />);
+    }
+
+    return (
+      <ReactMarkdown
+        source={value}
+        escapeHtml={false}
+      />);
+  }
+}

@@ -1,10 +1,15 @@
 /// <reference types="react" />
-export interface FormattedInput {
+import * as React from 'react';
+export interface FilterInput {
     value: string;
-    allowDangerousHtml: boolean;
     whiteList?: {
         [propName: string]: string[];
     };
 }
-declare const _default: ({ value, allowDangerousHtml, whiteList, }: FormattedInput) => JSX.Element | null;
-export default _default;
+export interface Props extends FilterInput {
+    allowFilteredHtml: boolean;
+}
+export default class FormattedText extends React.PureComponent<Props> {
+    static filterXss({value, whiteList}: FilterInput): string;
+    render(): JSX.Element | null;
+}

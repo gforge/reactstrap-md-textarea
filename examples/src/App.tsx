@@ -1,21 +1,21 @@
 import * as React from 'react';
-import ReactstrapMdTextarea from 'reactstrap-md-textarea';
+import { Textarea, FormattedText } from 'reactstrap-md-textarea';
 
 import './App.css';
 
 const mdTxt =
-  `# Markdown input
+  `## Markdown input
 Yeah, everything one could ever dream of!
 `;
 
 const htmlTxt =
-  `<h1>Markdown input</h1>
+  `<h3>Pure html input</h3>
 
 <p>Yeah, everything one could ever dream of!</p>
 
 <p>This also allows for including videos, imgs etc:</p>
 
-<img src="https://openclipart.org/download/174860/bookworm-penguin.svg" />
+<img src="https://openclipart.org/download/174860/bookworm-penguin.svg" width="300px"/>
 `;
 
 class App extends React.Component {
@@ -38,23 +38,45 @@ class App extends React.Component {
         </header>
         <article>
 
-        <ReactstrapMdTextarea
+        <h1>Some textarea examples</h1>
+
+        <h2>Basic</h2>
+        <Textarea
           onChange={(e) => this.onChange('mdTxt', e.target.value)}
           value={this.state.mdTxt}
         />
 
         <div className="spacer" />
+        <h2>Html based</h2>
 
-        <ReactstrapMdTextarea
+        <Textarea
           onChange={(e) => this.onChange('htmlTxt', e.target.value)}
           rows={10}
-          allowDangerousHtml={true}
+          allowFilteredHtml={true}
           value={this.state.htmlTxt}
         />
 
+        <div className="spacer" />
+        <h2>Allow toggling back and forth</h2>
+
+        <Textarea
+          onChange={(e) => this.onChange('mdTxt', e.target.value)}
+          value={this.state.mdTxt}
+          toggle={true}
+        />
+
         <p>
-          Note that the allowDangerousHtml must be set for the html to be parsed.
+          Note that the allowFilteredHtml must be set for the html to be parsed.
         </p>
+
+        <h1>The filtered output from the html</h1>
+        <p>The output when using <code>FormattedText.filterXss</code>:</p>
+        <code>
+          {FormattedText.filterXss({ value: this.state.htmlTxt })}
+        </code>
+
+        <h1>The FormattedText component</h1>
+        <FormattedText value={this.state.htmlTxt} allowFilteredHtml={true} />
         </article>
       </div>
     );
