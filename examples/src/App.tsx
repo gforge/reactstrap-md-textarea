@@ -34,7 +34,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Test for task type form in admin interface</h1>
+          <h1 className="App-title">Test for reactstrap-md-textarea</h1>
         </header>
         <article>
 
