@@ -6,7 +6,7 @@
   "repository": "git@bitbucket.org:aixray/reactstap-md-textarea.git",
   "author": "Max Gordon <max@gforge.se>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "module": "dist/textarea.es6.js",
   "typings": "dist/index.d.ts",
   "files": [
