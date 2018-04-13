@@ -5872,9 +5872,9 @@ react@^16.3.1:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-reactstrap-md-textarea@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/reactstrap-md-textarea/-/reactstrap-md-textarea-0.1.0.tgz#97c3121b5f8e0849c15338fdddddb0663096e8ab"
+reactstrap-md-textarea@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/reactstrap-md-textarea/-/reactstrap-md-textarea-0.2.0.tgz#03de9f8f5792c4b98892c5c4a21bbcff3355b6a3"
   dependencies:
     bootstrap "^4.0.0"
     react "^16.3.1"
