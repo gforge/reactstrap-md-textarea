@@ -7,6 +7,7 @@
   "author": "Max Gordon <max@gforge.se>",
   "license": "MIT",
   "private": false,
+  "homepage": "https://gforge.github.io/reactstrap-md-textarea",
   "module": "dist/textarea.es6.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -23,7 +24,10 @@
     "format": "prettier --trailing-comma es5 --single-quote --write 'src/**/*' 'test/**/*' 'README.md'",
     "precommit": "lint-staged",
     "lint": "tslint -p .",
-    "start-website": "cd examples && yarn start"
+    "start:example": "cd examples && npm run start",
+    "build:example": "cd examples && npm install && npm run build",
+    "link:example": "npm link && cd examples && npm link reactstrap-md-textarea",
+    "gh-pages": "npm run link:example && npm run build:example && gh-pages -d examples/build"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
@@ -39,6 +43,7 @@
     "@types/react-dom": "^16.0.4",
     "@types/reactstrap": "^5.0.20",
     "cross-env": "^5.1.4",
+    "gh-pages": "^1.1.0",
     "jest": "^22.4.3",
     "jest-cli": "^22.4.3",
     "lint-staged": "7.0.4",

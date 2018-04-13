@@ -60,3 +60,7 @@ yarn-error.log
 # dotenv environment variables file
 .env
 .vscode
+
+# Skip lock stuff
+package-lock.json
+yarn.lock
