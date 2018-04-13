@@ -1,6 +1,6 @@
 {
   "name": "reactstrap-md-textarea",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A textarea for markdown input that also shows markdown",
   "main": "dist/textarea.js",
   "repository": "git@bitbucket.org:aixray/reactstap-md-textarea.git",
