@@ -27,7 +27,7 @@
     "start:example": "cd examples && npm run start",
     "build:example": "cd examples && npm install && npm run build",
     "link:example": "npm link && cd examples && npm link reactstrap-md-textarea",
-    "gh-pages": "npm run link:example && npm run build:example && gh-pages -d examples/build"
+    "deploy": "npm run link:example && npm run build:example && gh-pages -d examples/build"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
