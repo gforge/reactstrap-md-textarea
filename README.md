@@ -3,13 +3,14 @@
 # A markdown textarea component
 
 This component is for allowing input in markdown format and then showing it
-to the user in a separate tab. The tabs are handled by the 
+to the user in a separate tab. The tabs are handled by the
 [`reactstrap`](https://www.npmjs.com/package/reactstrap) library
 that relies on the [bootstrap](https://getbootstrap.com/) components.
+Checkout the [examples](https://gforge.github.io/reactstrap-md-textarea/).
 
 ## Basic usage
 
-You have will set a limited number of properties. All properties except for 
+You have will set a limited number of properties. All properties except for
 `allowFilteredHtml` are passed to the underlying `reactstrap::Input` element.
 For displaying the markdown is passed through [`react-markdown`](https://www.npmjs.com/package/react-markdown)
 package.
@@ -29,7 +30,7 @@ import { Textarea as MdTextarea } from 'reactstrap-md-textarea';
 As you may sometimes need advanced `html` features there is an option of passing
 direct html to the component. It will render the html onto a div after sanitizing
 the input using [xss](https://www.npmjs.com/package/xss). **Note!** the function
-doesn't filter the return value. That is up to the user. 
+doesn't filter the return value. That is up to the user.
 
 ```{js}
 import { Textarea as MdTextarea } from 'reactstrap-md-textarea';

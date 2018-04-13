@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Textarea, FormattedText } from 'reactstrap-md-textarea';
+import { Card, CardHeader, CardBody } from 'reactstrap';
 
 import './App.css';
 
@@ -38,45 +39,69 @@ class App extends React.Component {
         </header>
         <article>
 
-        <h1>Some textarea examples</h1>
+          <h1>Some textarea examples</h1>
 
-        <h2>Basic</h2>
-        <Textarea
-          onChange={(e) => this.onChange('mdTxt', e.target.value)}
-          value={this.state.mdTxt}
-        />
+          <Card>
+            <CardHeader>Basic</CardHeader>
+            <CardBody>
+              <Textarea
+                onChange={(e) => this.onChange('mdTxt', e.target.value)}
+                value={this.state.mdTxt}
+              />
+            </CardBody>
+          </Card>
 
-        <div className="spacer" />
-        <h2>Html based</h2>
+          <br />
+          <Card>
+            <CardHeader>Html based</CardHeader>
 
-        <Textarea
-          onChange={(e) => this.onChange('htmlTxt', e.target.value)}
-          rows={10}
-          allowFilteredHtml={true}
-          value={this.state.htmlTxt}
-        />
+            <CardBody>
+              <Textarea
+                onChange={(e) => this.onChange('htmlTxt', e.target.value)}
+                rows={10}
+                allowFilteredHtml={true}
+                value={this.state.htmlTxt}
+              />
+            </CardBody>
+          </Card>
 
-        <div className="spacer" />
-        <h2>Allow toggling back and forth</h2>
+          <br />
+          <Card>
+            <CardHeader>Allow toggling back and forth</CardHeader>
 
-        <Textarea
-          onChange={(e) => this.onChange('mdTxt', e.target.value)}
-          value={this.state.mdTxt}
-          toggle={true}
-        />
+            <CardBody>
+              <Textarea
+                onChange={(e) => this.onChange('mdTxt', e.target.value)}
+                value={this.state.mdTxt}
+                toggle={true}
+              />
+              <p>
+                Note that the <code>allowFilteredHtml</code> must be set for the html to be parsed.
+              </p>
+            </CardBody>
+          </Card>
 
-        <p>
-          Note that the allowFilteredHtml must be set for the html to be parsed.
-        </p>
+          <br />
+          <h1>The filtered output from the html</h1>
 
-        <h1>The filtered output from the html</h1>
-        <p>The output when using <code>FormattedText.filterXss</code>:</p>
-        <code>
-          {FormattedText.filterXss({ value: this.state.htmlTxt })}
-        </code>
+          <Card>
+            <CardHeader>Pure output from <code>FormattedText.filterXss</code></CardHeader>
+            <CardBody>
+              <code>
+                <pre>
+                  {FormattedText.filterXss({ value: this.state.htmlTxt })}
+                </pre>
+              </code>
+            </CardBody>
+          </Card>
 
-        <h1>The FormattedText component</h1>
-        <FormattedText value={this.state.htmlTxt} allowFilteredHtml={true} />
+          <br />
+          <Card>
+            <CardHeader>The FormattedText component</CardHeader>
+            <CardBody>
+              <FormattedText value={this.state.htmlTxt} allowFilteredHtml={true} />
+            </CardBody>
+          </Card>
         </article>
       </div>
     );
