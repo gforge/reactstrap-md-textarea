@@ -8,7 +8,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-scripts-ts": "2.15.1",
-    "reactstrap-md-textarea": "^0.3.0"
+    "reactstrap-md-textarea": "^0.4.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
