@@ -4,7 +4,7 @@
     (factory((global.FormikAdminTaskType = {}),global.tslib,global.React,global.reactstrap));
 }(this, (function (exports,tslib_1,React,reactstrap) { 'use strict';
 
-    var React__default = React['default'];
+    var React__default = 'default' in React ? React['default'] : React;
 
     var wrapper = function (_a) {
         var children = _a.children, _b = _a.style, style = _b === void 0 ? {} : _b;
@@ -33,6 +33,8 @@
 
     var hasOwn = Object.prototype.hasOwnProperty;
     var toStr = Object.prototype.toString;
+    var defineProperty = Object.defineProperty;
+    var gOPD = Object.getOwnPropertyDescriptor;
 
     var isArray = function isArray(arr) {
     	if (typeof Array.isArray === 'function') {
@@ -62,6 +64,35 @@
     	return typeof key === 'undefined' || hasOwn.call(obj, key);
     };
 
+    // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+    var setProperty = function setProperty(target, options) {
+    	if (defineProperty && options.name === '__proto__') {
+    		defineProperty(target, options.name, {
+    			enumerable: true,
+    			configurable: true,
+    			value: options.newValue,
+    			writable: true
+    		});
+    	} else {
+    		target[options.name] = options.newValue;
+    	}
+    };
+
+    // Return undefined instead of __proto__ if '__proto__' is not an own property
+    var getProperty = function getProperty(obj, name) {
+    	if (name === '__proto__') {
+    		if (!hasOwn.call(obj, name)) {
+    			return void 0;
+    		} else if (gOPD) {
+    			// In early versions of node, obj['__proto__'] is buggy when obj has
+    			// __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+    			return gOPD(obj, name).value;
+    		}
+    	}
+
+    	return obj[name];
+    };
+
     var extend$1 = function extend() {
     	var options, name, src, copy, copyIsArray, clone;
     	var target = arguments[0];
@@ -86,8 +117,8 @@
     		if (options != null) {
     			// Extend the base object
     			for (name in options) {
-    				src = target[name];
-    				copy = options[name];
+    				src = getProperty(target, name);
+    				copy = getProperty(options, name);
 
     				// Prevent never-ending loop
     				if (target !== copy) {
@@ -101,11 +132,11 @@
     						}
 
     						// Never move original objects, clone them
-    						target[name] = extend(deep, clone, copy);
+    						setProperty(target, { name: name, newValue: extend(deep, clone, copy) });
 
     					// Don't bring in undefined values
     					} else if (typeof copy !== 'undefined') {
-    						target[name] = copy;
+    						setProperty(target, { name: name, newValue: copy });
     					}
     				}
     			}
@@ -120,7 +151,7 @@
 
     function bail(err) {
       if (err) {
-        throw err;
+        throw err
       }
     }
 
@@ -131,26 +162,34 @@
     function stringify(value) {
       /* Nothing. */
       if (!value || typeof value !== 'object') {
-        return null;
+        return null
       }
 
       /* Node. */
       if (own.call(value, 'position') || own.call(value, 'type')) {
-        return location(value.position);
-      }
-
-      /* Location. */
-      if (own.call(value, 'start') || own.call(value, 'end')) {
-        return location(value);
+        return position(value.position)
       }
 
       /* Position. */
+      if (own.call(value, 'start') || own.call(value, 'end')) {
+        return position(value)
+      }
+
+      /* Point. */
       if (own.call(value, 'line') || own.call(value, 'column')) {
-        return position(value);
+        return point(value)
       }
 
       /* ? */
-      return null;
+      return null
+    }
+
+    function point(point) {
+      if (!point || typeof point !== 'object') {
+        point = {};
+      }
+
+      return index(point.line) + ':' + index(point.column)
     }
 
     function position(pos) {
@@ -158,19 +197,11 @@
         pos = {};
       }
 
-      return index(pos.line) + ':' + index(pos.column);
-    }
-
-    function location(loc) {
-      if (!loc || typeof loc !== 'object') {
-        loc = {};
-      }
-
-      return position(loc.start) + '-' + position(loc.end);
+      return point(pos.start) + '-' + point(pos.end)
     }
 
     function index(value) {
-      return value && typeof value === 'number' ? value : 1;
+      return value && typeof value === 'number' ? value : 1
     }
 
     var vfileMessage = VMessage;
@@ -261,7 +292,7 @@
         }
       }
 
-      return result;
+      return result
     }
 
     // Copyright Joyent, Inc. and other Node contributors.
@@ -777,7 +808,7 @@
       middleware.run = run;
       middleware.use = use;
 
-      return middleware;
+      return middleware
 
       /* Run `fns`.  Last argument must be
        * a completion handler. */
@@ -787,7 +818,7 @@
         var done = arguments[arguments.length - 1];
 
         if (typeof done !== 'function') {
-          throw new Error('Expected function as last argument, not ' + done);
+          throw new Error('Expected function as last argument, not ' + done)
         }
 
         next.apply(null, [null].concat(input));
@@ -802,7 +833,7 @@
 
           if (err) {
             done(err);
-            return;
+            return
           }
 
           /* Copy non-nully input into values. */
@@ -826,12 +857,12 @@
       /* Add `fn` to the list. */
       function use(fn) {
         if (typeof fn !== 'function') {
-          throw new Error('Expected `fn` to be a function, not ' + fn);
+          throw new Error('Expected `fn` to be a function, not ' + fn)
         }
 
         fns.push(fn);
 
-        return middleware;
+        return middleware
       }
     }
 
@@ -841,7 +872,7 @@
     function wrap(fn, next) {
       var invoked;
 
-      return wrapped;
+      return wrapped
 
       function wrapped() {
         var params = slice.call(arguments, 0);
@@ -862,10 +893,10 @@
            * so the only thing left to do is to throw the
            * thing instea. */
           if (callback && invoked) {
-            throw err;
+            throw err
           }
 
-          return done(err);
+          return done(err)
         }
 
         if (!callback) {
@@ -903,10 +934,6 @@
         return toString$1.call(obj) === "[object String]"
     }
 
-    var xIsFunction = function isFunction (fn) {
-      return Object.prototype.toString.call(fn) === '[object Function]'
-    };
-
     var toString$2 = Object.prototype.toString;
 
     var isPlainObj = function (x) {
@@ -922,7 +949,6 @@
 
 
 
-
     /* Expose a frozen processor. */
     var unified_1 = unified().freeze();
 
@@ -930,7 +956,10 @@
     var own$2 = {}.hasOwnProperty;
 
     /* Process pipeline. */
-    var pipeline = trough_1().use(pipelineParse).use(pipelineRun).use(pipelineStringify);
+    var pipeline = trough_1()
+      .use(pipelineParse)
+      .use(pipelineRun)
+      .use(pipelineStringify);
 
     function pipelineParse(p, ctx) {
       ctx.tree = p.parse(ctx.file);
@@ -981,7 +1010,7 @@
       processor.processSync = processSync;
 
       /* Expose. */
-      return processor;
+      return processor
 
       /* Create a new processor based on the processor
        * in the current scope. */
@@ -996,7 +1025,7 @@
 
         destination.data(extend$1(true, {}, namespace));
 
-        return destination;
+        return destination
       }
 
       /* Freeze: used to signal a processor that has finished
@@ -1015,7 +1044,7 @@
         var transformer;
 
         if (frozen) {
-          return processor;
+          return processor
         }
 
         while (++freezeIndex < attachers.length) {
@@ -1025,7 +1054,7 @@
           transformer = null;
 
           if (options === false) {
-            continue;
+            continue
           }
 
           if (options === true) {
@@ -1034,7 +1063,7 @@
 
           transformer = plugin.apply(processor, values.slice(1));
 
-          if (xIsFunction(transformer)) {
+          if (typeof transformer === 'function') {
             transformers.use(transformer);
           }
         }
@@ -1042,7 +1071,7 @@
         frozen = true;
         freezeIndex = Infinity;
 
-        return processor;
+        return processor
       }
 
       /* Data management.
@@ -1055,22 +1084,22 @@
 
             namespace[key] = value;
 
-            return processor;
+            return processor
           }
 
           /* Get `key`. */
-          return (own$2.call(namespace, key) && namespace[key]) || null;
+          return (own$2.call(namespace, key) && namespace[key]) || null
         }
 
         /* Set space. */
         if (key) {
           assertUnfrozen('data', frozen);
           namespace = key;
-          return processor;
+          return processor
         }
 
         /* Get space. */
-        return namespace;
+        return namespace
       }
 
       /* Plug-in management.
@@ -1085,9 +1114,7 @@
 
         assertUnfrozen('use', frozen);
 
-        if (value === null || value === undefined) {
-          /* Empty */
-        } else if (xIsFunction(value)) {
+        if (value === null || value === undefined) ; else if (typeof value === 'function') {
           addPlugin.apply(null, arguments);
         } else if (typeof value === 'object') {
           if ('length' in value) {
@@ -1096,14 +1123,14 @@
             addPreset(value);
           }
         } else {
-          throw new Error('Expected usable value, not `' + value + '`');
+          throw new Error('Expected usable value, not `' + value + '`')
         }
 
         if (settings) {
           namespace.settings = extend$1(namespace.settings || {}, settings);
         }
 
-        return processor;
+        return processor
 
         function addPreset(result) {
           addList(result.plugins);
@@ -1114,7 +1141,7 @@
         }
 
         function add(value) {
-          if (xIsFunction(value)) {
+          if (typeof value === 'function') {
             addPlugin(value);
           } else if (typeof value === 'object') {
             if ('length' in value) {
@@ -1123,7 +1150,7 @@
               addPreset(value);
             }
           } else {
-            throw new Error('Expected usable value, not `' + value + '`');
+            throw new Error('Expected usable value, not `' + value + '`')
           }
         }
 
@@ -1131,9 +1158,7 @@
           var length;
           var index;
 
-          if (plugins === null || plugins === undefined) {
-            /* Empty */
-          } else if (typeof plugins === 'object' && 'length' in plugins) {
+          if (plugins === null || plugins === undefined) ; else if (typeof plugins === 'object' && 'length' in plugins) {
             length = plugins.length;
             index = -1;
 
@@ -1141,7 +1166,7 @@
               add(plugins[index]);
             }
           } else {
-            throw new Error('Expected a list of plugins, not `' + plugins + '`');
+            throw new Error('Expected a list of plugins, not `' + plugins + '`')
           }
         }
 
@@ -1169,7 +1194,7 @@
           entry = attachers[index];
 
           if (entry[0] === plugin) {
-            return entry;
+            return entry
           }
         }
       }
@@ -1186,10 +1211,10 @@
         assertParser('parse', Parser);
 
         if (newable(Parser)) {
-          return new Parser(String(file), file).parse();
+          return new Parser(String(file), file).parse()
         }
 
-        return Parser(String(file), file); // eslint-disable-line new-cap
+        return Parser(String(file), file) // eslint-disable-line new-cap
       }
 
       /* Run transforms on a Unist node representation of a file
@@ -1198,13 +1223,13 @@
         assertNode(node);
         freeze();
 
-        if (!cb && xIsFunction(file)) {
+        if (!cb && typeof file === 'function') {
           cb = file;
           file = null;
         }
 
         if (!cb) {
-          return new Promise(executor);
+          return new Promise(executor)
         }
 
         executor(null, cb);
@@ -1235,7 +1260,7 @@
 
         assertDone('runSync', 'run', complete);
 
-        return result;
+        return result
 
         function done(err, tree) {
           complete = true;
@@ -1257,10 +1282,10 @@
         assertNode(node);
 
         if (newable(Compiler)) {
-          return new Compiler(node, file).compile();
+          return new Compiler(node, file).compile()
         }
 
-        return Compiler(node, file); // eslint-disable-line new-cap
+        return Compiler(node, file) // eslint-disable-line new-cap
       }
 
       /* Parse a file (in string or VFile representation)
@@ -1274,7 +1299,7 @@
         assertCompiler('process', processor.Compiler);
 
         if (!cb) {
-          return new Promise(executor);
+          return new Promise(executor)
         }
 
         executor(null, cb);
@@ -1311,7 +1336,7 @@
 
         assertDone('processSync', 'process', complete);
 
-        return file;
+        return file
 
         function done(err) {
           complete = true;
@@ -1322,29 +1347,29 @@
 
     /* Check if `func` is a constructor. */
     function newable(value) {
-      return xIsFunction(value) && keys(value.prototype);
+      return typeof value === 'function' && keys(value.prototype)
     }
 
     /* Check if `value` is an object with keys. */
     function keys(value) {
       var key;
       for (key in value) {
-        return true;
+        return true
       }
-      return false;
+      return false
     }
 
     /* Assert a parser is available. */
     function assertParser(name, Parser) {
-      if (!xIsFunction(Parser)) {
-        throw new Error('Cannot `' + name + '` without `Parser`');
+      if (typeof Parser !== 'function') {
+        throw new Error('Cannot `' + name + '` without `Parser`')
       }
     }
 
     /* Assert a compiler is available. */
     function assertCompiler(name, Compiler) {
-      if (!xIsFunction(Compiler)) {
-        throw new Error('Cannot `' + name + '` without `Compiler`');
+      if (typeof Compiler !== 'function') {
+        throw new Error('Cannot `' + name + '` without `Compiler`')
       }
     }
 
@@ -1352,24 +1377,28 @@
     function assertUnfrozen(name, frozen) {
       if (frozen) {
         throw new Error(
-          'Cannot invoke `' + name + '` on a frozen processor.\n' +
-          'Create a new processor first, by invoking it: ' +
-          'use `processor()` instead of `processor`.'
-        );
+          [
+            'Cannot invoke `' + name + '` on a frozen processor.\nCreate a new ',
+            'processor first, by invoking it: use `processor()` instead of ',
+            '`processor`.'
+          ].join('')
+        )
       }
     }
 
     /* Assert `node` is a Unist node. */
     function assertNode(node) {
       if (!node || !xIsString(node.type)) {
-        throw new Error('Expected node, got `' + node + '`');
+        throw new Error('Expected node, got `' + node + '`')
       }
     }
 
     /* Assert that `complete` is `true`. */
     function assertDone(name, asyncName, complete) {
       if (!complete) {
-        throw new Error('`' + name + '` finished async. Use `' + asyncName + '` instead');
+        throw new Error(
+          '`' + name + '` finished async. Use `' + asyncName + '` instead'
+        )
       }
     }
 
@@ -1675,18 +1704,10 @@
         };
       }
 
-      if (process$1.noDeprecation === true) {
-        return fn;
-      }
-
       var warned = false;
       function deprecated() {
         if (!warned) {
-          if (process$1.throwDeprecation) {
-            throw new Error(msg);
-          } else if (process$1.traceDeprecation) {
-            console.trace(msg);
-          } else {
+          {
             console.error(msg);
           }
           warned = true;
@@ -2026,10 +2047,8 @@
 
 
     function reduceToSingleString(output, base, braces) {
-      var numLinesEst = 0;
       var length = output.reduce(function(prev, cur) {
-        numLinesEst++;
-        if (cur.indexOf('\n') >= 0) numLinesEst++;
+        if (cur.indexOf('\n') >= 0) ;
         return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
       }, 0);
 
@@ -2180,7 +2199,7 @@
       deprecate: deprecate,
       format: format,
       debuglog: debuglog
-    }
+    };
 
     var util$1 = /*#__PURE__*/Object.freeze({
         format: format,
@@ -2246,22 +2265,10 @@
     }
     });
 
-    /* Dependencies. */
-
-
-
-    /* Expose. */
     var unherit_1 = unherit;
 
-    /**
-     * Create a custom constructor which can be modified
-     * without affecting the original class.
-     *
-     * @param {Function} Super - Super-class.
-     * @return {Function} - Constructor acting like `Super`,
-     *   which can be modified without affecting the original
-     *   class.
-     */
+    /* Create a custom constructor which can be modified
+     * without affecting the original class. */
     function unherit(Super) {
       var result;
       var key;
@@ -2281,70 +2288,44 @@
         }
       }
 
-      return Of;
+      return Of
 
-      /**
-       * Constructor accepting a single argument,
-       * which itself is an `arguments` object.
-       */
+      /* Constructor accepting a single argument,
+       * which itself is an `arguments` object. */
       function From(parameters) {
-        return Super.apply(this, parameters);
+        return Super.apply(this, parameters)
       }
 
-      /**
-       * Constructor accepting variadic arguments.
-       */
+      /* Constructor accepting variadic arguments. */
       function Of() {
         if (!(this instanceof Of)) {
-          return new From(arguments);
+          return new From(arguments)
         }
 
-        return Super.apply(this, arguments);
+        return Super.apply(this, arguments)
       }
     }
 
-    /**
-     * @author Titus Wormer
-     * @copyright 2016 Titus Wormer
-     * @license MIT
-     * @module state-toggle
-     * @fileoverview Enter/exit a state.
-     */
-
-    /* eslint-env commonjs */
-
-    /* Expose. */
     var stateToggle = factory;
 
-    /**
-     * Construct a state `toggler`: a function which inverses
+    /* Construct a state `toggler`: a function which inverses
      * `property` in context based on its current value.
-     * The by `toggler` returned function restores that value.
-     *
-     * @param {string} key - Property to toggle.
-     * @param {boolean} state - Default state.
-     * @param {Object?} [ctx] - Context object.
-     * @return {Function} - Enter.
-     */
+     * The by `toggler` returned function restores that value. */
     function factory(key, state, ctx) {
-      /**
-       * Enter a state.
-       *
-       * @return {Function} - Exit state.
-       */
-      return function () {
+      return enter
+
+      function enter() {
         var context = ctx || this;
         var current = context[key];
 
         context[key] = !state;
 
-        /**
-         * Cancel state to its value before entering.
-         */
-        return function () {
+        return exit
+
+        function exit() {
           context[key] = current;
-        };
-      };
+        }
+      }
     }
 
     /* Expose. */
@@ -2357,13 +2338,13 @@
       return {
         toPosition: offsetToPositionFactory(contents),
         toOffset: positionToOffsetFactory(contents)
-      };
+      }
     }
 
     /* Factory to get the line and column-based `position` for
      * `offset` in the bound indices. */
     function offsetToPositionFactory(indices) {
-      return offsetToPosition;
+      return offsetToPosition
 
       /* Get the line and column-based `position` for
        * `offset` in the bound indices. */
@@ -2372,27 +2353,27 @@
         var length = indices.length;
 
         if (offset < 0) {
-          return {};
+          return {}
         }
 
         while (++index < length) {
           if (indices[index] > offset) {
             return {
               line: index + 1,
-              column: (offset - (indices[index - 1] || 0)) + 1,
+              column: offset - (indices[index - 1] || 0) + 1,
               offset: offset
-            };
+            }
           }
         }
 
-        return {};
+        return {}
       }
     }
 
     /* Factory to get the `offset` for a line and column-based
      * `position` in the bound indices. */
     function positionToOffsetFactory(indices) {
-      return positionToOffset;
+      return positionToOffset
 
       /* Get the `offset` for a line and column-based
        * `position` in the bound indices. */
@@ -2401,10 +2382,10 @@
         var column = position && position.column;
 
         if (!isNaN(line) && !isNaN(column) && line - 1 in indices) {
-          return ((indices[line - 2] || 0) + column - 1) || 0;
+          return (indices[line - 2] || 0) + column - 1 || 0
         }
 
-        return -1;
+        return -1
       }
     }
 
@@ -2420,7 +2401,7 @@
 
       result.push(value.length + 1);
 
-      return result;
+      return result
     }
 
     var _unescape = factory$2;
@@ -4985,6 +4966,7 @@
     	Lsh: Lsh,
     	Lstrok: Lstrok,
     	Lt: Lt,
+    	"Map": "⤅",
     	Mcy: Mcy,
     	MediumSpace: MediumSpace,
     	Mellintrf: Mellintrf,
@@ -5881,6 +5863,7 @@
     	imath: imath,
     	imof: imof,
     	imped: imped,
+    	"in": "∈",
     	incare: incare,
     	infin: infin,
     	infintie: infintie,
@@ -6899,9 +6882,7 @@
     	zopf: zopf,
     	zscr: zscr,
     	zwj: zwj,
-    	zwnj: zwnj,
-    	"Map": "⤅",
-    	"in": "∈"
+    	zwnj: zwnj
     };
 
     var characterEntities = /*#__PURE__*/Object.freeze({
@@ -9493,10 +9474,9 @@
     /* Check if the given character code, or the character
      * code at the first character, is decimal. */
     function decimal(character) {
-      var code = typeof character === 'string' ?
-        character.charCodeAt(0) : character;
+      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
 
-      return code >= 48 && code <= 57; /* 0-9 */
+      return code >= 48 && code <= 57 /* 0-9 */
     }
 
     var isHexadecimal = hexadecimal;
@@ -9504,12 +9484,13 @@
     /* Check if the given character code, or the character
      * code at the first character, is hexadecimal. */
     function hexadecimal(character) {
-      var code = typeof character === 'string' ?
-        character.charCodeAt(0) : character;
+      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
 
-      return (code >= 97 /* a */ && code <= 102 /* z */) ||
-        (code >= 65 /* A */ && code <= 70 /* Z */) ||
-        (code >= 48 /* A */ && code <= 57 /* Z */);
+      return (
+        (code >= 97 /* a */ && code <= 102) /* z */ ||
+        (code >= 65 /* A */ && code <= 70) /* Z */ ||
+        (code >= 48 /* A */ && code <= 57) /* Z */
+      )
     }
 
     var isAlphabetical = alphabetical;
@@ -9517,11 +9498,12 @@
     /* Check if the given character code, or the character
      * code at the first character, is alphabetical. */
     function alphabetical(character) {
-      var code = typeof character === 'string' ?
-        character.charCodeAt(0) : character;
+      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
 
-      return (code >= 97 && code <= 122) || /* a-z */
-        (code >= 65 && code <= 90); /* A-Z */
+      return (
+        (code >= 97 && code <= 122) /* a-z */ ||
+        (code >= 65 && code <= 90) /* A-Z */
+      )
     }
 
     var isAlphanumerical = alphanumerical;
@@ -9529,7 +9511,7 @@
     /* Check if the given character code, or the character
      * code at the first character, is alphanumerical. */
     function alphanumerical(character) {
-      return isAlphabetical(character) || isDecimal(character);
+      return isAlphabetical(character) || isDecimal(character)
     }
 
     var characterEntities$1 = ( characterEntities && index$1 ) || characterEntities;
@@ -9538,36 +9520,11 @@
 
     var invalid = ( characterReferenceInvalid && index$3 ) || characterReferenceInvalid;
 
-    /* Dependencies. */
+    var parseEntities_1 = parseEntities;
 
-
-
-
-
-
-
-    /* Expose. */
-    var parseEntities = wrapper$1;
-
-    /* Methods. */
     var own$3 = {}.hasOwnProperty;
     var fromCharCode = String.fromCharCode;
     var noop$1 = Function.prototype;
-
-    /* Characters. */
-    var REPLACEMENT = '\uFFFD';
-    var FORM_FEED = '\f';
-    var AMPERSAND = '&';
-    var OCTOTHORP = '#';
-    var SEMICOLON = ';';
-    var NEWLINE = '\n';
-    var X_LOWER = 'x';
-    var X_UPPER = 'X';
-    var SPACE = ' ';
-    var LESS_THAN = '<';
-    var EQUAL = '=';
-    var EMPTY = '';
-    var TAB = '\t';
 
     /* Default settings. */
     var defaults = {
@@ -9613,24 +9570,22 @@
     var NUMERIC_DISALLOWED = 6;
     var NUMERIC_PROHIBITED = 7;
 
-    var NUMERIC_REFERENCE = 'Numeric character references';
-    var NAMED_REFERENCE = 'Named character references';
-    var TERMINATED = ' must be terminated by a semicolon';
-    var VOID = ' cannot be empty';
-
     var MESSAGES = {};
 
-    MESSAGES[NAMED_NOT_TERMINATED] = NAMED_REFERENCE + TERMINATED;
-    MESSAGES[NUMERIC_NOT_TERMINATED] = NUMERIC_REFERENCE + TERMINATED;
-    MESSAGES[NAMED_EMPTY] = NAMED_REFERENCE + VOID;
-    MESSAGES[NUMERIC_EMPTY] = NUMERIC_REFERENCE + VOID;
-    MESSAGES[NAMED_UNKNOWN] = NAMED_REFERENCE + ' must be known';
-    MESSAGES[NUMERIC_DISALLOWED] = NUMERIC_REFERENCE + ' cannot be disallowed';
-    MESSAGES[NUMERIC_PROHIBITED] = NUMERIC_REFERENCE + ' cannot be outside the ' +
-        'permissible Unicode range';
+    MESSAGES[NAMED_NOT_TERMINATED] =
+      'Named character references must be terminated by a semicolon';
+    MESSAGES[NUMERIC_NOT_TERMINATED] =
+      'Numeric character references must be terminated by a semicolon';
+    MESSAGES[NAMED_EMPTY] = 'Named character references cannot be empty';
+    MESSAGES[NUMERIC_EMPTY] = 'Numeric character references cannot be empty';
+    MESSAGES[NAMED_UNKNOWN] = 'Named character references must be known';
+    MESSAGES[NUMERIC_DISALLOWED] =
+      'Numeric character references cannot be disallowed';
+    MESSAGES[NUMERIC_PROHIBITED] =
+      'Numeric character references cannot be outside the permissible Unicode range';
 
     /* Wrap to ensure clean parameters are given to `parse`. */
-    function wrapper$1(value, options) {
+    function parseEntities(value, options) {
       var settings = {};
       var option;
       var key;
@@ -9641,7 +9596,8 @@
 
       for (key in defaults) {
         option = options[key];
-        settings[key] = option === null || option === undefined ? defaults[key] : option;
+        settings[key] =
+          option === null || option === undefined ? defaults[key] : option;
       }
 
       if (settings.position.indent || settings.position.start) {
@@ -9649,7 +9605,7 @@
         settings.position = settings.position.start;
       }
 
-      return parse(value, settings);
+      return parse(value, settings)
     }
 
     /* Parse entities. */
@@ -9669,7 +9625,7 @@
       var lines = -1;
       var column = pos.column || 1;
       var line = pos.line || 1;
-      var queue = EMPTY;
+      var queue = '';
       var result = [];
       var entityCharacters;
       var terminated;
@@ -9703,7 +9659,7 @@
 
       while (++index < length) {
         /* If the previous character was a newline. */
-        if (character === NEWLINE) {
+        if (character === '\n') {
           column = indent[lines] || 1;
         }
 
@@ -9711,8 +9667,8 @@
 
         /* Handle anything other than an ampersand,
          * including newlines and EOF. */
-        if (character !== AMPERSAND) {
-          if (character === NEWLINE) {
+        if (character !== '&') {
+          if (character === '\n') {
             line++;
             lines++;
             column = 0;
@@ -9730,13 +9686,13 @@
           /* The behaviour depends on the identity of the next
            * character. */
           if (
-            following === TAB ||
-            following === NEWLINE ||
-            following === FORM_FEED ||
-            following === SPACE ||
-            following === LESS_THAN ||
-            following === AMPERSAND ||
-            following === EMPTY ||
+            following === '\t' /* Tab */ ||
+            following === '\n' /* Newline */ ||
+            following === '\f' /* Form feed */ ||
+            following === ' ' /* Space */ ||
+            following === '<' /* Less-than */ ||
+            following === '&' /* Ampersand */ ||
+            following === '' ||
             (additional && following === additional)
           ) {
             /* Not a character reference. No characters
@@ -9745,7 +9701,7 @@
             queue += character;
             column++;
 
-            continue;
+            continue
           }
 
           start = index + 1;
@@ -9753,7 +9709,7 @@
           end = start;
 
           /* Numerical entity. */
-          if (following !== OCTOTHORP) {
+          if (following !== '#') {
             type = NAMED;
           } else {
             end = ++begin;
@@ -9762,7 +9718,7 @@
              * character after the U+0023 NUMBER SIGN. */
             following = at(end);
 
-            if (following === X_LOWER || following === X_UPPER) {
+            if (following === 'x' || following === 'X') {
               /* ASCII hex digits. */
               type = HEXADECIMAL;
               end = ++begin;
@@ -9772,9 +9728,9 @@
             }
           }
 
-          entityCharacters = EMPTY;
-          entity = EMPTY;
-          characters = EMPTY;
+          entityCharacters = '';
+          entity = '';
+          characters = '';
           test = TESTS[type];
           end--;
 
@@ -9782,7 +9738,7 @@
             following = at(end);
 
             if (!test(following)) {
-              break;
+              break
             }
 
             characters += following;
@@ -9798,7 +9754,7 @@
             }
           }
 
-          terminated = at(end) === SEMICOLON;
+          terminated = at(end) === ';';
 
           if (terminated) {
             end++;
@@ -9811,9 +9767,7 @@
 
           diff = 1 + end - start;
 
-          if (!terminated && !nonTerminated) {
-            /* Empty. */
-          } else if (!characters) {
+          if (!terminated && !nonTerminated) ; else if (!characters) {
             /* An empty (possible) entity is valid, unless
              * its numeric (thus an ampersand followed by
              * an octothorp). */
@@ -9838,16 +9792,14 @@
               /* If the reference is not terminated,
                * warn. */
               if (!terminated) {
-                reason = entityCharacters ?
-                  NAMED_NOT_TERMINATED :
-                  NAMED_EMPTY;
+                reason = entityCharacters ? NAMED_NOT_TERMINATED : NAMED_EMPTY;
 
                 if (!settings.attribute) {
                   warning(reason, diff);
                 } else {
                   following = at(end);
 
-                  if (following === EQUAL) {
+                  if (following === '=') {
                     warning(reason, diff);
                     entity = null;
                   } else if (isAlphanumerical(following)) {
@@ -9874,32 +9826,30 @@
             /* Trigger a warning when the parsed number
              * is prohibited, and replace with
              * replacement character. */
-            if (isProhibited(reference)) {
+            if (prohibited(reference)) {
               warning(NUMERIC_PROHIBITED, diff);
-
-              reference = REPLACEMENT;
+              reference = '\uFFFD';
             } else if (reference in invalid) {
               /* Trigger a warning when the parsed number
                * is disallowed, and replace by an
                * alternative. */
               warning(NUMERIC_DISALLOWED, diff);
-
               reference = invalid[reference];
             } else {
               /* Parse the number. */
-              output = EMPTY;
+              output = '';
 
               /* Trigger a warning when the parsed
                * number should not be used. */
-              if (isWarning(reference)) {
+              if (disallowed(reference)) {
                 warning(NUMERIC_DISALLOWED, diff);
               }
 
               /* Stringify the number. */
-              if (reference > 0xFFFF) {
+              if (reference > 0xffff) {
                 reference -= 0x10000;
-                output += fromCharCode((reference >>> (10 & 0x3FF)) | 0xD800);
-                reference = 0xDC00 | (reference & 0x3FF);
+                output += fromCharCode((reference >>> (10 & 0x3ff)) | 0xd800);
+                reference = 0xdc00 | (reference & 0x3ff);
               }
 
               reference = output + fromCharCode(reference);
@@ -9930,10 +9880,12 @@
             next.offset++;
 
             if (handleReference) {
-              handleReference.call(referenceContext, reference, {
-                start: prev,
-                end: next
-              }, value.slice(start - 1, end));
+              handleReference.call(
+                referenceContext,
+                reference,
+                {start: prev, end: next},
+                value.slice(start - 1, end)
+              );
             }
 
             prev = next;
@@ -9942,7 +9894,7 @@
       }
 
       /* Return the reduced nodes, and any possible warnings. */
-      return result.join(EMPTY);
+      return result.join('')
 
       /* Get current position. */
       function now() {
@@ -9950,7 +9902,7 @@
           line: line,
           column: column,
           offset: index + (pos.offset || 0)
-        };
+        }
       }
 
       /* “Throw” a parse-error: a warning. */
@@ -9965,7 +9917,7 @@
 
       /* Get character at position. */
       function at(position) {
-        return value.charAt(position);
+        return value.charAt(position)
       }
 
       /* Flush `queue` (normal text). Macro invoked before
@@ -9976,38 +9928,30 @@
           result.push(queue);
 
           if (handleText) {
-            handleText.call(textContext, queue, {
-              start: prev,
-              end: now()
-            });
+            handleText.call(textContext, queue, {start: prev, end: now()});
           }
 
-          queue = EMPTY;
+          queue = '';
         }
       }
     }
 
-    /* Check if `character` is outside the permissible
-     * unicode range. */
-    function isProhibited(code) {
-      return (code >= 0xD800 && code <= 0xDFFF) || (code > 0x10FFFF);
+    /* Check if `character` is outside the permissible unicode range. */
+    function prohibited(code) {
+      return (code >= 0xd800 && code <= 0xdfff) || code > 0x10ffff
     }
 
     /* Check if `character` is disallowed. */
-    function isWarning(code) {
-      if (
+    function disallowed(code) {
+      return (
         (code >= 0x0001 && code <= 0x0008) ||
-        code === 0x000B ||
-        (code >= 0x000D && code <= 0x001F) ||
-        (code >= 0x007F && code <= 0x009F) ||
-        (code >= 0xFDD0 && code <= 0xFDEF) ||
-        (code & 0xFFFF) === 0xFFFF ||
-        (code & 0xFFFF) === 0xFFFE
-      ) {
-        return true;
-      }
-
-      return false;
+        code === 0x000b ||
+        (code >= 0x000d && code <= 0x001f) ||
+        (code >= 0x007f && code <= 0x009f) ||
+        (code >= 0xfdd0 && code <= 0xfdef) ||
+        (code & 0xffff) === 0xffff ||
+        (code & 0xffff) === 0xfffe
+      )
     }
 
     var decode = factory$3;
@@ -10051,7 +9995,7 @@
 
       /* Decode `value` (at `position`) into text-nodes. */
       function decoder(value, position, handler) {
-        parseEntities(value, {
+        parseEntities_1(value, {
           position: normalize(position),
           warning: handleWarning,
           text: handler,
@@ -10063,7 +10007,7 @@
 
       /* Decode `value` (at `position`) into a string. */
       function decodeRaw(value, position, options) {
-        return parseEntities(value, immutable(options, {
+        return parseEntities_1(value, immutable(options, {
           position: normalize(position),
           warning: handleWarning
         }));
@@ -10429,7 +10373,7 @@
       '$',
       '%',
       '&',
-      '\'',
+      "'",
       ',',
       '/',
       ':',
@@ -10450,10 +10394,10 @@
       var settings = options || {};
 
       if (settings.commonmark) {
-        return commonmark;
+        return commonmark
       }
 
-      return settings.gfm ? gfm : defaults$1;
+      return settings.gfm ? gfm : defaults$1
     }
 
     var blockElements = [
@@ -10599,42 +10543,42 @@
         hasIndex &&
         (typeof index !== 'number' || index < 0 || index === Infinity)
       ) {
-        throw new Error('Expected positive finite index or child node');
+        throw new Error('Expected positive finite index or child node')
       }
 
       if (hasParent && (!is(null, parent) || !parent.children)) {
-        throw new Error('Expected parent node');
+        throw new Error('Expected parent node')
       }
 
       if (!node || !node.type || typeof node.type !== 'string') {
-        return false;
+        return false
       }
 
       if (hasParent !== hasIndex) {
-        throw new Error('Expected both parent and index');
+        throw new Error('Expected both parent and index')
       }
 
-      return Boolean(check.call(context, node, index, parent));
+      return Boolean(check.call(context, node, index, parent))
     }
 
     function convert(test) {
       if (typeof test === 'string') {
-        return typeFactory(test);
+        return typeFactory(test)
       }
 
       if (test === null || test === undefined) {
-        return ok;
+        return ok
       }
 
       if (typeof test === 'object') {
-        return ('length' in test ? anyFactory : matchesFactory)(test);
+        return ('length' in test ? anyFactory : matchesFactory)(test)
       }
 
       if (typeof test === 'function') {
-        return test;
+        return test
       }
 
-      throw new Error('Expected function, string, or object as test');
+      throw new Error('Expected function, string, or object as test')
     }
 
     function convertAll(tests) {
@@ -10646,24 +10590,24 @@
         results[index] = convert(tests[index]);
       }
 
-      return results;
+      return results
     }
 
     /* Utility assert each property in `test` is represented
      * in `node`, and each values are strictly equal. */
     function matchesFactory(test) {
-      return matches;
+      return matches
 
       function matches(node) {
         var key;
 
         for (key in test) {
           if (node[key] !== test[key]) {
-            return false;
+            return false
           }
         }
 
-        return true;
+        return true
       }
     }
 
@@ -10671,34 +10615,34 @@
       var checks = convertAll(tests);
       var length = checks.length;
 
-      return matches;
+      return matches
 
       function matches() {
         var index = -1;
 
         while (++index < length) {
           if (checks[index].apply(this, arguments)) {
-            return true;
+            return true
           }
         }
 
-        return false;
+        return false
       }
     }
 
     /* Utility to convert a string into a function which checks
      * a given node’s type for said string. */
     function typeFactory(test) {
-      return type;
+      return type
 
       function type(node) {
-        return Boolean(node && node.type === test);
+        return Boolean(node && node.type === test)
       }
     }
 
     /* Utility to return true. */
     function ok() {
-      return true;
+      return true
     }
 
     var unistUtilVisit = visit;
@@ -10733,14 +10677,14 @@
         }
 
         if (result === EXIT) {
-          return result;
+          return result
         }
 
         if (node.children && result !== SKIP) {
-          return all(node.children, node) === EXIT ? EXIT : result;
+          return all(node.children, node) === EXIT ? EXIT : result
         }
 
-        return result;
+        return result
       }
 
       /* Visit children in `parent`. */
@@ -10755,13 +10699,13 @@
           result = child && one(child, index, parent);
 
           if (result === EXIT) {
-            return result;
+            return result
           }
 
           index = typeof result === 'number' ? result : index + step;
         }
 
-        return CONTINUE;
+        return CONTINUE
       }
     }
 
@@ -10770,7 +10714,7 @@
     /* Remove `position`s from `tree`. */
     function removePosition(node, force) {
       unistUtilVisit(node, force ? hard : soft);
-      return node;
+      return node
     }
 
     function hard(node) {
@@ -10832,7 +10776,7 @@
     function whitespace(character) {
       return re$1.test(
         typeof character === 'number' ? fromCode(character) : character.charAt(0)
-      );
+      )
     }
 
     var newline_1 = newline;
@@ -10957,9 +10901,11 @@
       var val = String(value);
       var index = val.length;
 
-      while (val.charAt(--index) === line) { /* empty */ }
+      while (val.charAt(--index) === line) {
+        /* Empty */
+      }
 
-      return val.slice(0, index + 1);
+      return val.slice(0, index + 1)
     }
 
     var codeIndented = indentedCode;
@@ -12492,7 +12438,7 @@
 
     /* collapse(' \t\nbar \nbaz\t'); // ' bar baz ' */
     function collapse(value) {
-      return String(value).replace(/\s+/g, ' ');
+      return String(value).replace(/\s+/g, ' ')
     }
 
     var normalize_1 = normalize$1;
@@ -12508,7 +12454,7 @@
     footnoteDefinition.notInBlock = true;
 
     var C_BACKSLASH = '\\';
-    var C_NEWLINE$10 = '\n';
+    var C_NEWLINE$a = '\n';
     var C_TAB$9 = '\t';
     var C_SPACE$9 = ' ';
     var C_BRACKET_OPEN = '[';
@@ -12617,14 +12563,14 @@
       while (index < length) {
         character = value.charAt(index);
 
-        if (character === C_NEWLINE$10) {
+        if (character === C_NEWLINE$a) {
           subqueue = character;
           index++;
 
           while (index < length) {
             character = value.charAt(index);
 
-            if (character !== C_NEWLINE$10) {
+            if (character !== C_NEWLINE$a) {
               break;
             }
 
@@ -12691,9 +12637,9 @@
     var C_DOUBLE_QUOTE = '"';
     var C_SINGLE_QUOTE = '\'';
     var C_BACKSLASH$1 = '\\';
-    var C_NEWLINE$11 = '\n';
-    var C_TAB$10 = '\t';
-    var C_SPACE$10 = ' ';
+    var C_NEWLINE$b = '\n';
+    var C_TAB$a = '\t';
+    var C_SPACE$a = ' ';
     var C_BRACKET_OPEN$1 = '[';
     var C_BRACKET_CLOSE$1 = ']';
     var C_PAREN_OPEN = '(';
@@ -12720,7 +12666,7 @@
       while (index < length) {
         character = value.charAt(index);
 
-        if (character !== C_SPACE$10 && character !== C_TAB$10) {
+        if (character !== C_SPACE$a && character !== C_TAB$a) {
           break;
         }
 
@@ -12770,9 +12716,9 @@
         character = value.charAt(index);
 
         if (
-          character !== C_TAB$10 &&
-          character !== C_SPACE$10 &&
-          character !== C_NEWLINE$11
+          character !== C_TAB$a &&
+          character !== C_SPACE$a &&
+          character !== C_NEWLINE$b
         ) {
           break;
         }
@@ -12840,9 +12786,9 @@
         character = value.charAt(index);
 
         if (
-          character !== C_TAB$10 &&
-          character !== C_SPACE$10 &&
-          character !== C_NEWLINE$11
+          character !== C_TAB$a &&
+          character !== C_SPACE$a &&
+          character !== C_NEWLINE$b
         ) {
           break;
         }
@@ -12877,15 +12823,15 @@
             break;
           }
 
-          if (character === C_NEWLINE$11) {
+          if (character === C_NEWLINE$b) {
             index++;
             character = value.charAt(index);
 
-            if (character === C_NEWLINE$11 || character === test) {
+            if (character === C_NEWLINE$b || character === test) {
               return;
             }
 
-            queue += C_NEWLINE$11;
+            queue += C_NEWLINE$b;
           }
 
           queue += character;
@@ -12910,7 +12856,7 @@
       while (index < length) {
         character = value.charAt(index);
 
-        if (character !== C_TAB$10 && character !== C_SPACE$10) {
+        if (character !== C_TAB$a && character !== C_SPACE$a) {
           break;
         }
 
@@ -12920,7 +12866,7 @@
 
       character = value.charAt(index);
 
-      if (!character || character === C_NEWLINE$11) {
+      if (!character || character === C_NEWLINE$b) {
         if (silent) {
           return true;
         }
@@ -12965,9 +12911,9 @@
     var C_DASH$3 = '-';
     var C_PIPE = '|';
     var C_COLON$2 = ':';
-    var C_SPACE$11 = ' ';
-    var C_NEWLINE$12 = '\n';
-    var C_TAB$11 = '\t';
+    var C_SPACE$b = ' ';
+    var C_NEWLINE$c = '\n';
+    var C_TAB$b = '\t';
 
     var MIN_TABLE_COLUMNS = 1;
     var MIN_TABLE_ROWS = 2;
@@ -13020,7 +12966,7 @@
       lines = [];
 
       while (index < length) {
-        lineIndex = value.indexOf(C_NEWLINE$12, index);
+        lineIndex = value.indexOf(C_NEWLINE$c, index);
         pipeIndex = value.indexOf(C_PIPE, index + 1);
 
         if (lineIndex === -1) {
@@ -13041,7 +12987,7 @@
       }
 
       /* Parse the alignment row. */
-      subvalue = lines.join(C_NEWLINE$12);
+      subvalue = lines.join(C_NEWLINE$c);
       alignments = lines.splice(1, 1)[0] || [];
       index = 0;
       length = alignments.length;
@@ -13114,7 +13060,7 @@
         /* Eat a newline character when this is not the
          * first row. */
         if (position) {
-          eat(C_NEWLINE$12);
+          eat(C_NEWLINE$c);
         }
 
         /* Eat the row. */
@@ -13131,7 +13077,7 @@
         while (index < length) {
           character = line.charAt(index);
 
-          if (character === C_TAB$11 || character === C_SPACE$11) {
+          if (character === C_TAB$b || character === C_SPACE$b) {
             if (cell) {
               queue += character;
             } else {
@@ -13214,7 +13160,7 @@
 
         /* Eat the alignment row. */
         if (!position) {
-          eat(C_NEWLINE$12 + alignments);
+          eat(C_NEWLINE$c + alignments);
         }
       }
 
@@ -13223,9 +13169,9 @@
 
     var paragraph_1 = paragraph;
 
-    var C_NEWLINE$13 = '\n';
-    var C_TAB$12 = '\t';
-    var C_SPACE$12 = ' ';
+    var C_NEWLINE$d = '\n';
+    var C_TAB$c = '\t';
+    var C_SPACE$c = ' ';
 
     var TAB_SIZE$1 = 4;
 
@@ -13237,7 +13183,7 @@
       var gfm = settings.gfm;
       var tokenizers = self.blockTokenizers;
       var interruptors = self.interruptParagraph;
-      var index = value.indexOf(C_NEWLINE$13);
+      var index = value.indexOf(C_NEWLINE$d);
       var length = value.length;
       var position;
       var subvalue;
@@ -13253,7 +13199,7 @@
         }
 
         /* Stop if the next character is NEWLINE. */
-        if (value.charAt(index + 1) === C_NEWLINE$13) {
+        if (value.charAt(index + 1) === C_NEWLINE$d) {
           break;
         }
 
@@ -13266,10 +13212,10 @@
           while (position < length) {
             character = value.charAt(position);
 
-            if (character === C_TAB$12) {
+            if (character === C_TAB$c) {
               size = TAB_SIZE$1;
               break;
-            } else if (character === C_SPACE$12) {
+            } else if (character === C_SPACE$c) {
               size++;
             } else {
               break;
@@ -13279,7 +13225,7 @@
           }
 
           if (size >= TAB_SIZE$1) {
-            index = value.indexOf(C_NEWLINE$13, index + 1);
+            index = value.indexOf(C_NEWLINE$d, index + 1);
             continue;
           }
         }
@@ -13307,7 +13253,7 @@
         }
 
         position = index;
-        index = value.indexOf(C_NEWLINE$13, index + 1);
+        index = value.indexOf(C_NEWLINE$d, index + 1);
 
         if (index !== -1 && trim_1(value.slice(position, index)) === '') {
           index = position;
@@ -13515,7 +13461,7 @@
       return eat(subvalue)({
         type: 'link',
         title: null,
-        url: parseEntities(link, {nonTerminated: false}),
+        url: parseEntities_1(link, {nonTerminated: false}),
         children: content
       });
     }
@@ -13679,7 +13625,7 @@
       return eat(subvalue)({
         type: 'link',
         title: null,
-        url: parseEntities(subvalue, {nonTerminated: false}),
+        url: parseEntities_1(subvalue, {nonTerminated: false}),
         children: content
       });
     }
@@ -14445,7 +14391,7 @@
     function wordCharacter(character) {
       return re$2.test(
         typeof character === 'number' ? fromCode$1(character) : character.charAt(0)
-      );
+      )
     }
 
     var emphasis = locate$5;
@@ -14983,144 +14929,6 @@
       this.Parser = Local;
     }
 
-    /**
-     * Copyright (c) 2013-present, Facebook, Inc.
-     *
-     * This source code is licensed under the MIT license found in the
-     * LICENSE file in the root directory of this source tree.
-     *
-     * 
-     */
-
-    function makeEmptyFunction(arg) {
-      return function () {
-        return arg;
-      };
-    }
-
-    /**
-     * This function accepts and discards inputs; it has no side effects. This is
-     * primarily useful idiomatically for overridable function endpoints which
-     * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-     */
-    var emptyFunction = function emptyFunction() {};
-
-    emptyFunction.thatReturns = makeEmptyFunction;
-    emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-    emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-    emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-    emptyFunction.thatReturnsThis = function () {
-      return this;
-    };
-    emptyFunction.thatReturnsArgument = function (arg) {
-      return arg;
-    };
-
-    var emptyFunction_1 = emptyFunction;
-
-    /**
-     * Copyright (c) 2013-present, Facebook, Inc.
-     *
-     * This source code is licensed under the MIT license found in the
-     * LICENSE file in the root directory of this source tree.
-     *
-     */
-
-    /**
-     * Use invariant() to assert state which your program assumes to be true.
-     *
-     * Provide sprintf-style format (only %s is supported) and arguments
-     * to provide information about what broke and what you were
-     * expecting.
-     *
-     * The invariant message will be stripped in production, but the invariant
-     * will remain to ensure logic does not differ in production.
-     */
-
-    var validateFormat = function validateFormat(format) {};
-
-    if (process.env.NODE_ENV !== 'production') {
-      validateFormat = function validateFormat(format) {
-        if (format === undefined) {
-          throw new Error('invariant requires an error message argument');
-        }
-      };
-    }
-
-    function invariant(condition, format, a, b, c, d, e, f) {
-      validateFormat(format);
-
-      if (!condition) {
-        var error;
-        if (format === undefined) {
-          error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-        } else {
-          var args = [a, b, c, d, e, f];
-          var argIndex = 0;
-          error = new Error(format.replace(/%s/g, function () {
-            return args[argIndex++];
-          }));
-          error.name = 'Invariant Violation';
-        }
-
-        error.framesToPop = 1; // we don't care about invariant's own frame
-        throw error;
-      }
-    }
-
-    var invariant_1 = invariant;
-
-    /**
-     * Similar to invariant but only logs a warning if the condition is not met.
-     * This can be used to log issues in development environments in critical
-     * paths. Removing the logging code for production environments will keep the
-     * same logic and follow the same code paths.
-     */
-
-    var warning = emptyFunction_1;
-
-    if (process.env.NODE_ENV !== 'production') {
-      var printWarning = function printWarning(format) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
-        }
-
-        var argIndex = 0;
-        var message = 'Warning: ' + format.replace(/%s/g, function () {
-          return args[argIndex++];
-        });
-        if (typeof console !== 'undefined') {
-          console.error(message);
-        }
-        try {
-          // --- Welcome to debugging React ---
-          // This error was thrown as a convenience so that you can use this stack
-          // to find the callsite that caused this warning to fire.
-          throw new Error(message);
-        } catch (x) {}
-      };
-
-      warning = function warning(condition, format) {
-        if (format === undefined) {
-          throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-        }
-
-        if (format.indexOf('Failed Composite propType: ') === 0) {
-          return; // Ignore CompositeComponent proptype check.
-        }
-
-        if (!condition) {
-          for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-            args[_key2 - 2] = arguments[_key2];
-          }
-
-          printWarning.apply(undefined, [format].concat(args));
-        }
-      };
-    }
-
-    var warning_1 = warning;
-
     /*
     object-assign
     (c) Sindre Sorhus
@@ -15221,11 +15029,24 @@
 
     var ReactPropTypesSecret_1 = ReactPropTypesSecret;
 
+    var printWarning = function() {};
+
     if (process.env.NODE_ENV !== 'production') {
-      var invariant$1 = invariant_1;
-      var warning$1 = warning_1;
       var ReactPropTypesSecret$1 = ReactPropTypesSecret_1;
       var loggedTypeFailures = {};
+
+      printWarning = function(text) {
+        var message = 'Warning: ' + text;
+        if (typeof console !== 'undefined') {
+          console.error(message);
+        }
+        try {
+          // --- Welcome to debugging React ---
+          // This error was thrown as a convenience so that you can use this stack
+          // to find the callsite that caused this warning to fire.
+          throw new Error(message);
+        } catch (x) {}
+      };
     }
 
     /**
@@ -15250,12 +15071,29 @@
             try {
               // This is intentionally an invariant that gets caught. It's the same
               // behavior as without this statement except with a better message.
-              invariant$1(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
+              if (typeof typeSpecs[typeSpecName] !== 'function') {
+                var err = Error(
+                  (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
+                  'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.'
+                );
+                err.name = 'Invariant Violation';
+                throw err;
+              }
               error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret$1);
             } catch (ex) {
               error = ex;
             }
-            warning$1(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
+            if (error && !(error instanceof Error)) {
+              printWarning(
+                (componentName || 'React class') + ': type specification of ' +
+                location + ' `' + typeSpecName + '` is invalid; the type checker ' +
+                'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
+                'You may have forgotten to pass an argument to the type checker ' +
+                'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
+                'shape all require an argument).'
+              );
+
+            }
             if (error instanceof Error && !(error.message in loggedTypeFailures)) {
               // Only monitor this failure once because there tends to be a lot of the
               // same error.
@@ -15263,7 +15101,9 @@
 
               var stack = getStack ? getStack() : '';
 
-              warning$1(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+              printWarning(
+                'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
+              );
             }
           }
         }
@@ -15271,6 +15111,27 @@
     }
 
     var checkPropTypes_1 = checkPropTypes;
+
+    var printWarning$1 = function() {};
+
+    if (process.env.NODE_ENV !== 'production') {
+      printWarning$1 = function(text) {
+        var message = 'Warning: ' + text;
+        if (typeof console !== 'undefined') {
+          console.error(message);
+        }
+        try {
+          // --- Welcome to debugging React ---
+          // This error was thrown as a convenience so that you can use this stack
+          // to find the callsite that caused this warning to fire.
+          throw new Error(message);
+        } catch (x) {}
+      };
+    }
+
+    function emptyFunctionThatReturnsNull() {
+      return null;
+    }
 
     var factoryWithTypeCheckers = function(isValidElement, throwOnDirectAccess) {
       /* global Symbol */
@@ -15414,12 +15275,13 @@
           if (secret !== ReactPropTypesSecret_1) {
             if (throwOnDirectAccess) {
               // New behavior only for users of `prop-types` package
-              invariant_1(
-                false,
+              var err = new Error(
                 'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
                 'Use `PropTypes.checkPropTypes()` to call them. ' +
                 'Read more at http://fb.me/use-check-prop-types'
               );
+              err.name = 'Invariant Violation';
+              throw err;
             } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
               // Old behavior for people using React.PropTypes
               var cacheKey = componentName + ':' + propName;
@@ -15428,15 +15290,12 @@
                 // Avoid spamming the console because they are often not actionable except for lib authors
                 manualPropTypeWarningCount < 3
               ) {
-                warning_1(
-                  false,
+                printWarning$1(
                   'You are manually calling a React.PropTypes validation ' +
-                  'function for the `%s` prop on `%s`. This is deprecated ' +
+                  'function for the `' + propFullName + '` prop on `' + componentName  + '`. This is deprecated ' +
                   'and will throw in the standalone `prop-types` package. ' +
                   'You may be seeing this warning due to a third-party PropTypes ' +
-                  'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
-                  propFullName,
-                  componentName
+                  'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
                 );
                 manualPropTypeCallCache[cacheKey] = true;
                 manualPropTypeWarningCount++;
@@ -15480,7 +15339,7 @@
       }
 
       function createAnyTypeChecker() {
-        return createChainableTypeChecker(emptyFunction_1.thatReturnsNull);
+        return createChainableTypeChecker(emptyFunctionThatReturnsNull);
       }
 
       function createArrayOfTypeChecker(typeChecker) {
@@ -15530,8 +15389,8 @@
 
       function createEnumTypeChecker(expectedValues) {
         if (!Array.isArray(expectedValues)) {
-          process.env.NODE_ENV !== 'production' ? warning_1(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-          return emptyFunction_1.thatReturnsNull;
+          process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+          return emptyFunctionThatReturnsNull;
         }
 
         function validate(props, propName, componentName, location, propFullName) {
@@ -15573,21 +15432,18 @@
 
       function createUnionTypeChecker(arrayOfTypeCheckers) {
         if (!Array.isArray(arrayOfTypeCheckers)) {
-          process.env.NODE_ENV !== 'production' ? warning_1(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-          return emptyFunction_1.thatReturnsNull;
+          process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+          return emptyFunctionThatReturnsNull;
         }
 
         for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
           var checker = arrayOfTypeCheckers[i];
           if (typeof checker !== 'function') {
-            warning_1(
-              false,
+            printWarning$1(
               'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-              'received %s at index %s.',
-              getPostfixForTypeWarning(checker),
-              i
+              'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
             );
-            return emptyFunction_1.thatReturnsNull;
+            return emptyFunctionThatReturnsNull;
           }
         }
 
@@ -15798,18 +15654,21 @@
       return ReactPropTypes;
     };
 
+    function emptyFunction() {}
+
     var factoryWithThrowingShims = function() {
       function shim(props, propName, componentName, location, propFullName, secret) {
         if (secret === ReactPropTypesSecret_1) {
           // It is still safe when called from React.
           return;
         }
-        invariant_1(
-          false,
+        var err = new Error(
           'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
           'Use PropTypes.checkPropTypes() to call them. ' +
           'Read more at http://fb.me/use-check-prop-types'
         );
+        err.name = 'Invariant Violation';
+        throw err;
       }  shim.isRequired = shim;
       function getShim() {
         return shim;
@@ -15836,7 +15695,7 @@
         exact: getShim
       };
 
-      ReactPropTypes.checkPropTypes = emptyFunction_1;
+      ReactPropTypes.checkPropTypes = emptyFunction;
       ReactPropTypes.PropTypes = ReactPropTypes;
 
       return ReactPropTypes;
@@ -15994,7 +15853,12 @@
       if (mode === 'remove') {
         parent.children.splice(index, 1);
       } else if (mode === 'unwrap') {
-        var args = [index, 1].concat(node.children);
+        var args = [index, 1];
+
+        if (node.children) {
+          args = args.concat(node.children);
+        }
+
         Array.prototype.splice.apply(parent.children, args);
       }
     }
@@ -16038,14 +15902,20 @@
 
     // eslint-disable-next-line max-params, complexity
     function getNodeProps(node, key, opts, renderer, parent, index) {
-      var props = { key: key
+      var props = { key: key };
 
-        // `sourcePos` is true if the user wants source information (line/column info from markdown source)
-      };if (opts.sourcePos && node.position) {
+      var isTagRenderer = typeof renderer === 'string';
+
+      // `sourcePos` is true if the user wants source information (line/column info from markdown source)
+      if (opts.sourcePos && node.position) {
         props['data-sourcepos'] = flattenPosition(node.position);
       }
 
-      var ref = node.identifier ? opts.definitions[node.identifier] || {} : null;
+      if (opts.rawSourcePos && !isTagRenderer) {
+        props.sourcePosition = node.position;
+      }
+
+      var ref = node.identifier !== null && node.identifier !== undefined ? opts.definitions[node.identifier] || {} : null;
 
       switch (node.type) {
         case 'root':
@@ -16126,9 +15996,14 @@
           props.skipHtml = opts.skipHtml;
           break;
         default:
+          assignDefined(props, immutable(node, {
+            type: undefined,
+            position: undefined,
+            children: undefined
+          }));
       }
 
-      if (typeof renderer !== 'string' && node.value) {
+      if (!isTagRenderer && node.value) {
         props.value = node.value;
       }
 
@@ -16337,6 +16212,20 @@
       return props['data-sourcepos'] ? { 'data-sourcepos': props['data-sourcepos'] } : {};
     }
 
+    function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+
+
+
+
+
+
+
+
+
+
+
+
     var allTypes = Object.keys(renderers);
 
     var ReactMarkdown = function ReactMarkdown(props) {
@@ -16366,7 +16255,7 @@
     };
 
     function applyParserPlugin(parser, plugin) {
-      return Array.isArray(plugin) ? parser.use(plugin[0], plugin[1]) : parser.use(plugin);
+      return Array.isArray(plugin) ? parser.use.apply(parser, _toConsumableArray(plugin)) : parser.use(plugin);
     }
 
     function determineAstPlugins(props) {
@@ -16400,7 +16289,11 @@
       renderers: {},
       escapeHtml: true,
       skipHtml: false,
-      transformLinkUri: uriTransformer
+      sourcePos: false,
+      rawSourcePos: false,
+      transformLinkUri: uriTransformer,
+      astPlugins: [],
+      plugins: []
     };
 
     ReactMarkdown.propTypes = {
@@ -16408,6 +16301,7 @@
       source: propTypes.string,
       children: propTypes.string,
       sourcePos: propTypes.bool,
+      rawSourcePos: propTypes.bool,
       escapeHtml: propTypes.bool,
       skipHtml: propTypes.bool,
       allowNode: propTypes.func,
@@ -16417,7 +16311,8 @@
       transformImageUri: propTypes.func,
       astPlugins: propTypes.arrayOf(propTypes.func),
       unwrapDisallowed: propTypes.bool,
-      renderers: propTypes.object
+      renderers: propTypes.object,
+      plugins: propTypes.array
     };
 
     ReactMarkdown.types = allTypes;
@@ -16929,9 +16824,7 @@
         } else if (c === ')') {
           isParenthesisOpen = false;
         } else if (c === ';') {
-          if (isParenthesisOpen) {
-            // 在圆括号里面，忽略
-          } else {
+          if (isParenthesisOpen) ; else {
             addNewAttr();
           }
         } else if (c === '\n') {
@@ -18051,6 +17944,14 @@
     // using `xss` on the browser, output `filterXSS` to the globals
     if (typeof window !== "undefined") {
       window.filterXSS = module.exports;
+    }
+
+    // using `xss` on the WebWorker, output `filterXSS` to the globals
+    function isWorkerEnv() {
+      return typeof self !== 'undefined' && typeof DedicatedWorkerGlobalScope !== 'undefined' && self instanceof DedicatedWorkerGlobalScope;
+    }
+    if (isWorkerEnv()) {
+      self.filterXSS = module.exports;
     }
     });
     var lib_1$1 = lib$1.FilterXSS;

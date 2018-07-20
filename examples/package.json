@@ -4,24 +4,25 @@
   "private": true,
   "homepage": "https://gforge.github.io/reactstrap-md-textarea/",
   "dependencies": {
-    "@types/reactstrap": "^5.0.21",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-scripts-ts": "2.14.0",
-    "reactstrap": "^5.0.0",
-    "reactstrap-md-textarea": "^0.2.0"
+    "@types/reactstrap": "^6.0.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts-ts": "2.16.0",
+    "reactstrap": "^6.3.0",
+    "reactstrap-md-textarea": "^0.4.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "flink": "yarn link reactstrap-md-textarea"
   },
   "devDependencies": {
-    "@types/jest": "^22.2.2",
-    "@types/node": "^9.6.2",
-    "@types/react": "^16.3.5",
-    "@types/react-dom": "^16.0.4",
-    "typescript": "^2.8.1"
+    "@types/jest": "^23.3.0",
+    "@types/node": "^10.5.2",
+    "@types/react": "^16.4.6",
+    "@types/react-dom": "^16.0.6",
+    "typescript": "^2.9.2"
   }
 }
