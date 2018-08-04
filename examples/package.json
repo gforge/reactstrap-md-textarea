@@ -5,11 +5,12 @@
   "homepage": "https://gforge.github.io/reactstrap-md-textarea/",
   "dependencies": {
     "@types/reactstrap": "^6.0.2",
+    "bootstrap": "^4.1.3",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts-ts": "2.16.0",
     "reactstrap": "^6.3.1",
-    "reactstrap-md-textarea": "^0.4.1"
+    "reactstrap-md-textarea": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
