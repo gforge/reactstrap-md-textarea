@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('react'), require('reactstrap')) :
     typeof define === 'function' && define.amd ? define(['exports', 'tslib', 'react', 'reactstrap'], factory) :
-    (factory((global.FormikAdminTaskType = {}),global.tslib,global.React,global.reactstrap));
+    (factory((global['reactstrap-md-textarea'] = {}),global.tslib,global.React,global.reactstrap));
 }(this, (function (exports,tslib_1,React,reactstrap) { 'use strict';
 
     var React__default = React['default'];

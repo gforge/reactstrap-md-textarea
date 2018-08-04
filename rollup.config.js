@@ -47,9 +47,9 @@ const sharedPlugins = [
 export default [
   Object.assign({}, shared, {
     output: {
-      name: 'FormikAdminTaskType',
+      name: 'reactstrap-md-textarea',
       format: 'umd',
-      sourcemap: true,
+      sourcemap: process.env.NODE_ENV !== 'production',
       file:
         process.env.NODE_ENV === 'production'
           ? './dist/textarea.umd.min.js'
@@ -91,11 +91,13 @@ export default [
     external: shared.external.concat(Object.keys(pkg.dependencies)),
     output: [
       {
+        name: 'reactstrap-md-textarea',
         file: 'dist/textarea.es6.js',
         format: 'es',
         sourcemap: true,
       },
       {
+        name: 'reactstrap-md-textarea',
         file: 'dist/textarea.js',
         format: 'cjs',
         sourcemap: true,
