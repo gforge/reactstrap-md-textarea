@@ -30,7 +30,8 @@
     "start:example": "cd examples && npm run start",
     "build:example": "cd examples && npm install && npm run build",
     "link:example": "npm link && cd examples && npm link reactstrap-md-textarea",
-    "deploy": "npm run link:example && npm run build:example && gh-pages -d examples/build"
+    "deploy": "npm run link:example && npm run build:example && gh-pages -d examples/build",
+    "install:react": "npm install --no-save react react-dom"
   },
   "dependencies": {
     "react-markdown": "^3.4.1",

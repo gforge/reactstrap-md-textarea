@@ -73,14 +73,14 @@ export default [
       sourceMaps(),
       process.env.NODE_ENV === 'production' && filesize(),
       process.env.NODE_ENV === 'production' &&
-       terser({
+        terser({
           output: { comments: false },
           compress: {
             keep_infinity: true,
             pure_getters: true,
           },
           warnings: true,
-          ecma: 5,
+          ecma: 6,
           toplevel: false,
         }),
     ],
