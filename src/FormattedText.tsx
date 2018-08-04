@@ -8,7 +8,7 @@ export interface FilterInput {
 }
 
 export interface Props extends FilterInput {
-  allowFilteredHtml: boolean;
+  allowFilteredHtml?: boolean;
 }
 
 export default class FormattedText extends React.PureComponent<Props> {

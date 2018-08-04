@@ -102,6 +102,14 @@ class App extends React.Component {
               <FormattedText value={this.state.htmlTxt} allowFilteredHtml={true} />
             </CardBody>
           </Card>
+
+          <br />
+          <Card>
+            <CardHeader>The FormattedText component without allowFilteredHtml</CardHeader>
+            <CardBody>
+              <FormattedText value={this.state.mdTxt} />
+            </CardBody>
+          </Card>
         </article>
       </div>
     );

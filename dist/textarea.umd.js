@@ -4,7 +4,7 @@
     (factory((global['reactstrap-md-textarea'] = {}),global.tslib,global.React,global.reactstrap));
 }(this, (function (exports,tslib_1,React,reactstrap) { 'use strict';
 
-    var React__default = React['default'];
+    var React__default = 'default' in React ? React['default'] : React;
 
     var wrapper = function (_a) {
         var children = _a.children, _b = _a.style, style = _b === void 0 ? {} : _b;
@@ -33,6 +33,8 @@
 
     var hasOwn = Object.prototype.hasOwnProperty;
     var toStr = Object.prototype.toString;
+    var defineProperty = Object.defineProperty;
+    var gOPD = Object.getOwnPropertyDescriptor;
 
     var isArray = function isArray(arr) {
     	if (typeof Array.isArray === 'function') {
@@ -62,6 +64,35 @@
     	return typeof key === 'undefined' || hasOwn.call(obj, key);
     };
 
+    // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+    var setProperty = function setProperty(target, options) {
+    	if (defineProperty && options.name === '__proto__') {
+    		defineProperty(target, options.name, {
+    			enumerable: true,
+    			configurable: true,
+    			value: options.newValue,
+    			writable: true
+    		});
+    	} else {
+    		target[options.name] = options.newValue;
+    	}
+    };
+
+    // Return undefined instead of __proto__ if '__proto__' is not an own property
+    var getProperty = function getProperty(obj, name) {
+    	if (name === '__proto__') {
+    		if (!hasOwn.call(obj, name)) {
+    			return void 0;
+    		} else if (gOPD) {
+    			// In early versions of node, obj['__proto__'] is buggy when obj has
+    			// __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+    			return gOPD(obj, name).value;
+    		}
+    	}
+
+    	return obj[name];
+    };
+
     var extend$1 = function extend() {
     	var options, name, src, copy, copyIsArray, clone;
     	var target = arguments[0];
@@ -86,8 +117,8 @@
     		if (options != null) {
     			// Extend the base object
     			for (name in options) {
-    				src = target[name];
-    				copy = options[name];
+    				src = getProperty(target, name);
+    				copy = getProperty(options, name);
 
     				// Prevent never-ending loop
     				if (target !== copy) {
@@ -101,11 +132,11 @@
     						}
 
     						// Never move original objects, clone them
-    						target[name] = extend(deep, clone, copy);
+    						setProperty(target, { name: name, newValue: extend(deep, clone, copy) });
 
     					// Don't bring in undefined values
     					} else if (typeof copy !== 'undefined') {
-    						target[name] = copy;
+    						setProperty(target, { name: name, newValue: copy });
     					}
     				}
     			}
@@ -1673,18 +1704,10 @@
         };
       }
 
-      if (process$1.noDeprecation === true) {
-        return fn;
-      }
-
       var warned = false;
       function deprecated() {
         if (!warned) {
-          if (process$1.throwDeprecation) {
-            throw new Error(msg);
-          } else if (process$1.traceDeprecation) {
-            console.trace(msg);
-          } else {
+          {
             console.error(msg);
           }
           warned = true;
@@ -2176,7 +2199,7 @@
       deprecate: deprecate,
       format: format,
       debuglog: debuglog
-    }
+    };
 
     var util$1 = /*#__PURE__*/Object.freeze({
         format: format,
@@ -4943,6 +4966,7 @@
     	Lsh: Lsh,
     	Lstrok: Lstrok,
     	Lt: Lt,
+    	"Map": "⤅",
     	Mcy: Mcy,
     	MediumSpace: MediumSpace,
     	Mellintrf: Mellintrf,
@@ -5839,6 +5863,7 @@
     	imath: imath,
     	imof: imof,
     	imped: imped,
+    	"in": "∈",
     	incare: incare,
     	infin: infin,
     	infintie: infintie,
@@ -6857,9 +6882,7 @@
     	zopf: zopf,
     	zscr: zscr,
     	zwj: zwj,
-    	zwnj: zwnj,
-    	"Map": "⤅",
-    	"in": "∈"
+    	zwnj: zwnj
     };
 
     var characterEntities = /*#__PURE__*/Object.freeze({
@@ -10622,7 +10645,7 @@
       return true
     }
 
-    var unistUtilVisit = visit;
+    var unistUtilVisitParents = visitParents;
 
 
 
@@ -10630,9 +10653,70 @@
     var SKIP = 'skip';
     var EXIT = false;
 
-    visit.CONTINUE = CONTINUE;
-    visit.SKIP = SKIP;
-    visit.EXIT = EXIT;
+    visitParents.CONTINUE = CONTINUE;
+    visitParents.SKIP = SKIP;
+    visitParents.EXIT = EXIT;
+
+    function visitParents(tree, test, visitor, reverse) {
+      if (typeof test === 'function' && typeof visitor !== 'function') {
+        reverse = visitor;
+        visitor = test;
+        test = null;
+      }
+
+      one(tree, null, []);
+
+      // Visit a single node.
+      function one(node, index, parents) {
+        var result;
+
+        if (!test || unistUtilIs(test, node, index, parents[parents.length - 1] || null)) {
+          result = visitor(node, parents);
+
+          if (result === EXIT) {
+            return result
+          }
+        }
+
+        if (node.children && result !== SKIP) {
+          return all(node.children, parents.concat(node)) === EXIT ? EXIT : result
+        }
+
+        return result
+      }
+
+      // Visit children in `parent`.
+      function all(children, parents) {
+        var min = -1;
+        var step = reverse ? -1 : 1;
+        var index = (reverse ? children.length : min) + step;
+        var child;
+        var result;
+
+        while (index > min && index < children.length) {
+          child = children[index];
+          result = child && one(child, index, parents);
+
+          if (result === EXIT) {
+            return result
+          }
+
+          index = typeof result === 'number' ? result : index + step;
+        }
+      }
+    }
+
+    var unistUtilVisit = visit;
+
+
+
+    var CONTINUE$1 = unistUtilVisitParents.CONTINUE;
+    var SKIP$1 = unistUtilVisitParents.SKIP;
+    var EXIT$1 = unistUtilVisitParents.EXIT;
+
+    visit.CONTINUE = CONTINUE$1;
+    visit.SKIP = SKIP$1;
+    visit.EXIT = EXIT$1;
 
     function visit(tree, test, visitor, reverse) {
       if (typeof test === 'function' && typeof visitor !== 'function') {
@@ -10641,48 +10725,12 @@
         test = null;
       }
 
-      one(tree);
+      unistUtilVisitParents(tree, test, overload, reverse);
 
-      /* Visit a single node. */
-      function one(node, index, parent) {
-        var result;
-
-        index = index || (parent ? 0 : null);
-
-        if (!test || node.type === test || unistUtilIs(test, node, index, parent || null)) {
-          result = visitor(node, index, parent || null);
-        }
-
-        if (result === EXIT) {
-          return result
-        }
-
-        if (node.children && result !== SKIP) {
-          return all(node.children, node) === EXIT ? EXIT : result
-        }
-
-        return result
-      }
-
-      /* Visit children in `parent`. */
-      function all(children, parent) {
-        var step = reverse ? -1 : 1;
-        var index = (reverse ? children.length : -1) + step;
-        var child;
-        var result;
-
-        while (index > -1 && index < children.length) {
-          child = children[index];
-          result = child && one(child, index, parent);
-
-          if (result === EXIT) {
-            return result
-          }
-
-          index = typeof result === 'number' ? result : index + step;
-        }
-
-        return CONTINUE
+      function overload(node, parents) {
+        var parent = parents[parents.length - 1];
+        var index = parent ? parent.children.indexOf(node) : null;
+        return visitor(node, index, parent)
       }
     }
 
@@ -12431,7 +12479,7 @@
     footnoteDefinition.notInBlock = true;
 
     var C_BACKSLASH = '\\';
-    var C_NEWLINE$10 = '\n';
+    var C_NEWLINE$a = '\n';
     var C_TAB$9 = '\t';
     var C_SPACE$9 = ' ';
     var C_BRACKET_OPEN = '[';
@@ -12540,14 +12588,14 @@
       while (index < length) {
         character = value.charAt(index);
 
-        if (character === C_NEWLINE$10) {
+        if (character === C_NEWLINE$a) {
           subqueue = character;
           index++;
 
           while (index < length) {
             character = value.charAt(index);
 
-            if (character !== C_NEWLINE$10) {
+            if (character !== C_NEWLINE$a) {
               break;
             }
 
@@ -12614,9 +12662,9 @@
     var C_DOUBLE_QUOTE = '"';
     var C_SINGLE_QUOTE = '\'';
     var C_BACKSLASH$1 = '\\';
-    var C_NEWLINE$11 = '\n';
-    var C_TAB$10 = '\t';
-    var C_SPACE$10 = ' ';
+    var C_NEWLINE$b = '\n';
+    var C_TAB$a = '\t';
+    var C_SPACE$a = ' ';
     var C_BRACKET_OPEN$1 = '[';
     var C_BRACKET_CLOSE$1 = ']';
     var C_PAREN_OPEN = '(';
@@ -12643,7 +12691,7 @@
       while (index < length) {
         character = value.charAt(index);
 
-        if (character !== C_SPACE$10 && character !== C_TAB$10) {
+        if (character !== C_SPACE$a && character !== C_TAB$a) {
           break;
         }
 
@@ -12693,9 +12741,9 @@
         character = value.charAt(index);
 
         if (
-          character !== C_TAB$10 &&
-          character !== C_SPACE$10 &&
-          character !== C_NEWLINE$11
+          character !== C_TAB$a &&
+          character !== C_SPACE$a &&
+          character !== C_NEWLINE$b
         ) {
           break;
         }
@@ -12763,9 +12811,9 @@
         character = value.charAt(index);
 
         if (
-          character !== C_TAB$10 &&
-          character !== C_SPACE$10 &&
-          character !== C_NEWLINE$11
+          character !== C_TAB$a &&
+          character !== C_SPACE$a &&
+          character !== C_NEWLINE$b
         ) {
           break;
         }
@@ -12800,15 +12848,15 @@
             break;
           }
 
-          if (character === C_NEWLINE$11) {
+          if (character === C_NEWLINE$b) {
             index++;
             character = value.charAt(index);
 
-            if (character === C_NEWLINE$11 || character === test) {
+            if (character === C_NEWLINE$b || character === test) {
               return;
             }
 
-            queue += C_NEWLINE$11;
+            queue += C_NEWLINE$b;
           }
 
           queue += character;
@@ -12833,7 +12881,7 @@
       while (index < length) {
         character = value.charAt(index);
 
-        if (character !== C_TAB$10 && character !== C_SPACE$10) {
+        if (character !== C_TAB$a && character !== C_SPACE$a) {
           break;
         }
 
@@ -12843,7 +12891,7 @@
 
       character = value.charAt(index);
 
-      if (!character || character === C_NEWLINE$11) {
+      if (!character || character === C_NEWLINE$b) {
         if (silent) {
           return true;
         }
@@ -12888,9 +12936,9 @@
     var C_DASH$3 = '-';
     var C_PIPE = '|';
     var C_COLON$2 = ':';
-    var C_SPACE$11 = ' ';
-    var C_NEWLINE$12 = '\n';
-    var C_TAB$11 = '\t';
+    var C_SPACE$b = ' ';
+    var C_NEWLINE$c = '\n';
+    var C_TAB$b = '\t';
 
     var MIN_TABLE_COLUMNS = 1;
     var MIN_TABLE_ROWS = 2;
@@ -12943,7 +12991,7 @@
       lines = [];
 
       while (index < length) {
-        lineIndex = value.indexOf(C_NEWLINE$12, index);
+        lineIndex = value.indexOf(C_NEWLINE$c, index);
         pipeIndex = value.indexOf(C_PIPE, index + 1);
 
         if (lineIndex === -1) {
@@ -12964,7 +13012,7 @@
       }
 
       /* Parse the alignment row. */
-      subvalue = lines.join(C_NEWLINE$12);
+      subvalue = lines.join(C_NEWLINE$c);
       alignments = lines.splice(1, 1)[0] || [];
       index = 0;
       length = alignments.length;
@@ -13037,7 +13085,7 @@
         /* Eat a newline character when this is not the
          * first row. */
         if (position) {
-          eat(C_NEWLINE$12);
+          eat(C_NEWLINE$c);
         }
 
         /* Eat the row. */
@@ -13054,7 +13102,7 @@
         while (index < length) {
           character = line.charAt(index);
 
-          if (character === C_TAB$11 || character === C_SPACE$11) {
+          if (character === C_TAB$b || character === C_SPACE$b) {
             if (cell) {
               queue += character;
             } else {
@@ -13137,7 +13185,7 @@
 
         /* Eat the alignment row. */
         if (!position) {
-          eat(C_NEWLINE$12 + alignments);
+          eat(C_NEWLINE$c + alignments);
         }
       }
 
@@ -13146,9 +13194,9 @@
 
     var paragraph_1 = paragraph;
 
-    var C_NEWLINE$13 = '\n';
-    var C_TAB$12 = '\t';
-    var C_SPACE$12 = ' ';
+    var C_NEWLINE$d = '\n';
+    var C_TAB$c = '\t';
+    var C_SPACE$c = ' ';
 
     var TAB_SIZE$1 = 4;
 
@@ -13160,7 +13208,7 @@
       var gfm = settings.gfm;
       var tokenizers = self.blockTokenizers;
       var interruptors = self.interruptParagraph;
-      var index = value.indexOf(C_NEWLINE$13);
+      var index = value.indexOf(C_NEWLINE$d);
       var length = value.length;
       var position;
       var subvalue;
@@ -13176,7 +13224,7 @@
         }
 
         /* Stop if the next character is NEWLINE. */
-        if (value.charAt(index + 1) === C_NEWLINE$13) {
+        if (value.charAt(index + 1) === C_NEWLINE$d) {
           break;
         }
 
@@ -13189,10 +13237,10 @@
           while (position < length) {
             character = value.charAt(position);
 
-            if (character === C_TAB$12) {
+            if (character === C_TAB$c) {
               size = TAB_SIZE$1;
               break;
-            } else if (character === C_SPACE$12) {
+            } else if (character === C_SPACE$c) {
               size++;
             } else {
               break;
@@ -13202,7 +13250,7 @@
           }
 
           if (size >= TAB_SIZE$1) {
-            index = value.indexOf(C_NEWLINE$13, index + 1);
+            index = value.indexOf(C_NEWLINE$d, index + 1);
             continue;
           }
         }
@@ -13230,7 +13278,7 @@
         }
 
         position = index;
-        index = value.indexOf(C_NEWLINE$13, index + 1);
+        index = value.indexOf(C_NEWLINE$d, index + 1);
 
         if (index !== -1 && trim_1(value.slice(position, index)) === '') {
           index = position;
@@ -14906,144 +14954,6 @@
       this.Parser = Local;
     }
 
-    /**
-     * Copyright (c) 2013-present, Facebook, Inc.
-     *
-     * This source code is licensed under the MIT license found in the
-     * LICENSE file in the root directory of this source tree.
-     *
-     * 
-     */
-
-    function makeEmptyFunction(arg) {
-      return function () {
-        return arg;
-      };
-    }
-
-    /**
-     * This function accepts and discards inputs; it has no side effects. This is
-     * primarily useful idiomatically for overridable function endpoints which
-     * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-     */
-    var emptyFunction = function emptyFunction() {};
-
-    emptyFunction.thatReturns = makeEmptyFunction;
-    emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-    emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-    emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-    emptyFunction.thatReturnsThis = function () {
-      return this;
-    };
-    emptyFunction.thatReturnsArgument = function (arg) {
-      return arg;
-    };
-
-    var emptyFunction_1 = emptyFunction;
-
-    /**
-     * Copyright (c) 2013-present, Facebook, Inc.
-     *
-     * This source code is licensed under the MIT license found in the
-     * LICENSE file in the root directory of this source tree.
-     *
-     */
-
-    /**
-     * Use invariant() to assert state which your program assumes to be true.
-     *
-     * Provide sprintf-style format (only %s is supported) and arguments
-     * to provide information about what broke and what you were
-     * expecting.
-     *
-     * The invariant message will be stripped in production, but the invariant
-     * will remain to ensure logic does not differ in production.
-     */
-
-    var validateFormat = function validateFormat(format) {};
-
-    if (process.env.NODE_ENV !== 'production') {
-      validateFormat = function validateFormat(format) {
-        if (format === undefined) {
-          throw new Error('invariant requires an error message argument');
-        }
-      };
-    }
-
-    function invariant(condition, format, a, b, c, d, e, f) {
-      validateFormat(format);
-
-      if (!condition) {
-        var error;
-        if (format === undefined) {
-          error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-        } else {
-          var args = [a, b, c, d, e, f];
-          var argIndex = 0;
-          error = new Error(format.replace(/%s/g, function () {
-            return args[argIndex++];
-          }));
-          error.name = 'Invariant Violation';
-        }
-
-        error.framesToPop = 1; // we don't care about invariant's own frame
-        throw error;
-      }
-    }
-
-    var invariant_1 = invariant;
-
-    /**
-     * Similar to invariant but only logs a warning if the condition is not met.
-     * This can be used to log issues in development environments in critical
-     * paths. Removing the logging code for production environments will keep the
-     * same logic and follow the same code paths.
-     */
-
-    var warning = emptyFunction_1;
-
-    if (process.env.NODE_ENV !== 'production') {
-      var printWarning = function printWarning(format) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
-        }
-
-        var argIndex = 0;
-        var message = 'Warning: ' + format.replace(/%s/g, function () {
-          return args[argIndex++];
-        });
-        if (typeof console !== 'undefined') {
-          console.error(message);
-        }
-        try {
-          // --- Welcome to debugging React ---
-          // This error was thrown as a convenience so that you can use this stack
-          // to find the callsite that caused this warning to fire.
-          throw new Error(message);
-        } catch (x) {}
-      };
-
-      warning = function warning(condition, format) {
-        if (format === undefined) {
-          throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-        }
-
-        if (format.indexOf('Failed Composite propType: ') === 0) {
-          return; // Ignore CompositeComponent proptype check.
-        }
-
-        if (!condition) {
-          for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-            args[_key2 - 2] = arguments[_key2];
-          }
-
-          printWarning.apply(undefined, [format].concat(args));
-        }
-      };
-    }
-
-    var warning_1 = warning;
-
     /*
     object-assign
     (c) Sindre Sorhus
@@ -15144,11 +15054,24 @@
 
     var ReactPropTypesSecret_1 = ReactPropTypesSecret;
 
+    var printWarning = function() {};
+
     if (process.env.NODE_ENV !== 'production') {
-      var invariant$1 = invariant_1;
-      var warning$1 = warning_1;
       var ReactPropTypesSecret$1 = ReactPropTypesSecret_1;
       var loggedTypeFailures = {};
+
+      printWarning = function(text) {
+        var message = 'Warning: ' + text;
+        if (typeof console !== 'undefined') {
+          console.error(message);
+        }
+        try {
+          // --- Welcome to debugging React ---
+          // This error was thrown as a convenience so that you can use this stack
+          // to find the callsite that caused this warning to fire.
+          throw new Error(message);
+        } catch (x) {}
+      };
     }
 
     /**
@@ -15173,12 +15096,29 @@
             try {
               // This is intentionally an invariant that gets caught. It's the same
               // behavior as without this statement except with a better message.
-              invariant$1(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
+              if (typeof typeSpecs[typeSpecName] !== 'function') {
+                var err = Error(
+                  (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
+                  'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.'
+                );
+                err.name = 'Invariant Violation';
+                throw err;
+              }
               error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret$1);
             } catch (ex) {
               error = ex;
             }
-            warning$1(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
+            if (error && !(error instanceof Error)) {
+              printWarning(
+                (componentName || 'React class') + ': type specification of ' +
+                location + ' `' + typeSpecName + '` is invalid; the type checker ' +
+                'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
+                'You may have forgotten to pass an argument to the type checker ' +
+                'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
+                'shape all require an argument).'
+              );
+
+            }
             if (error instanceof Error && !(error.message in loggedTypeFailures)) {
               // Only monitor this failure once because there tends to be a lot of the
               // same error.
@@ -15186,7 +15126,9 @@
 
               var stack = getStack ? getStack() : '';
 
-              warning$1(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+              printWarning(
+                'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
+              );
             }
           }
         }
@@ -15194,6 +15136,27 @@
     }
 
     var checkPropTypes_1 = checkPropTypes;
+
+    var printWarning$1 = function() {};
+
+    if (process.env.NODE_ENV !== 'production') {
+      printWarning$1 = function(text) {
+        var message = 'Warning: ' + text;
+        if (typeof console !== 'undefined') {
+          console.error(message);
+        }
+        try {
+          // --- Welcome to debugging React ---
+          // This error was thrown as a convenience so that you can use this stack
+          // to find the callsite that caused this warning to fire.
+          throw new Error(message);
+        } catch (x) {}
+      };
+    }
+
+    function emptyFunctionThatReturnsNull() {
+      return null;
+    }
 
     var factoryWithTypeCheckers = function(isValidElement, throwOnDirectAccess) {
       /* global Symbol */
@@ -15337,12 +15300,13 @@
           if (secret !== ReactPropTypesSecret_1) {
             if (throwOnDirectAccess) {
               // New behavior only for users of `prop-types` package
-              invariant_1(
-                false,
+              var err = new Error(
                 'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
                 'Use `PropTypes.checkPropTypes()` to call them. ' +
                 'Read more at http://fb.me/use-check-prop-types'
               );
+              err.name = 'Invariant Violation';
+              throw err;
             } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
               // Old behavior for people using React.PropTypes
               var cacheKey = componentName + ':' + propName;
@@ -15351,15 +15315,12 @@
                 // Avoid spamming the console because they are often not actionable except for lib authors
                 manualPropTypeWarningCount < 3
               ) {
-                warning_1(
-                  false,
+                printWarning$1(
                   'You are manually calling a React.PropTypes validation ' +
-                  'function for the `%s` prop on `%s`. This is deprecated ' +
+                  'function for the `' + propFullName + '` prop on `' + componentName  + '`. This is deprecated ' +
                   'and will throw in the standalone `prop-types` package. ' +
                   'You may be seeing this warning due to a third-party PropTypes ' +
-                  'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
-                  propFullName,
-                  componentName
+                  'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
                 );
                 manualPropTypeCallCache[cacheKey] = true;
                 manualPropTypeWarningCount++;
@@ -15403,7 +15364,7 @@
       }
 
       function createAnyTypeChecker() {
-        return createChainableTypeChecker(emptyFunction_1.thatReturnsNull);
+        return createChainableTypeChecker(emptyFunctionThatReturnsNull);
       }
 
       function createArrayOfTypeChecker(typeChecker) {
@@ -15453,8 +15414,8 @@
 
       function createEnumTypeChecker(expectedValues) {
         if (!Array.isArray(expectedValues)) {
-          process.env.NODE_ENV !== 'production' ? warning_1(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-          return emptyFunction_1.thatReturnsNull;
+          process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+          return emptyFunctionThatReturnsNull;
         }
 
         function validate(props, propName, componentName, location, propFullName) {
@@ -15496,21 +15457,18 @@
 
       function createUnionTypeChecker(arrayOfTypeCheckers) {
         if (!Array.isArray(arrayOfTypeCheckers)) {
-          process.env.NODE_ENV !== 'production' ? warning_1(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-          return emptyFunction_1.thatReturnsNull;
+          process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+          return emptyFunctionThatReturnsNull;
         }
 
         for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
           var checker = arrayOfTypeCheckers[i];
           if (typeof checker !== 'function') {
-            warning_1(
-              false,
+            printWarning$1(
               'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-              'received %s at index %s.',
-              getPostfixForTypeWarning(checker),
-              i
+              'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
             );
-            return emptyFunction_1.thatReturnsNull;
+            return emptyFunctionThatReturnsNull;
           }
         }
 
@@ -15721,18 +15679,21 @@
       return ReactPropTypes;
     };
 
+    function emptyFunction() {}
+
     var factoryWithThrowingShims = function() {
       function shim(props, propName, componentName, location, propFullName, secret) {
         if (secret === ReactPropTypesSecret_1) {
           // It is still safe when called from React.
           return;
         }
-        invariant_1(
-          false,
+        var err = new Error(
           'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
           'Use PropTypes.checkPropTypes() to call them. ' +
           'Read more at http://fb.me/use-check-prop-types'
         );
+        err.name = 'Invariant Violation';
+        throw err;
       }  shim.isRequired = shim;
       function getShim() {
         return shim;
@@ -15759,7 +15720,7 @@
         exact: getShim
       };
 
-      ReactPropTypes.checkPropTypes = emptyFunction_1;
+      ReactPropTypes.checkPropTypes = emptyFunction;
       ReactPropTypes.PropTypes = ReactPropTypes;
 
       return ReactPropTypes;
@@ -15795,6 +15756,77 @@
       module.exports = factoryWithThrowingShims();
     }
     });
+
+    /* Expose. */
+    var unistUtilVisitParents$1 = visitParents$1;
+
+    /* Visit. */
+    function visitParents$1(tree, type, visitor) {
+      var stack = [];
+
+      if (typeof type === 'function') {
+        visitor = type;
+        type = null;
+      }
+
+      one(tree);
+
+      /* Visit a single node. */
+      function one(node) {
+        var result;
+
+        if (!type || node.type === type) {
+          result = visitor(node, stack.concat());
+        }
+
+        if (node.children && result !== false) {
+          return all(node.children, node)
+        }
+
+        return result
+      }
+
+      /* Visit children in `parent`. */
+      function all(children, parent) {
+        var length = children.length;
+        var index = -1;
+        var child;
+
+        stack.push(parent);
+
+        while (++index < length) {
+          child = children[index];
+
+          if (child && one(child) === false) {
+            return false
+          }
+        }
+
+        stack.pop();
+
+        return true
+      }
+    }
+
+    function addListMetadata() {
+      return function (ast) {
+        unistUtilVisitParents$1(ast, 'list', function (listNode, parents) {
+          var depth = 0, i, n;
+          for (i = 0, n = parents.length; i < n; i++) {
+            if (parents[i].type === 'list') depth += 1;
+          }
+          for (i = 0, n = listNode.children.length; i < n; i++) {
+            var child = listNode.children[i];
+            child.index = i;
+            child.ordered = listNode.ordered;
+          }
+          listNode.depth = depth;
+        });
+        return ast;
+      };
+    }
+
+    var mdastAddListMetadata = addListMetadata;
 
     /**
      * Naive, simple plugin to match inline nodes without attributes
@@ -15917,7 +15949,12 @@
       if (mode === 'remove') {
         parent.children.splice(index, 1);
       } else if (mode === 'unwrap') {
-        var args = [index, 1].concat(node.children);
+        var args = [index, 1];
+
+        if (node.children) {
+          args = args.concat(node.children);
+        }
+
         Array.prototype.splice.apply(parent.children, args);
       }
     }
@@ -15974,7 +16011,7 @@
         props.sourcePosition = node.position;
       }
 
-      var ref = node.identifier ? opts.definitions[node.identifier] || {} : null;
+      var ref = node.identifier !== null && node.identifier !== undefined ? opts.definitions[node.identifier] || {} : null;
 
       switch (node.type) {
         case 'root':
@@ -15987,10 +16024,13 @@
           props.start = node.start;
           props.ordered = node.ordered;
           props.tight = !node.loose;
+          props.depth = node.depth;
           break;
         case 'listItem':
           props.checked = node.checked;
           props.tight = !node.loose;
+          props.ordered = node.ordered;
+          props.index = node.index;
           props.children = (props.tight ? unwrapParagraphs(node) : node.children).map(function (childNode, i) {
             return astToReact(childNode, opts, { node: node, props: props }, i);
           });
@@ -16285,6 +16325,7 @@
 
 
 
+
     var allTypes = Object.keys(renderers);
 
     var ReactMarkdown = function ReactMarkdown(props) {
@@ -16318,7 +16359,7 @@
     }
 
     function determineAstPlugins(props) {
-      var plugins = [wrapTableRows];
+      var plugins = [wrapTableRows, mdastAddListMetadata()];
 
       var disallowedTypes = props.disallowedTypes;
       if (props.allowedTypes) {
@@ -18004,6 +18045,14 @@
     if (typeof window !== "undefined") {
       window.filterXSS = module.exports;
     }
+
+    // using `xss` on the WebWorker, output `filterXSS` to the globals
+    function isWorkerEnv() {
+      return typeof self !== 'undefined' && typeof DedicatedWorkerGlobalScope !== 'undefined' && self instanceof DedicatedWorkerGlobalScope;
+    }
+    if (isWorkerEnv()) {
+      self.filterXSS = module.exports;
+    }
     });
     var lib_1$1 = lib$1.FilterXSS;
 
@@ -18043,20 +18092,17 @@
 
     var MdTextarea = (function (_super) {
         tslib_1.__extends(MdTextarea, _super);
-        function MdTextarea(props) {
-            var _this = _super.call(this, props) || this;
+        function MdTextarea() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.state = {
                 showEdit: true,
             };
-            _this.handleToggle = _this.handleToggle.bind(_this);
+            _this.handleToggle = function () { return _this.toggle(); };
             return _this;
         }
         MdTextarea.prototype.toggle = function (show) {
             if (show === void 0) { show = !this.state.showEdit; }
             this.setState({ showEdit: show });
-        };
-        MdTextarea.prototype.handleToggle = function () {
-            this.toggle();
         };
         MdTextarea.prototype.renderTextarea = function () {
             var _a = this.props, type = _a.type, allowFilteredHtml = _a.allowFilteredHtml, whiteList = _a.whiteList, other = tslib_1.__rest(_a, ["type", "allowFilteredHtml", "whiteList"]);

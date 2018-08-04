@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import * as React from 'react';
 import { InputProps } from 'reactstrap';
 export interface State {
@@ -15,12 +14,11 @@ export interface Props extends InputProps {
     cols?: number;
 }
 declare class MdTextarea extends React.Component<Props, State> {
-    constructor(props: Props);
     state: {
         showEdit: boolean;
     };
     toggle(show?: boolean): void;
-    handleToggle(): void;
+    handleToggle: () => void;
     renderTextarea(): JSX.Element;
     renderTabs(): JSX.Element;
     getFilteredValue(): string;

@@ -21,11 +21,6 @@ export interface Props extends InputProps {
 }
 
 class MdTextarea extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.handleToggle = this.handleToggle.bind(this);
-  }
   state = {
     showEdit: true,
   };
@@ -34,9 +29,7 @@ class MdTextarea extends React.Component<Props, State> {
     this.setState({ showEdit: show });
   }
 
-  handleToggle() {
-    this.toggle();
-  }
+  handleToggle = () => this.toggle();
 
   renderTextarea() {
     const { type, allowFilteredHtml, whiteList, ...other } = this.props;

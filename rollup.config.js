@@ -4,13 +4,13 @@ import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
 import json from 'rollup-plugin-json';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 import builtins from 'rollup-plugin-node-builtins';
 import pkg from './package.json';
 
 const shared = {
   input: `compiled/index.js`,
-  external: ['react', 'react-native', 'tslib', 'reactstrap'],
+  external: ['react', 'tslib', 'reactstrap'],
 };
 
 
@@ -57,7 +57,6 @@ export default [
       exports: 'named',
       globals: {
         react: 'React',
-        'react-native': 'ReactNative',
         tslib: 'tslib',
         reactstrap: 'reactstrap',
       },
@@ -74,7 +73,7 @@ export default [
       sourceMaps(),
       process.env.NODE_ENV === 'production' && filesize(),
       process.env.NODE_ENV === 'production' &&
-        uglify({
+       terser({
           output: { comments: false },
           compress: {
             keep_infinity: true,

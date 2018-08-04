@@ -45,20 +45,17 @@ var FormattedText = (function (_super) {
 
 var MdTextarea = (function (_super) {
     __extends(MdTextarea, _super);
-    function MdTextarea(props) {
-        var _this = _super.call(this, props) || this;
+    function MdTextarea() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
             showEdit: true,
         };
-        _this.handleToggle = _this.handleToggle.bind(_this);
+        _this.handleToggle = function () { return _this.toggle(); };
         return _this;
     }
     MdTextarea.prototype.toggle = function (show) {
         if (show === void 0) { show = !this.state.showEdit; }
         this.setState({ showEdit: show });
-    };
-    MdTextarea.prototype.handleToggle = function () {
-        this.toggle();
     };
     MdTextarea.prototype.renderTextarea = function () {
         var _a = this.props, type = _a.type, allowFilteredHtml = _a.allowFilteredHtml, whiteList = _a.whiteList, other = __rest(_a, ["type", "allowFilteredHtml", "whiteList"]);
