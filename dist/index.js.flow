@@ -1,6 +1,6 @@
-declare module "reactstrap-md-textarea" {
+declare module 'reactstrap-md-textarea' {
   declare export interface State {
-    showEdit: boolean
+    showEdit: boolean;
   }
 
   declare export type TextareaProps = {
@@ -11,27 +11,26 @@ declare module "reactstrap-md-textarea" {
       [propName: string]: string[]
     },
     rows?: number,
-    cols?: number
-  } & InputProps
+    cols?: number,
+  } & InputProps;
 
 
   declare export interface FilterInput {
-    value: string,
+    value: string;
     whiteList?: {
-      [propName: string]: string[]
-    }
+      [propName: string]: string[],
+    };
   }
 
   declare export type FormattedInput = {
-    allowFilteredHtml: boolean
-  } & FilterInput
+    allowFilteredHtml: boolean,
+  } & FilterInput;
 
-  declare export default class FormattedText mixins React.PureComponent<FormattedInput> {
+  declare export default class FormattedText extends React.PureComponent<FormattedInput> {
     filterXss(props: FilterInput): string;
-    render(): JSX.Element | null
+    render(): JSX.Element | null;
   }
 
   declare export default class MdTextarea extends React.Component<TextareaProps> {
   }
-
 }

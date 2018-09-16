@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Textarea, FormattedText } from 'reactstrap-md-textarea';
+import { Textarea, FormattedText } from '../src';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 
 import './App.css';
@@ -45,7 +45,7 @@ class App extends React.Component {
             <CardHeader>Basic</CardHeader>
             <CardBody>
               <Textarea
-                onChange={(e) => this.onChange('mdTxt', e.target.value)}
+                onChange={e => this.onChange('mdTxt', e.target.value)}
                 value={this.state.mdTxt}
               />
             </CardBody>
@@ -57,7 +57,7 @@ class App extends React.Component {
 
             <CardBody>
               <Textarea
-                onChange={(e) => this.onChange('htmlTxt', e.target.value)}
+                onChange={e => this.onChange('htmlTxt', e.target.value)}
                 rows={10}
                 allowFilteredHtml={true}
                 value={this.state.htmlTxt}
@@ -71,7 +71,7 @@ class App extends React.Component {
 
             <CardBody>
               <Textarea
-                onChange={(e) => this.onChange('mdTxt', e.target.value)}
+                onChange={e => this.onChange('mdTxt', e.target.value)}
                 value={this.state.mdTxt}
                 toggle={true}
               />

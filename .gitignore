@@ -64,3 +64,6 @@ yarn-error.log
 # Skip lock stuff
 package-lock.json
 yarn.lock
+
+demo/dist
+.cache

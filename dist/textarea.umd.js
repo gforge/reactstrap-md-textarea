@@ -794,82 +794,14 @@
       return message;
     }
 
-    /* Expose. */
-    var trough_1 = trough;
-
-    /* Methods. */
     var slice = [].slice;
 
-    /* Create new middleware. */
-    function trough() {
-      var fns = [];
-      var middleware = {};
-
-      middleware.run = run;
-      middleware.use = use;
-
-      return middleware
-
-      /* Run `fns`.  Last argument must be
-       * a completion handler. */
-      function run() {
-        var index = -1;
-        var input = slice.call(arguments, 0, -1);
-        var done = arguments[arguments.length - 1];
-
-        if (typeof done !== 'function') {
-          throw new Error('Expected function as last argument, not ' + done)
-        }
-
-        next.apply(null, [null].concat(input));
-
-        /* Run the next `fn`, if any. */
-        function next(err) {
-          var fn = fns[++index];
-          var params = slice.call(arguments, 0);
-          var values = params.slice(1);
-          var length = input.length;
-          var pos = -1;
-
-          if (err) {
-            done(err);
-            return
-          }
-
-          /* Copy non-nully input into values. */
-          while (++pos < length) {
-            if (values[pos] === null || values[pos] === undefined) {
-              values[pos] = input[pos];
-            }
-          }
-
-          input = values;
-
-          /* Next or done. */
-          if (fn) {
-            wrap(fn, next).apply(null, input);
-          } else {
-            done.apply(null, [null].concat(input));
-          }
-        }
-      }
-
-      /* Add `fn` to the list. */
-      function use(fn) {
-        if (typeof fn !== 'function') {
-          throw new Error('Expected `fn` to be a function, not ' + fn)
-        }
-
-        fns.push(fn);
-
-        return middleware
-      }
-    }
+    var wrap_1 = wrap;
 
     /* Wrap `fn`.  Can be sync or async; return a promise,
      * receive a completion handler, return new values and
      * errors. */
-    function wrap(fn, next) {
+    function wrap(fn, callback) {
       var invoked;
 
       return wrapped
@@ -915,7 +847,7 @@
         if (!invoked) {
           invoked = true;
 
-          next.apply(null, arguments);
+          callback.apply(null, arguments);
         }
       }
 
@@ -923,6 +855,78 @@
        * Tracks if an error is passed, too. */
       function then(value) {
         done(null, value);
+      }
+    }
+
+    var trough_1 = trough;
+
+    trough.wrap = wrap_1;
+
+    var slice$1 = [].slice;
+
+    /* Create new middleware. */
+    function trough() {
+      var fns = [];
+      var middleware = {};
+
+      middleware.run = run;
+      middleware.use = use;
+
+      return middleware
+
+      /* Run `fns`.  Last argument must be
+       * a completion handler. */
+      function run() {
+        var index = -1;
+        var input = slice$1.call(arguments, 0, -1);
+        var done = arguments[arguments.length - 1];
+
+        if (typeof done !== 'function') {
+          throw new Error('Expected function as last argument, not ' + done)
+        }
+
+        next.apply(null, [null].concat(input));
+
+        /* Run the next `fn`, if any. */
+        function next(err) {
+          var fn = fns[++index];
+          var params = slice$1.call(arguments, 0);
+          var values = params.slice(1);
+          var length = input.length;
+          var pos = -1;
+
+          if (err) {
+            done(err);
+            return
+          }
+
+          /* Copy non-nully input into values. */
+          while (++pos < length) {
+            if (values[pos] === null || values[pos] === undefined) {
+              values[pos] = input[pos];
+            }
+          }
+
+          input = values;
+
+          /* Next or done. */
+          if (fn) {
+            wrap_1(fn, next).apply(null, input);
+          } else {
+            done.apply(null, [null].concat(input));
+          }
+        }
+      }
+
+      /* Add `fn` to the list. */
+      function use(fn) {
+        if (typeof fn !== 'function') {
+          throw new Error('Expected `fn` to be a function, not ' + fn)
+        }
+
+        fns.push(fn);
+
+        return middleware
       }
     }
 
@@ -952,7 +956,7 @@
     /* Expose a frozen processor. */
     var unified_1 = unified().freeze();
 
-    var slice$1 = [].slice;
+    var slice$2 = [].slice;
     var own$2 = {}.hasOwnProperty;
 
     /* Process pipeline. */
@@ -1180,7 +1184,7 @@
 
             entry[1] = value;
           } else {
-            attachers.push(slice$1.call(arguments));
+            attachers.push(slice$2.call(arguments));
           }
         }
       }
@@ -16011,6 +16015,12 @@
         props.sourcePosition = node.position;
       }
 
+      // If `includeNodeIndex` is true, pass node index info to all non-tag renderers
+      if (opts.includeNodeIndex && parent.node && parent.node.children && !isTagRenderer) {
+        props.index = parent.node.children.indexOf(node);
+        props.parentChildCount = parent.node.children.length;
+      }
+
       var ref = node.identifier !== null && node.identifier !== undefined ? opts.definitions[node.identifier] || {} : null;
 
       switch (node.type) {
@@ -16048,6 +16058,7 @@
         case 'link':
           assignDefined(props, {
             title: node.title || undefined,
+            target: typeof opts.linkTarget === 'function' ? opts.linkTarget(node.url, node.children, node.title) : opts.linkTarget,
             href: opts.transformLinkUri ? opts.transformLinkUri(node.url, node.children, node.title) : node.url
           });
           break;
@@ -16408,6 +16419,7 @@
       allowedTypes: propTypes.arrayOf(propTypes.oneOf(allTypes)),
       disallowedTypes: propTypes.arrayOf(propTypes.oneOf(allTypes)),
       transformLinkUri: propTypes.oneOfType([propTypes.func, propTypes.bool]),
+      linkTarget: propTypes.oneOfType([propTypes.func, propTypes.string]),
       transformImageUri: propTypes.func,
       astPlugins: propTypes.arrayOf(propTypes.func),
       unwrapDisallowed: propTypes.bool,
