@@ -13,7 +13,7 @@ export interface Props extends InputProps {
     rows?: number;
     cols?: number;
 }
-declare class MdTextarea extends React.Component<Props, State> {
+declare class MdTextarea extends React.PureComponent<Props, State> {
     state: {
         showEdit: boolean;
     };

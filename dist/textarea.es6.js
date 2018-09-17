@@ -1,5 +1,5 @@
 import { __extends, __rest, __assign } from 'tslib';
-import { createElement, Fragment, Component, PureComponent } from 'react';
+import { createElement, Fragment, PureComponent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import xss from 'xss';
 import { Input, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
@@ -92,7 +92,7 @@ var MdTextarea = (function (_super) {
         return this.renderTabs();
     };
     return MdTextarea;
-}(Component));
+}(PureComponent));
 
 export { MdTextarea as Textarea, FormattedText };
 //# sourceMappingURL=textarea.es6.js.map

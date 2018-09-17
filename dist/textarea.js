@@ -98,7 +98,7 @@ var MdTextarea = (function (_super) {
         return this.renderTabs();
     };
     return MdTextarea;
-}(React.Component));
+}(React.PureComponent));
 
 exports.Textarea = MdTextarea;
 exports.FormattedText = FormattedText;
