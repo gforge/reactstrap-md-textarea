@@ -3,6 +3,7 @@ export interface Props {
     style?: {
         [propName: string]: string;
     };
+    children: React.ReactNode;
 }
-declare const wrapper: React.SFC<Props>;
+declare const wrapper: ({ children, style }: Props) => JSX.Element;
 export default wrapper;
