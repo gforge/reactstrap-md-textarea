@@ -3,9 +3,10 @@ import * as React from 'react';
 
 export interface Props {
   style?: { [propName: string]: string };
+  children: React.ReactNode;
 }
 
-const wrapper: React.SFC<Props> = ({ children, style = {} }) => (
+const wrapper = ({ children, style = {} }: Props) => (
   <div
     style={{
       border: '1px solid #ddd',
