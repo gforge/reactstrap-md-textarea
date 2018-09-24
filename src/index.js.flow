@@ -1,3 +1,6 @@
+// @flow
+import * as React from 'react';
+
 declare module 'reactstrap-md-textarea' {
   declare export interface State {
     showEdit: boolean;
@@ -10,9 +13,22 @@ declare module 'reactstrap-md-textarea' {
     whiteList?: {
       [propName: string]: string[]
     },
-    rows?: number,
-    cols?: number,
-  } & InputProps;
+    name?: string;
+    valid?: boolean;
+    invalid?: boolean;
+    rows?: number;
+    cols?: number;
+    bsSize?: 'lg' | 'sm';
+    disabled?: boolean;
+    autoFocus?: boolean;
+    maxLength?: number;
+    readOnly?: boolean;
+    required?: boolean;
+    wrap?: 'hard' | 'soft';
+    onChange?: (event: SyntheticInputEvent<HTMLInputElement>) => void;
+    onFocus?: (event: SyntheticFocusEvent<HTMLInputElement>) => void;
+    onBlur?: (event: SyntheticFocusEvent<HTMLInputElement>) => void;
+  };
 
 
   declare export interface FilterInput {
@@ -28,7 +44,7 @@ declare module 'reactstrap-md-textarea' {
 
   declare export default class FormattedText extends React.PureComponent<FormattedInput> {
     filterXss(props: FilterInput): string;
-    render(): JSX.Element | null;
+    render(): React.Node | null;
   }
 
   declare export default class MdTextarea extends React.Component<TextareaProps> {

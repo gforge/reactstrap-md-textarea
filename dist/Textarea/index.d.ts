@@ -5,23 +5,26 @@ export interface State {
 }
 export interface Props extends InputProps {
     value: string;
-    allowFilteredHtml?: boolean;
+    allowFilteredHtml: boolean;
+    rows?: number;
+    cols?: number;
     toggle?: boolean;
     whiteList?: {
         [propName: string]: string[];
     };
-    rows?: number;
-    cols?: number;
 }
 declare class MdTextarea extends React.PureComponent<Props, State> {
+    static defaultProps: {
+        allowFilteredHtml: boolean;
+    };
     state: {
         showEdit: boolean;
     };
     toggle(show?: boolean): void;
     handleToggle: () => void;
-    renderTextarea(): JSX.Element;
-    renderTabs(): JSX.Element;
-    getFilteredValue(): string;
+    activateEdit: () => void;
+    deActivateEdit: () => void;
     render(): JSX.Element;
+    getFilteredValue(): string;
 }
 export default MdTextarea;

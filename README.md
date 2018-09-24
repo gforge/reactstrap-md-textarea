@@ -53,3 +53,8 @@ import { FormattedText } from 'reactstrap-md-textarea';
 
 <FormattedText value="#My MD text" />
 ```
+
+## Changelog
+
+2.0.0 Dropped pure input type. The component should only be used when markdown output
+      has been requested.
