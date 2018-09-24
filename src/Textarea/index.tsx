@@ -42,7 +42,7 @@ class MdTextarea extends React.PureComponent<Props, State> {
     const {
       id, value, toggle, allowFilteredHtml,
       rows, cols, onChange, onFocus, onBlur,
-      valid, invalid, bsSize,
+      valid, invalid, bsSize, name,
       autoFocus, disabled, maxLength, readOnly, required, wrap,
     } = this.props;
     const { showEdit } = this.state;
@@ -79,7 +79,7 @@ class MdTextarea extends React.PureComponent<Props, State> {
               rows={rows}
               cols={cols}
               {...{ onChange, onFocus, onBlur }}
-              {...{ valid, invalid, bsSize }}
+              {...{ valid, name, invalid, bsSize }}
               {...{ autoFocus, disabled, maxLength, readOnly, required, wrap }}
             />
           </TabPane>

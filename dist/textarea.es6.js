@@ -98,7 +98,7 @@ var MdTextarea = (function (_super) {
         this.setState({ showEdit: show });
     };
     MdTextarea.prototype.render = function () {
-        var _a = this.props, id = _a.id, value = _a.value, toggle = _a.toggle, allowFilteredHtml = _a.allowFilteredHtml, rows = _a.rows, cols = _a.cols, onChange = _a.onChange, onFocus = _a.onFocus, onBlur = _a.onBlur, valid = _a.valid, invalid = _a.invalid, bsSize = _a.bsSize, autoFocus = _a.autoFocus, disabled = _a.disabled, maxLength = _a.maxLength, readOnly = _a.readOnly, required = _a.required, wrap = _a.wrap;
+        var _a = this.props, id = _a.id, value = _a.value, toggle = _a.toggle, allowFilteredHtml = _a.allowFilteredHtml, rows = _a.rows, cols = _a.cols, onChange = _a.onChange, onFocus = _a.onFocus, onBlur = _a.onBlur, valid = _a.valid, invalid = _a.invalid, bsSize = _a.bsSize, name = _a.name, autoFocus = _a.autoFocus, disabled = _a.disabled, maxLength = _a.maxLength, readOnly = _a.readOnly, required = _a.required, wrap = _a.wrap;
         var showEdit = this.state.showEdit;
         return (createElement(Fragment, null,
             createElement(Nav, { tabs: true, key: "Nav" },
@@ -108,7 +108,7 @@ var MdTextarea = (function (_super) {
                     createElement(NavLink, { active: !showEdit, onClick: toggle ? this.handleToggle : this.deActivateEdit }, "Preview"))),
             createElement(TabContent, { key: "Content", id: "tabpane_" + id, activeTab: showEdit ? 'Edit' : 'Preview' },
                 createElement(TabPane, { tabId: "Edit" },
-                    createElement(InputTabMD, __assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
+                    createElement(InputTabMD, __assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
                 createElement(TabPane, { tabId: "Preview" },
                     createElement(PreviewTabMD, { allowFilteredHtml: allowFilteredHtml, value: value, skipRender: !showEdit })))));
     };
