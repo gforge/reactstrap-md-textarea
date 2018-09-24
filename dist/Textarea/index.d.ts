@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { InputProps } from 'reactstrap';
+import { Props as InputProps } from './InputTab';
 export interface State {
     showEdit: boolean;
 }
 export interface Props extends InputProps {
+    id: string;
     value: string;
     allowFilteredHtml: boolean;
-    rows?: number;
-    cols?: number;
     toggle?: boolean;
     whiteList?: {
         [propName: string]: string[];
@@ -16,6 +15,7 @@ export interface Props extends InputProps {
 declare class MdTextarea extends React.PureComponent<Props, State> {
     static defaultProps: {
         allowFilteredHtml: boolean;
+        id: string;
     };
     state: {
         showEdit: boolean;
