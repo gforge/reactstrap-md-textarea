@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { default as ReactMarkdown } from 'react-markdown';
-import { default as xss } from 'xss';
+import { filterXSS as xss } from 'xss';
+// @ts-ignore
+import { getDefaultWhiteList } from 'xss/lib/default';
 
 export interface FilterInput {
   value: string;
@@ -23,7 +25,7 @@ export default class FormattedText extends React.PureComponent<Props> {
   }}: FilterInput): string {
     const options = {
       whiteList: {
-        ...xss.getDefaultWhiteList(),
+        ...getDefaultWhiteList(),
         ...whiteList,
       },
       stripIgnoreTagBody: ['script'], // the script tag is a special case, we need
@@ -50,6 +52,7 @@ export default class FormattedText extends React.PureComponent<Props> {
       <ReactMarkdown
         source={value}
         escapeHtml={false}
-      />);
+      />
+    );
   }
 }

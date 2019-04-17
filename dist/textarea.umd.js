@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('react'), require('reactstrap')) :
     typeof define === 'function' && define.amd ? define(['exports', 'tslib', 'react', 'reactstrap'], factory) :
-    (factory((global['reactstrap-md-textarea'] = {}),global.tslib,global.React,global.reactstrap));
-}(this, (function (exports,tslib_1,React,reactstrap) { 'use strict';
+    (global = global || self, factory(global['reactstrap-md-textarea'] = {}, global.tslib, global.React, global.reactstrap));
+}(this, function (exports, tslib_1, React, reactstrap) { 'use strict';
 
     var React__default = 'default' in React ? React['default'] : React;
 
@@ -221,12 +221,12 @@
 
     var vfileMessage = VMessage;
 
-    /* Inherit from `Error#`. */
+    // Inherit from `Error#`.
     function VMessagePrototype() {}
     VMessagePrototype.prototype = Error.prototype;
     VMessage.prototype = new VMessagePrototype();
 
-    /* Message properties. */
+    // Message properties.
     var proto = VMessage.prototype;
 
     proto.file = '';
@@ -238,11 +238,11 @@
     proto.column = null;
     proto.line = null;
 
-    /* Construct a new VMessage.
-     *
-     * Note: We cannot invoke `Error` on the created context,
-     * as that adds readonly `line` and `column` attributes on
-     * Safari 9, thus throwing and failing the data. */
+    // Construct a new VMessage.
+    //
+    // Note: We cannot invoke `Error` on the created context, as that adds readonly
+    // `line` and `column` attributes on Safari 9, thus throwing and failing the
+    // data.
     function VMessage(reason, position, origin) {
       var parts;
       var range;
@@ -261,18 +261,18 @@
         end: {line: null, column: null}
       };
 
-      /* Node. */
+      // Node.
       if (position && position.position) {
         position = position.position;
       }
 
       if (position) {
-        /* Position. */
+        // Position.
         if (position.start) {
           location = position;
           position = position.start;
         } else {
-          /* Point. */
+          // Point.
           location.start = position;
         }
       }
@@ -543,22 +543,6 @@
         }
     ;
 
-    var path$1 = /*#__PURE__*/Object.freeze({
-        resolve: resolve,
-        normalize: normalize,
-        isAbsolute: isAbsolute,
-        join: join,
-        relative: relative,
-        sep: sep,
-        delimiter: delimiter,
-        dirname: dirname,
-        basename: basename,
-        extname: extname,
-        default: path
-    });
-
-    var path$2 = ( path$1 && path ) || path$1;
-
     function replaceExt(npath, ext) {
       if (typeof npath !== 'string') {
         return npath;
@@ -568,8 +552,8 @@
         return npath;
       }
 
-      var nFileName = path$2.basename(npath, path$2.extname(npath)) + ext;
-      return path$2.join(path$2.dirname(npath), nFileName);
+      var nFileName = path.basename(npath, path.extname(npath)) + ext;
+      return path.join(path.dirname(npath), nFileName);
     }
 
     var replaceExt_1 = replaceExt;
@@ -675,30 +659,30 @@
     /* Access parent path (`~`). */
     Object.defineProperty(proto$1, 'dirname', {
       get: function () {
-        return typeof this.path === 'string' ? path$2.dirname(this.path) : undefined;
+        return typeof this.path === 'string' ? path.dirname(this.path) : undefined;
       },
       set: function (dirname) {
         assertPath(this.path, 'dirname');
-        this.path = path$2.join(dirname || '', this.basename);
+        this.path = path.join(dirname || '', this.basename);
       }
     });
 
     /* Access basename (`index.min.js`). */
     Object.defineProperty(proto$1, 'basename', {
       get: function () {
-        return typeof this.path === 'string' ? path$2.basename(this.path) : undefined;
+        return typeof this.path === 'string' ? path.basename(this.path) : undefined;
       },
       set: function (basename) {
         assertNonEmpty(basename, 'basename');
         assertPart(basename, 'basename');
-        this.path = path$2.join(this.dirname || '', basename);
+        this.path = path.join(this.dirname || '', basename);
       }
     });
 
     /* Access extname (`.js`). */
     Object.defineProperty(proto$1, 'extname', {
       get: function () {
-        return typeof this.path === 'string' ? path$2.extname(this.path) : undefined;
+        return typeof this.path === 'string' ? path.extname(this.path) : undefined;
       },
       set: function (extname) {
         var ext = extname || '';
@@ -723,12 +707,12 @@
     /* Access stem (`index.min`). */
     Object.defineProperty(proto$1, 'stem', {
       get: function () {
-        return typeof this.path === 'string' ? path$2.basename(this.path, this.extname) : undefined;
+        return typeof this.path === 'string' ? path.basename(this.path, this.extname) : undefined;
       },
       set: function (stem) {
         assertNonEmpty(stem, 'stem');
         assertPart(stem, 'stem');
-        this.path = path$2.join(this.dirname || '', stem + (this.extname || ''));
+        this.path = path.join(this.dirname || '', stem + (this.extname || ''));
       }
     });
 
@@ -741,8 +725,8 @@
     /* Assert that `part` is not a path (i.e., does
      * not contain `path.sep`). */
     function assertPart(part, name) {
-      if (part.indexOf(path$2.sep) !== -1) {
-        throw new Error('`' + name + '` cannot be a path: did not expect `' + path$2.sep + '`');
+      if (part.indexOf(path.sep) !== -1) {
+        throw new Error('`' + name + '` cannot be a path: did not expect `' + path.sep + '`');
       }
     }
 
@@ -1421,171 +1405,17 @@
       }
     }
 
+    function unwrapExports (x) {
+    	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+    }
+
     function createCommonjsModule(fn, module) {
     	return module = { exports: {} }, fn(module, module.exports), module.exports;
     }
 
     // shim for using process in browser
-    // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
-
-    function defaultSetTimout() {
-        throw new Error('setTimeout has not been defined');
-    }
-    function defaultClearTimeout () {
-        throw new Error('clearTimeout has not been defined');
-    }
-    var cachedSetTimeout = defaultSetTimout;
-    var cachedClearTimeout = defaultClearTimeout;
-    if (typeof global.setTimeout === 'function') {
-        cachedSetTimeout = setTimeout;
-    }
-    if (typeof global.clearTimeout === 'function') {
-        cachedClearTimeout = clearTimeout;
-    }
-
-    function runTimeout(fun) {
-        if (cachedSetTimeout === setTimeout) {
-            //normal enviroments in sane situations
-            return setTimeout(fun, 0);
-        }
-        // if setTimeout wasn't available but was latter defined
-        if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-            cachedSetTimeout = setTimeout;
-            return setTimeout(fun, 0);
-        }
-        try {
-            // when when somebody has screwed with setTimeout but no I.E. maddness
-            return cachedSetTimeout(fun, 0);
-        } catch(e){
-            try {
-                // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-                return cachedSetTimeout.call(null, fun, 0);
-            } catch(e){
-                // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-                return cachedSetTimeout.call(this, fun, 0);
-            }
-        }
-
-
-    }
-    function runClearTimeout(marker) {
-        if (cachedClearTimeout === clearTimeout) {
-            //normal enviroments in sane situations
-            return clearTimeout(marker);
-        }
-        // if clearTimeout wasn't available but was latter defined
-        if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-            cachedClearTimeout = clearTimeout;
-            return clearTimeout(marker);
-        }
-        try {
-            // when when somebody has screwed with setTimeout but no I.E. maddness
-            return cachedClearTimeout(marker);
-        } catch (e){
-            try {
-                // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-                return cachedClearTimeout.call(null, marker);
-            } catch (e){
-                // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-                // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-                return cachedClearTimeout.call(this, marker);
-            }
-        }
-
-
-
-    }
-    var queue = [];
-    var draining = false;
-    var currentQueue;
-    var queueIndex = -1;
-
-    function cleanUpNextTick() {
-        if (!draining || !currentQueue) {
-            return;
-        }
-        draining = false;
-        if (currentQueue.length) {
-            queue = currentQueue.concat(queue);
-        } else {
-            queueIndex = -1;
-        }
-        if (queue.length) {
-            drainQueue();
-        }
-    }
-
-    function drainQueue() {
-        if (draining) {
-            return;
-        }
-        var timeout = runTimeout(cleanUpNextTick);
-        draining = true;
-
-        var len = queue.length;
-        while(len) {
-            currentQueue = queue;
-            queue = [];
-            while (++queueIndex < len) {
-                if (currentQueue) {
-                    currentQueue[queueIndex].run();
-                }
-            }
-            queueIndex = -1;
-            len = queue.length;
-        }
-        currentQueue = null;
-        draining = false;
-        runClearTimeout(timeout);
-    }
-    function nextTick(fun) {
-        var args = new Array(arguments.length - 1);
-        if (arguments.length > 1) {
-            for (var i = 1; i < arguments.length; i++) {
-                args[i - 1] = arguments[i];
-            }
-        }
-        queue.push(new Item(fun, args));
-        if (queue.length === 1 && !draining) {
-            runTimeout(drainQueue);
-        }
-    }
-    // v8 likes predictible objects
-    function Item(fun, array) {
-        this.fun = fun;
-        this.array = array;
-    }
-    Item.prototype.run = function () {
-        this.fun.apply(null, this.array);
-    };
-    var title = 'browser';
-    var platform = 'browser';
-    var browser = true;
-    var env = {};
-    var argv = [];
-    var version = ''; // empty string to avoid regexp issues
-    var versions = {};
-    var release = {};
-    var config = {};
-
-    function noop() {}
-
-    var on = noop;
-    var addListener = noop;
-    var once = noop;
-    var off = noop;
-    var removeListener = noop;
-    var removeAllListeners = noop;
-    var emit = noop;
-
-    function binding(name) {
-        throw new Error('process.binding is not supported');
-    }
-
-    function cwd () { return '/' }
-    function chdir (dir) {
-        throw new Error('process.chdir is not supported');
-    }function umask() { return 0; }
+    if (typeof global.setTimeout === 'function') ;
+    if (typeof global.clearTimeout === 'function') ;
 
     // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
     var performance = global.performance || {};
@@ -1596,56 +1426,6 @@
       performance.oNow       ||
       performance.webkitNow  ||
       function(){ return (new Date()).getTime() };
-
-    // generate timestamp or delta
-    // see http://nodejs.org/api/process.html#process_process_hrtime
-    function hrtime(previousTimestamp){
-      var clocktime = performanceNow.call(performance)*1e-3;
-      var seconds = Math.floor(clocktime);
-      var nanoseconds = Math.floor((clocktime%1)*1e9);
-      if (previousTimestamp) {
-        seconds = seconds - previousTimestamp[0];
-        nanoseconds = nanoseconds - previousTimestamp[1];
-        if (nanoseconds<0) {
-          seconds--;
-          nanoseconds += 1e9;
-        }
-      }
-      return [seconds,nanoseconds]
-    }
-
-    var startTime = new Date();
-    function uptime() {
-      var currentTime = new Date();
-      var dif = currentTime - startTime;
-      return dif / 1000;
-    }
-
-    var process$1 = {
-      nextTick: nextTick,
-      title: title,
-      browser: browser,
-      env: env,
-      argv: argv,
-      version: version,
-      versions: versions,
-      on: on,
-      addListener: addListener,
-      once: once,
-      off: off,
-      removeListener: removeListener,
-      removeAllListeners: removeAllListeners,
-      emit: emit,
-      binding: binding,
-      cwd: cwd,
-      chdir: chdir,
-      umask: umask,
-      hrtime: hrtime,
-      platform: platform,
-      release: release,
-      config: config,
-      uptime: uptime
-    };
 
     var inherits;
     if (typeof Object.create === 'function'){
@@ -1741,7 +1521,7 @@
     var debugEnviron;
     function debuglog(set) {
       if (isUndefined(debugEnviron))
-        debugEnviron = process$1.env.NODE_DEBUG || '';
+        debugEnviron = '';
       set = set.toUpperCase();
       if (!debugs[set]) {
         if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -2195,7 +1975,7 @@
       return Object.prototype.hasOwnProperty.call(obj, prop);
     }
 
-    var util = {
+    var require$$0 = {
       inherits: inherits$1,
       _extend: _extend,
       log: log,
@@ -2219,32 +1999,6 @@
       format: format,
       debuglog: debuglog
     };
-
-    var util$1 = /*#__PURE__*/Object.freeze({
-        format: format,
-        deprecate: deprecate,
-        debuglog: debuglog,
-        inspect: inspect,
-        isArray: isArray$1,
-        isBoolean: isBoolean,
-        isNull: isNull,
-        isNullOrUndefined: isNullOrUndefined,
-        isNumber: isNumber,
-        isString: isString$1,
-        isSymbol: isSymbol,
-        isUndefined: isUndefined,
-        isRegExp: isRegExp,
-        isObject: isObject,
-        isDate: isDate,
-        isError: isError,
-        isFunction: isFunction,
-        isPrimitive: isPrimitive,
-        isBuffer: isBuffer$1,
-        log: log,
-        inherits: inherits$1,
-        _extend: _extend,
-        default: util
-    });
 
     var inherits_browser = createCommonjsModule(function (module) {
     if (typeof Object.create === 'function') {
@@ -2271,8 +2025,6 @@
       };
     }
     });
-
-    var require$$0 = ( util$1 && util ) || util$1;
 
     var inherits$2 = createCommonjsModule(function (module) {
     try {
@@ -2347,10 +2099,8 @@
       }
     }
 
-    /* Expose. */
     var vfileLocation = factory$1;
 
-    /* Factory. */
     function factory$1(file) {
       var contents = indices(String(file));
 
@@ -2360,13 +2110,12 @@
       }
     }
 
-    /* Factory to get the line and column-based `position` for
-     * `offset` in the bound indices. */
+    // Factory to get the line and column-based `position` for `offset` in the bound
+    // indices.
     function offsetToPositionFactory(indices) {
       return offsetToPosition
 
-      /* Get the line and column-based `position` for
-       * `offset` in the bound indices. */
+      // Get the line and column-based `position` for `offset` in the bound indices.
       function offsetToPosition(offset) {
         var index = -1;
         var length = indices.length;
@@ -2389,13 +2138,13 @@
       }
     }
 
-    /* Factory to get the `offset` for a line and column-based
-     * `position` in the bound indices. */
+    // Factory to get the `offset` for a line and column-based `position` in the
+    // bound indices.
     function positionToOffsetFactory(indices) {
       return positionToOffset
 
-      /* Get the `offset` for a line and column-based
-       * `position` in the bound indices. */
+      // Get the `offset` for a line and column-based `position` in the bound
+      // indices.
       function positionToOffset(position) {
         var line = position && position.line;
         var column = position && position.column;
@@ -2408,7 +2157,7 @@
       }
     }
 
-    /* Get indices of line-breaks in `value`. */
+    // Get indices of line-breaks in `value`.
     function indices(value) {
       var result = [];
       var index = value.indexOf('\n');
@@ -2459,19 +2208,310 @@
       }
     }
 
-    var AEli = "Æ";
     var AElig = "Æ";
-    var AM = "&";
     var AMP = "&";
-    var Aacut = "Á";
     var Aacute = "Á";
+    var Acirc = "Â";
+    var Agrave = "À";
+    var Aring = "Å";
+    var Atilde = "Ã";
+    var Auml = "Ä";
+    var COPY = "©";
+    var Ccedil = "Ç";
+    var ETH = "Ð";
+    var Eacute = "É";
+    var Ecirc = "Ê";
+    var Egrave = "È";
+    var Euml = "Ë";
+    var GT = ">";
+    var Iacute = "Í";
+    var Icirc = "Î";
+    var Igrave = "Ì";
+    var Iuml = "Ï";
+    var LT = "<";
+    var Ntilde = "Ñ";
+    var Oacute = "Ó";
+    var Ocirc = "Ô";
+    var Ograve = "Ò";
+    var Oslash = "Ø";
+    var Otilde = "Õ";
+    var Ouml = "Ö";
+    var QUOT = "\"";
+    var REG = "®";
+    var THORN = "Þ";
+    var Uacute = "Ú";
+    var Ucirc = "Û";
+    var Ugrave = "Ù";
+    var Uuml = "Ü";
+    var Yacute = "Ý";
+    var aacute = "á";
+    var acirc = "â";
+    var acute = "´";
+    var aelig = "æ";
+    var agrave = "à";
+    var amp = "&";
+    var aring = "å";
+    var atilde = "ã";
+    var auml = "ä";
+    var brvbar = "¦";
+    var ccedil = "ç";
+    var cedil = "¸";
+    var cent = "¢";
+    var copy = "©";
+    var curren = "¤";
+    var deg = "°";
+    var divide = "÷";
+    var eacute = "é";
+    var ecirc = "ê";
+    var egrave = "è";
+    var eth = "ð";
+    var euml = "ë";
+    var frac12 = "½";
+    var frac14 = "¼";
+    var frac34 = "¾";
+    var gt = ">";
+    var iacute = "í";
+    var icirc = "î";
+    var iexcl = "¡";
+    var igrave = "ì";
+    var iquest = "¿";
+    var iuml = "ï";
+    var laquo = "«";
+    var lt = "<";
+    var macr = "¯";
+    var micro = "µ";
+    var middot = "·";
+    var nbsp = " ";
+    var not = "¬";
+    var ntilde = "ñ";
+    var oacute = "ó";
+    var ocirc = "ô";
+    var ograve = "ò";
+    var ordf = "ª";
+    var ordm = "º";
+    var oslash = "ø";
+    var otilde = "õ";
+    var ouml = "ö";
+    var para = "¶";
+    var plusmn = "±";
+    var pound = "£";
+    var quot = "\"";
+    var raquo = "»";
+    var reg = "®";
+    var sect = "§";
+    var shy = "­";
+    var sup1 = "¹";
+    var sup2 = "²";
+    var sup3 = "³";
+    var szlig = "ß";
+    var thorn = "þ";
+    var times = "×";
+    var uacute = "ú";
+    var ucirc = "û";
+    var ugrave = "ù";
+    var uml = "¨";
+    var uuml = "ü";
+    var yacute = "ý";
+    var yen = "¥";
+    var yuml = "ÿ";
+    var legacy = {
+    	AElig: AElig,
+    	AMP: AMP,
+    	Aacute: Aacute,
+    	Acirc: Acirc,
+    	Agrave: Agrave,
+    	Aring: Aring,
+    	Atilde: Atilde,
+    	Auml: Auml,
+    	COPY: COPY,
+    	Ccedil: Ccedil,
+    	ETH: ETH,
+    	Eacute: Eacute,
+    	Ecirc: Ecirc,
+    	Egrave: Egrave,
+    	Euml: Euml,
+    	GT: GT,
+    	Iacute: Iacute,
+    	Icirc: Icirc,
+    	Igrave: Igrave,
+    	Iuml: Iuml,
+    	LT: LT,
+    	Ntilde: Ntilde,
+    	Oacute: Oacute,
+    	Ocirc: Ocirc,
+    	Ograve: Ograve,
+    	Oslash: Oslash,
+    	Otilde: Otilde,
+    	Ouml: Ouml,
+    	QUOT: QUOT,
+    	REG: REG,
+    	THORN: THORN,
+    	Uacute: Uacute,
+    	Ucirc: Ucirc,
+    	Ugrave: Ugrave,
+    	Uuml: Uuml,
+    	Yacute: Yacute,
+    	aacute: aacute,
+    	acirc: acirc,
+    	acute: acute,
+    	aelig: aelig,
+    	agrave: agrave,
+    	amp: amp,
+    	aring: aring,
+    	atilde: atilde,
+    	auml: auml,
+    	brvbar: brvbar,
+    	ccedil: ccedil,
+    	cedil: cedil,
+    	cent: cent,
+    	copy: copy,
+    	curren: curren,
+    	deg: deg,
+    	divide: divide,
+    	eacute: eacute,
+    	ecirc: ecirc,
+    	egrave: egrave,
+    	eth: eth,
+    	euml: euml,
+    	frac12: frac12,
+    	frac14: frac14,
+    	frac34: frac34,
+    	gt: gt,
+    	iacute: iacute,
+    	icirc: icirc,
+    	iexcl: iexcl,
+    	igrave: igrave,
+    	iquest: iquest,
+    	iuml: iuml,
+    	laquo: laquo,
+    	lt: lt,
+    	macr: macr,
+    	micro: micro,
+    	middot: middot,
+    	nbsp: nbsp,
+    	not: not,
+    	ntilde: ntilde,
+    	oacute: oacute,
+    	ocirc: ocirc,
+    	ograve: ograve,
+    	ordf: ordf,
+    	ordm: ordm,
+    	oslash: oslash,
+    	otilde: otilde,
+    	ouml: ouml,
+    	para: para,
+    	plusmn: plusmn,
+    	pound: pound,
+    	quot: quot,
+    	raquo: raquo,
+    	reg: reg,
+    	sect: sect,
+    	shy: shy,
+    	sup1: sup1,
+    	sup2: sup2,
+    	sup3: sup3,
+    	szlig: szlig,
+    	thorn: thorn,
+    	times: times,
+    	uacute: uacute,
+    	ucirc: ucirc,
+    	ugrave: ugrave,
+    	uml: uml,
+    	uuml: uuml,
+    	yacute: yacute,
+    	yen: yen,
+    	yuml: yuml
+    };
+
+    var invalid = {
+    	"0": "�",
+    	"128": "€",
+    	"130": "‚",
+    	"131": "ƒ",
+    	"132": "„",
+    	"133": "…",
+    	"134": "†",
+    	"135": "‡",
+    	"136": "ˆ",
+    	"137": "‰",
+    	"138": "Š",
+    	"139": "‹",
+    	"140": "Œ",
+    	"142": "Ž",
+    	"145": "‘",
+    	"146": "’",
+    	"147": "“",
+    	"148": "”",
+    	"149": "•",
+    	"150": "–",
+    	"151": "—",
+    	"152": "˜",
+    	"153": "™",
+    	"154": "š",
+    	"155": "›",
+    	"156": "œ",
+    	"158": "ž",
+    	"159": "Ÿ"
+    };
+
+    var isDecimal = decimal;
+
+    /* Check if the given character code, or the character
+     * code at the first character, is decimal. */
+    function decimal(character) {
+      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
+
+      return code >= 48 && code <= 57 /* 0-9 */
+    }
+
+    var isHexadecimal = hexadecimal;
+
+    /* Check if the given character code, or the character
+     * code at the first character, is hexadecimal. */
+    function hexadecimal(character) {
+      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
+
+      return (
+        (code >= 97 /* a */ && code <= 102) /* z */ ||
+        (code >= 65 /* A */ && code <= 70) /* Z */ ||
+        (code >= 48 /* A */ && code <= 57) /* Z */
+      )
+    }
+
+    var isAlphabetical = alphabetical;
+
+    /* Check if the given character code, or the character
+     * code at the first character, is alphabetical. */
+    function alphabetical(character) {
+      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
+
+      return (
+        (code >= 97 && code <= 122) /* a-z */ ||
+        (code >= 65 && code <= 90) /* A-Z */
+      )
+    }
+
+    var isAlphanumerical = alphanumerical;
+
+    /* Check if the given character code, or the character
+     * code at the first character, is alphanumerical. */
+    function alphanumerical(character) {
+      return isAlphabetical(character) || isDecimal(character)
+    }
+
+    var AEli = "Æ";
+    var AElig$1 = "Æ";
+    var AM = "&";
+    var AMP$1 = "&";
+    var Aacut = "Á";
+    var Aacute$1 = "Á";
     var Abreve = "Ă";
     var Acir = "Â";
-    var Acirc = "Â";
+    var Acirc$1 = "Â";
     var Acy = "А";
     var Afr = "𝔄";
     var Agrav = "À";
-    var Agrave = "À";
+    var Agrave$1 = "À";
     var Alpha = "Α";
     var Amacr = "Ā";
     var And = "⩓";
@@ -2479,13 +2519,13 @@
     var Aopf = "𝔸";
     var ApplyFunction = "⁡";
     var Arin = "Å";
-    var Aring = "Å";
+    var Aring$1 = "Å";
     var Ascr = "𝒜";
     var Assign = "≔";
     var Atild = "Ã";
-    var Atilde = "Ã";
+    var Atilde$1 = "Ã";
     var Aum = "Ä";
-    var Auml = "Ä";
+    var Auml$1 = "Ä";
     var Backslash = "∖";
     var Barv = "⫧";
     var Barwed = "⌆";
@@ -2500,14 +2540,14 @@
     var Bumpeq = "≎";
     var CHcy = "Ч";
     var COP = "©";
-    var COPY = "©";
+    var COPY$1 = "©";
     var Cacute = "Ć";
     var Cap = "⋒";
     var CapitalDifferentialD = "ⅅ";
     var Cayleys = "ℭ";
     var Ccaron = "Č";
     var Ccedi = "Ç";
-    var Ccedil = "Ç";
+    var Ccedil$1 = "Ç";
     var Ccirc = "Ĉ";
     var Cconint = "∰";
     var Cdot = "Ċ";
@@ -2590,17 +2630,17 @@
     var Dstrok = "Đ";
     var ENG = "Ŋ";
     var ET = "Ð";
-    var ETH = "Ð";
+    var ETH$1 = "Ð";
     var Eacut = "É";
-    var Eacute = "É";
+    var Eacute$1 = "É";
     var Ecaron = "Ě";
     var Ecir = "Ê";
-    var Ecirc = "Ê";
+    var Ecirc$1 = "Ê";
     var Ecy = "Э";
     var Edot = "Ė";
     var Efr = "𝔈";
     var Egrav = "È";
-    var Egrave = "È";
+    var Egrave$1 = "È";
     var Element = "∈";
     var Emacr = "Ē";
     var EmptySmallSquare = "◻";
@@ -2615,7 +2655,7 @@
     var Esim = "⩳";
     var Eta = "Η";
     var Eum = "Ë";
-    var Euml = "Ë";
+    var Euml$1 = "Ë";
     var Exists = "∃";
     var ExponentialE = "ⅇ";
     var Fcy = "Ф";
@@ -2628,7 +2668,7 @@
     var Fscr = "ℱ";
     var GJcy = "Ѓ";
     var G = ">";
-    var GT = ">";
+    var GT$1 = ">";
     var Gamma = "Γ";
     var Gammad = "Ϝ";
     var Gbreve = "Ğ";
@@ -2664,14 +2704,14 @@
     var IJlig = "Ĳ";
     var IOcy = "Ё";
     var Iacut = "Í";
-    var Iacute = "Í";
+    var Iacute$1 = "Í";
     var Icir = "Î";
-    var Icirc = "Î";
+    var Icirc$1 = "Î";
     var Icy = "И";
     var Idot = "İ";
     var Ifr = "ℑ";
     var Igrav = "Ì";
-    var Igrave = "Ì";
+    var Igrave$1 = "Ì";
     var Im = "ℑ";
     var Imacr = "Ī";
     var ImaginaryI = "ⅈ";
@@ -2688,7 +2728,7 @@
     var Itilde = "Ĩ";
     var Iukcy = "І";
     var Ium = "Ï";
-    var Iuml = "Ï";
+    var Iuml$1 = "Ï";
     var Jcirc = "Ĵ";
     var Jcy = "Й";
     var Jfr = "𝔍";
@@ -2706,7 +2746,7 @@
     var Kscr = "𝒦";
     var LJcy = "Љ";
     var L = "<";
-    var LT = "<";
+    var LT$1 = "<";
     var Lacute = "Ĺ";
     var Lambda = "Λ";
     var Lang = "⟪";
@@ -2842,18 +2882,18 @@
     var NotVerticalBar = "∤";
     var Nscr = "𝒩";
     var Ntild = "Ñ";
-    var Ntilde = "Ñ";
+    var Ntilde$1 = "Ñ";
     var Nu = "Ν";
     var OElig = "Œ";
     var Oacut = "Ó";
-    var Oacute = "Ó";
+    var Oacute$1 = "Ó";
     var Ocir = "Ô";
-    var Ocirc = "Ô";
+    var Ocirc$1 = "Ô";
     var Ocy = "О";
     var Odblac = "Ő";
     var Ofr = "𝔒";
     var Ograv = "Ò";
-    var Ograve = "Ò";
+    var Ograve$1 = "Ò";
     var Omacr = "Ō";
     var Omega = "Ω";
     var Omicron = "Ο";
@@ -2863,12 +2903,12 @@
     var Or = "⩔";
     var Oscr = "𝒪";
     var Oslas = "Ø";
-    var Oslash = "Ø";
+    var Oslash$1 = "Ø";
     var Otild = "Õ";
-    var Otilde = "Õ";
+    var Otilde$1 = "Õ";
     var Otimes = "⨷";
     var Oum = "Ö";
-    var Ouml = "Ö";
+    var Ouml$1 = "Ö";
     var OverBar = "‾";
     var OverBrace = "⏞";
     var OverBracket = "⎴";
@@ -2893,13 +2933,13 @@
     var Pscr = "𝒫";
     var Psi = "Ψ";
     var QUO = "\"";
-    var QUOT = "\"";
+    var QUOT$1 = "\"";
     var Qfr = "𝔔";
     var Qopf = "ℚ";
     var Qscr = "𝒬";
     var RBarr = "⤐";
     var RE = "®";
-    var REG = "®";
+    var REG$1 = "®";
     var Racute = "Ŕ";
     var Rang = "⟫";
     var Rarr = "↠";
@@ -2983,7 +3023,7 @@
     var SupersetEqual = "⊇";
     var Supset = "⋑";
     var THOR = "Þ";
-    var THORN = "Þ";
+    var THORN$1 = "Þ";
     var TRADE = "™";
     var TSHcy = "Ћ";
     var TScy = "Ц";
@@ -3006,18 +3046,18 @@
     var Tscr = "𝒯";
     var Tstrok = "Ŧ";
     var Uacut = "Ú";
-    var Uacute = "Ú";
+    var Uacute$1 = "Ú";
     var Uarr = "↟";
     var Uarrocir = "⥉";
     var Ubrcy = "Ў";
     var Ubreve = "Ŭ";
     var Ucir = "Û";
-    var Ucirc = "Û";
+    var Ucirc$1 = "Û";
     var Ucy = "У";
     var Udblac = "Ű";
     var Ufr = "𝔘";
     var Ugrav = "Ù";
-    var Ugrave = "Ù";
+    var Ugrave$1 = "Ù";
     var Umacr = "Ū";
     var UnderBar = "_";
     var UnderBrace = "⏟";
@@ -3044,7 +3084,7 @@
     var Uscr = "𝒰";
     var Utilde = "Ũ";
     var Uum = "Ü";
-    var Uuml = "Ü";
+    var Uuml$1 = "Ü";
     var VDash = "⊫";
     var Vbar = "⫫";
     var Vcy = "В";
@@ -3075,7 +3115,7 @@
     var YIcy = "Ї";
     var YUcy = "Ю";
     var Yacut = "Ý";
-    var Yacute = "Ý";
+    var Yacute$1 = "Ý";
     var Ycirc = "Ŷ";
     var Ycy = "Ы";
     var Yfr = "𝔜";
@@ -3093,29 +3133,29 @@
     var Zopf = "ℤ";
     var Zscr = "𝒵";
     var aacut = "á";
-    var aacute = "á";
+    var aacute$1 = "á";
     var abreve = "ă";
     var ac = "∾";
     var acE = "∾̳";
     var acd = "∿";
     var acir = "â";
-    var acirc = "â";
+    var acirc$1 = "â";
     var acut = "´";
-    var acute = "´";
+    var acute$1 = "´";
     var acy = "а";
     var aeli = "æ";
-    var aelig = "æ";
+    var aelig$1 = "æ";
     var af = "⁡";
     var afr = "𝔞";
     var agrav = "à";
-    var agrave = "à";
+    var agrave$1 = "à";
     var alefsym = "ℵ";
     var aleph = "ℵ";
     var alpha = "α";
     var amacr = "ā";
     var amalg = "⨿";
     var am = "&";
-    var amp = "&";
+    var amp$1 = "&";
     var and = "∧";
     var andand = "⩕";
     var andd = "⩜";
@@ -3150,15 +3190,15 @@
     var approx = "≈";
     var approxeq = "≊";
     var arin = "å";
-    var aring = "å";
+    var aring$1 = "å";
     var ascr = "𝒶";
     var ast = "*";
     var asymp = "≈";
     var asympeq = "≍";
     var atild = "ã";
-    var atilde = "ã";
+    var atilde$1 = "ã";
     var aum = "ä";
-    var auml = "ä";
+    var auml$1 = "ä";
     var awconint = "∳";
     var awint = "⨑";
     var bNot = "⫭";
@@ -3263,7 +3303,7 @@
     var bprime = "‵";
     var breve = "˘";
     var brvba = "¦";
-    var brvbar = "¦";
+    var brvbar$1 = "¦";
     var bscr = "𝒷";
     var bsemi = "⁏";
     var bsim = "∽";
@@ -3290,16 +3330,16 @@
     var ccaps = "⩍";
     var ccaron = "č";
     var ccedi = "ç";
-    var ccedil = "ç";
+    var ccedil$1 = "ç";
     var ccirc = "ĉ";
     var ccups = "⩌";
     var ccupssm = "⩐";
     var cdot = "ċ";
     var cedi = "¸";
-    var cedil = "¸";
+    var cedil$1 = "¸";
     var cemptyv = "⦲";
     var cen = "¢";
-    var cent = "¢";
+    var cent$1 = "¢";
     var centerdot = "·";
     var cfr = "𝔠";
     var chcy = "ч";
@@ -3338,7 +3378,7 @@
     var copf = "𝕔";
     var coprod = "∐";
     var cop = "©";
-    var copy = "©";
+    var copy$1 = "©";
     var copysr = "℗";
     var crarr = "↵";
     var cross = "✗";
@@ -3368,7 +3408,7 @@
     var curlyvee = "⋎";
     var curlywedge = "⋏";
     var curre = "¤";
-    var curren = "¤";
+    var curren$1 = "¤";
     var curvearrowleft = "↶";
     var curvearrowright = "↷";
     var cuvee = "⋎";
@@ -3392,7 +3432,7 @@
     var ddarr = "⇊";
     var ddotseq = "⩷";
     var de = "°";
-    var deg = "°";
+    var deg$1 = "°";
     var delta = "δ";
     var demptyv = "⦱";
     var dfisht = "⥿";
@@ -3408,7 +3448,7 @@
     var disin = "⋲";
     var div = "÷";
     var divid = "÷";
-    var divide = "÷";
+    var divide$1 = "÷";
     var divideontimes = "⋇";
     var divonx = "⋇";
     var djcy = "ђ";
@@ -3445,11 +3485,11 @@
     var eDDot = "⩷";
     var eDot = "≑";
     var eacut = "é";
-    var eacute = "é";
+    var eacute$1 = "é";
     var easter = "⩮";
     var ecaron = "ě";
     var ecir = "ê";
-    var ecirc = "ê";
+    var ecirc$1 = "ê";
     var ecolon = "≕";
     var ecy = "э";
     var edot = "ė";
@@ -3458,7 +3498,7 @@
     var efr = "𝔢";
     var eg = "⪚";
     var egrav = "è";
-    var egrave = "è";
+    var egrave$1 = "è";
     var egs = "⪖";
     var egsdot = "⪘";
     var el = "⪙";
@@ -3500,9 +3540,9 @@
     var esim = "≂";
     var eta = "η";
     var et = "ð";
-    var eth = "ð";
+    var eth$1 = "ð";
     var eum = "ë";
-    var euml = "ë";
+    var euml$1 = "ë";
     var euro = "€";
     var excl = "!";
     var exist = "∃";
@@ -3527,16 +3567,16 @@
     var forkv = "⫙";
     var fpartint = "⨍";
     var frac1 = "¼";
-    var frac12 = "½";
+    var frac12$1 = "½";
     var frac13 = "⅓";
-    var frac14 = "¼";
+    var frac14$1 = "¼";
     var frac15 = "⅕";
     var frac16 = "⅙";
     var frac18 = "⅛";
     var frac23 = "⅔";
     var frac25 = "⅖";
     var frac3 = "¾";
-    var frac34 = "¾";
+    var frac34$1 = "¾";
     var frac35 = "⅗";
     var frac38 = "⅜";
     var frac45 = "⅘";
@@ -3591,7 +3631,7 @@
     var gsime = "⪎";
     var gsiml = "⪐";
     var g = ">";
-    var gt = ">";
+    var gt$1 = ">";
     var gtcc = "⪧";
     var gtcir = "⩺";
     var gtdot = "⋗";
@@ -3635,18 +3675,18 @@
     var hybull = "⁃";
     var hyphen = "‐";
     var iacut = "í";
-    var iacute = "í";
+    var iacute$1 = "í";
     var ic = "⁣";
     var icir = "î";
-    var icirc = "î";
+    var icirc$1 = "î";
     var icy = "и";
     var iecy = "е";
     var iexc = "¡";
-    var iexcl = "¡";
+    var iexcl$1 = "¡";
     var iff = "⇔";
     var ifr = "𝔦";
     var igrav = "ì";
-    var igrave = "ì";
+    var igrave$1 = "ì";
     var ii = "ⅈ";
     var iiiint = "⨌";
     var iiint = "∭";
@@ -3676,7 +3716,7 @@
     var iota = "ι";
     var iprod = "⨼";
     var iques = "¿";
-    var iquest = "¿";
+    var iquest$1 = "¿";
     var iscr = "𝒾";
     var isin = "∈";
     var isinE = "⋹";
@@ -3688,7 +3728,7 @@
     var itilde = "ĩ";
     var iukcy = "і";
     var ium = "ï";
-    var iuml = "ï";
+    var iuml$1 = "ï";
     var jcirc = "ĵ";
     var jcy = "й";
     var jfr = "𝔧";
@@ -3723,7 +3763,7 @@
     var langle = "⟨";
     var lap = "⪅";
     var laqu = "«";
-    var laquo = "«";
+    var laquo$1 = "«";
     var larr = "←";
     var larrb = "⇤";
     var larrbfs = "⤟";
@@ -3845,7 +3885,7 @@
     var lsquor = "‚";
     var lstrok = "ł";
     var l = "<";
-    var lt = "<";
+    var lt$1 = "<";
     var ltcc = "⪦";
     var ltcir = "⩹";
     var ltdot = "⋖";
@@ -3863,7 +3903,7 @@
     var lvnE = "≨︀";
     var mDDot = "∺";
     var mac = "¯";
-    var macr = "¯";
+    var macr$1 = "¯";
     var male = "♂";
     var malt = "✠";
     var maltese = "✠";
@@ -3880,12 +3920,12 @@
     var mfr = "𝔪";
     var mho = "℧";
     var micr = "µ";
-    var micro = "µ";
+    var micro$1 = "µ";
     var mid = "∣";
     var midast = "*";
     var midcir = "⫰";
     var middo = "·";
-    var middot = "·";
+    var middot$1 = "·";
     var minus = "−";
     var minusb = "⊟";
     var minusd = "∸";
@@ -3924,7 +3964,7 @@
     var natural = "♮";
     var naturals = "ℕ";
     var nbs = " ";
-    var nbsp = " ";
+    var nbsp$1 = " ";
     var nbump = "≎̸";
     var nbumpe = "≏̸";
     var ncap = "⩃";
@@ -3983,7 +4023,7 @@
     var nmid = "∤";
     var nopf = "𝕟";
     var no = "¬";
-    var not = "¬";
+    var not$1 = "¬";
     var notin = "∉";
     var notinE = "⋹̸";
     var notindot = "⋵̸";
@@ -4040,7 +4080,7 @@
     var nsupseteqq = "⫆̸";
     var ntgl = "≹";
     var ntild = "ñ";
-    var ntilde = "ñ";
+    var ntilde$1 = "ñ";
     var ntlg = "≸";
     var ntriangleleft = "⋪";
     var ntrianglelefteq = "⋬";
@@ -4071,10 +4111,10 @@
     var nwnear = "⤧";
     var oS = "Ⓢ";
     var oacut = "ó";
-    var oacute = "ó";
+    var oacute$1 = "ó";
     var oast = "⊛";
     var ocir = "ô";
-    var ocirc = "ô";
+    var ocirc$1 = "ô";
     var ocy = "о";
     var odash = "⊝";
     var odblac = "ő";
@@ -4086,7 +4126,7 @@
     var ofr = "𝔬";
     var ogon = "˛";
     var ograv = "ò";
-    var ograve = "ò";
+    var ograve$1 = "ò";
     var ogt = "⧁";
     var ohbar = "⦵";
     var ohm = "Ω";
@@ -4110,25 +4150,25 @@
     var ord = "º";
     var order$1 = "ℴ";
     var orderof = "ℴ";
-    var ordf = "ª";
-    var ordm = "º";
+    var ordf$1 = "ª";
+    var ordm$1 = "º";
     var origof = "⊶";
     var oror = "⩖";
     var orslope = "⩗";
     var orv = "⩛";
     var oscr = "ℴ";
     var oslas = "ø";
-    var oslash = "ø";
+    var oslash$1 = "ø";
     var osol = "⊘";
     var otild = "õ";
-    var otilde = "õ";
+    var otilde$1 = "õ";
     var otimes = "⊗";
     var otimesas = "⨶";
     var oum = "ö";
-    var ouml = "ö";
+    var ouml$1 = "ö";
     var ovbar = "⌽";
     var par = "¶";
-    var para = "¶";
+    var para$1 = "¶";
     var parallel = "∥";
     var parsim = "⫳";
     var parsl = "⫽";
@@ -4158,14 +4198,14 @@
     var plusdu = "⨥";
     var pluse = "⩲";
     var plusm = "±";
-    var plusmn = "±";
+    var plusmn$1 = "±";
     var plussim = "⨦";
     var plustwo = "⨧";
     var pm = "±";
     var pointint = "⨕";
     var popf = "𝕡";
     var poun = "£";
-    var pound = "£";
+    var pound$1 = "£";
     var pr = "≺";
     var prE = "⪳";
     var prap = "⪷";
@@ -4205,7 +4245,7 @@
     var quest = "?";
     var questeq = "≟";
     var quo = "\"";
-    var quot = "\"";
+    var quot$1 = "\"";
     var rAarr = "⇛";
     var rArr = "⇒";
     var rAtail = "⤜";
@@ -4220,7 +4260,7 @@
     var range = "⦥";
     var rangle = "⟩";
     var raqu = "»";
-    var raquo = "»";
+    var raquo$1 = "»";
     var rarr = "→";
     var rarrap = "⥵";
     var rarrb = "⇥";
@@ -4259,7 +4299,7 @@
     var reals = "ℝ";
     var rect = "▭";
     var re = "®";
-    var reg = "®";
+    var reg$1 = "®";
     var rfisht = "⥽";
     var rfloor = "⌋";
     var rfr = "𝔯";
@@ -4334,7 +4374,7 @@
     var searr = "↘";
     var searrow = "↘";
     var sec = "§";
-    var sect = "§";
+    var sect$1 = "§";
     var semi = ";";
     var seswar = "⤩";
     var setminus = "∖";
@@ -4348,7 +4388,7 @@
     var shortmid = "∣";
     var shortparallel = "∥";
     var sh = "­";
-    var shy = "­";
+    var shy$1 = "­";
     var sigma = "σ";
     var sigmaf = "ς";
     var sigmav = "ς";
@@ -4435,9 +4475,9 @@
     var sum = "∑";
     var sung = "♪";
     var sup = "⊃";
-    var sup1 = "¹";
-    var sup2 = "²";
-    var sup3 = "³";
+    var sup1$1 = "¹";
+    var sup2$1 = "²";
+    var sup3$1 = "³";
     var supE = "⫆";
     var supdot = "⪾";
     var supdsub = "⫘";
@@ -4464,7 +4504,7 @@
     var swarrow = "↙";
     var swnwar = "⤪";
     var szli = "ß";
-    var szlig = "ß";
+    var szlig$1 = "ß";
     var target = "⌖";
     var tau = "τ";
     var tbrk = "⎴";
@@ -4485,10 +4525,10 @@
     var thkap = "≈";
     var thksim = "∼";
     var thor = "þ";
-    var thorn = "þ";
+    var thorn$1 = "þ";
     var tilde = "˜";
     var time = "×";
-    var times = "×";
+    var times$1 = "×";
     var timesb = "⊠";
     var timesbar = "⨱";
     var timesd = "⨰";
@@ -4526,12 +4566,12 @@
     var uArr = "⇑";
     var uHar = "⥣";
     var uacut = "ú";
-    var uacute = "ú";
+    var uacute$1 = "ú";
     var uarr = "↑";
     var ubrcy = "ў";
     var ubreve = "ŭ";
     var ucir = "û";
-    var ucirc = "û";
+    var ucirc$1 = "û";
     var ucy = "у";
     var udarr = "⇅";
     var udblac = "ű";
@@ -4539,7 +4579,7 @@
     var ufisht = "⥾";
     var ufr = "𝔲";
     var ugrav = "ù";
-    var ugrave = "ù";
+    var ugrave$1 = "ù";
     var uharl = "↿";
     var uharr = "↾";
     var uhblk = "▀";
@@ -4549,7 +4589,7 @@
     var ultri = "◸";
     var umacr = "ū";
     var um = "¨";
-    var uml = "¨";
+    var uml$1 = "¨";
     var uogon = "ų";
     var uopf = "𝕦";
     var uparrow = "↑";
@@ -4573,7 +4613,7 @@
     var utrif = "▴";
     var uuarr = "⇈";
     var uum = "ü";
-    var uuml = "ü";
+    var uuml$1 = "ü";
     var uwangle = "⦧";
     var vArr = "⇕";
     var vBar = "⫨";
@@ -4653,19 +4693,19 @@
     var xvee = "⋁";
     var xwedge = "⋀";
     var yacut = "ý";
-    var yacute = "ý";
+    var yacute$1 = "ý";
     var yacy = "я";
     var ycirc = "ŷ";
     var ycy = "ы";
     var ye = "¥";
-    var yen = "¥";
+    var yen$1 = "¥";
     var yfr = "𝔶";
     var yicy = "ї";
     var yopf = "𝕪";
     var yscr = "𝓎";
     var yucy = "ю";
     var yum = "ÿ";
-    var yuml = "ÿ";
+    var yuml$1 = "ÿ";
     var zacute = "ź";
     var zcaron = "ž";
     var zcy = "з";
@@ -4679,20 +4719,20 @@
     var zscr = "𝓏";
     var zwj = "‍";
     var zwnj = "‌";
-    var index$1 = {
+    var characterEntities = {
     	AEli: AEli,
-    	AElig: AElig,
+    	AElig: AElig$1,
     	AM: AM,
-    	AMP: AMP,
+    	AMP: AMP$1,
     	Aacut: Aacut,
-    	Aacute: Aacute,
+    	Aacute: Aacute$1,
     	Abreve: Abreve,
     	Acir: Acir,
-    	Acirc: Acirc,
+    	Acirc: Acirc$1,
     	Acy: Acy,
     	Afr: Afr,
     	Agrav: Agrav,
-    	Agrave: Agrave,
+    	Agrave: Agrave$1,
     	Alpha: Alpha,
     	Amacr: Amacr,
     	And: And,
@@ -4700,13 +4740,13 @@
     	Aopf: Aopf,
     	ApplyFunction: ApplyFunction,
     	Arin: Arin,
-    	Aring: Aring,
+    	Aring: Aring$1,
     	Ascr: Ascr,
     	Assign: Assign,
     	Atild: Atild,
-    	Atilde: Atilde,
+    	Atilde: Atilde$1,
     	Aum: Aum,
-    	Auml: Auml,
+    	Auml: Auml$1,
     	Backslash: Backslash,
     	Barv: Barv,
     	Barwed: Barwed,
@@ -4721,14 +4761,14 @@
     	Bumpeq: Bumpeq,
     	CHcy: CHcy,
     	COP: COP,
-    	COPY: COPY,
+    	COPY: COPY$1,
     	Cacute: Cacute,
     	Cap: Cap,
     	CapitalDifferentialD: CapitalDifferentialD,
     	Cayleys: Cayleys,
     	Ccaron: Ccaron,
     	Ccedi: Ccedi,
-    	Ccedil: Ccedil,
+    	Ccedil: Ccedil$1,
     	Ccirc: Ccirc,
     	Cconint: Cconint,
     	Cdot: Cdot,
@@ -4811,17 +4851,17 @@
     	Dstrok: Dstrok,
     	ENG: ENG,
     	ET: ET,
-    	ETH: ETH,
+    	ETH: ETH$1,
     	Eacut: Eacut,
-    	Eacute: Eacute,
+    	Eacute: Eacute$1,
     	Ecaron: Ecaron,
     	Ecir: Ecir,
-    	Ecirc: Ecirc,
+    	Ecirc: Ecirc$1,
     	Ecy: Ecy,
     	Edot: Edot,
     	Efr: Efr,
     	Egrav: Egrav,
-    	Egrave: Egrave,
+    	Egrave: Egrave$1,
     	Element: Element,
     	Emacr: Emacr,
     	EmptySmallSquare: EmptySmallSquare,
@@ -4836,7 +4876,7 @@
     	Esim: Esim,
     	Eta: Eta,
     	Eum: Eum,
-    	Euml: Euml,
+    	Euml: Euml$1,
     	Exists: Exists,
     	ExponentialE: ExponentialE,
     	Fcy: Fcy,
@@ -4849,7 +4889,7 @@
     	Fscr: Fscr,
     	GJcy: GJcy,
     	G: G,
-    	GT: GT,
+    	GT: GT$1,
     	Gamma: Gamma,
     	Gammad: Gammad,
     	Gbreve: Gbreve,
@@ -4885,14 +4925,14 @@
     	IJlig: IJlig,
     	IOcy: IOcy,
     	Iacut: Iacut,
-    	Iacute: Iacute,
+    	Iacute: Iacute$1,
     	Icir: Icir,
-    	Icirc: Icirc,
+    	Icirc: Icirc$1,
     	Icy: Icy,
     	Idot: Idot,
     	Ifr: Ifr,
     	Igrav: Igrav,
-    	Igrave: Igrave,
+    	Igrave: Igrave$1,
     	Im: Im,
     	Imacr: Imacr,
     	ImaginaryI: ImaginaryI,
@@ -4909,7 +4949,7 @@
     	Itilde: Itilde,
     	Iukcy: Iukcy,
     	Ium: Ium,
-    	Iuml: Iuml,
+    	Iuml: Iuml$1,
     	Jcirc: Jcirc,
     	Jcy: Jcy,
     	Jfr: Jfr,
@@ -4927,7 +4967,7 @@
     	Kscr: Kscr,
     	LJcy: LJcy,
     	L: L,
-    	LT: LT,
+    	LT: LT$1,
     	Lacute: Lacute,
     	Lambda: Lambda,
     	Lang: Lang,
@@ -5064,18 +5104,18 @@
     	NotVerticalBar: NotVerticalBar,
     	Nscr: Nscr,
     	Ntild: Ntild,
-    	Ntilde: Ntilde,
+    	Ntilde: Ntilde$1,
     	Nu: Nu,
     	OElig: OElig,
     	Oacut: Oacut,
-    	Oacute: Oacute,
+    	Oacute: Oacute$1,
     	Ocir: Ocir,
-    	Ocirc: Ocirc,
+    	Ocirc: Ocirc$1,
     	Ocy: Ocy,
     	Odblac: Odblac,
     	Ofr: Ofr,
     	Ograv: Ograv,
-    	Ograve: Ograve,
+    	Ograve: Ograve$1,
     	Omacr: Omacr,
     	Omega: Omega,
     	Omicron: Omicron,
@@ -5085,12 +5125,12 @@
     	Or: Or,
     	Oscr: Oscr,
     	Oslas: Oslas,
-    	Oslash: Oslash,
+    	Oslash: Oslash$1,
     	Otild: Otild,
-    	Otilde: Otilde,
+    	Otilde: Otilde$1,
     	Otimes: Otimes,
     	Oum: Oum,
-    	Ouml: Ouml,
+    	Ouml: Ouml$1,
     	OverBar: OverBar,
     	OverBrace: OverBrace,
     	OverBracket: OverBracket,
@@ -5115,13 +5155,13 @@
     	Pscr: Pscr,
     	Psi: Psi,
     	QUO: QUO,
-    	QUOT: QUOT,
+    	QUOT: QUOT$1,
     	Qfr: Qfr,
     	Qopf: Qopf,
     	Qscr: Qscr,
     	RBarr: RBarr,
     	RE: RE,
-    	REG: REG,
+    	REG: REG$1,
     	Racute: Racute,
     	Rang: Rang,
     	Rarr: Rarr,
@@ -5205,7 +5245,7 @@
     	SupersetEqual: SupersetEqual,
     	Supset: Supset,
     	THOR: THOR,
-    	THORN: THORN,
+    	THORN: THORN$1,
     	TRADE: TRADE,
     	TSHcy: TSHcy,
     	TScy: TScy,
@@ -5228,18 +5268,18 @@
     	Tscr: Tscr,
     	Tstrok: Tstrok,
     	Uacut: Uacut,
-    	Uacute: Uacute,
+    	Uacute: Uacute$1,
     	Uarr: Uarr,
     	Uarrocir: Uarrocir,
     	Ubrcy: Ubrcy,
     	Ubreve: Ubreve,
     	Ucir: Ucir,
-    	Ucirc: Ucirc,
+    	Ucirc: Ucirc$1,
     	Ucy: Ucy,
     	Udblac: Udblac,
     	Ufr: Ufr,
     	Ugrav: Ugrav,
-    	Ugrave: Ugrave,
+    	Ugrave: Ugrave$1,
     	Umacr: Umacr,
     	UnderBar: UnderBar,
     	UnderBrace: UnderBrace,
@@ -5266,7 +5306,7 @@
     	Uscr: Uscr,
     	Utilde: Utilde,
     	Uum: Uum,
-    	Uuml: Uuml,
+    	Uuml: Uuml$1,
     	VDash: VDash,
     	Vbar: Vbar,
     	Vcy: Vcy,
@@ -5297,7 +5337,7 @@
     	YIcy: YIcy,
     	YUcy: YUcy,
     	Yacut: Yacut,
-    	Yacute: Yacute,
+    	Yacute: Yacute$1,
     	Ycirc: Ycirc,
     	Ycy: Ycy,
     	Yfr: Yfr,
@@ -5315,29 +5355,29 @@
     	Zopf: Zopf,
     	Zscr: Zscr,
     	aacut: aacut,
-    	aacute: aacute,
+    	aacute: aacute$1,
     	abreve: abreve,
     	ac: ac,
     	acE: acE,
     	acd: acd,
     	acir: acir,
-    	acirc: acirc,
+    	acirc: acirc$1,
     	acut: acut,
-    	acute: acute,
+    	acute: acute$1,
     	acy: acy,
     	aeli: aeli,
-    	aelig: aelig,
+    	aelig: aelig$1,
     	af: af,
     	afr: afr,
     	agrav: agrav,
-    	agrave: agrave,
+    	agrave: agrave$1,
     	alefsym: alefsym,
     	aleph: aleph,
     	alpha: alpha,
     	amacr: amacr,
     	amalg: amalg,
     	am: am,
-    	amp: amp,
+    	amp: amp$1,
     	and: and,
     	andand: andand,
     	andd: andd,
@@ -5372,15 +5412,15 @@
     	approx: approx,
     	approxeq: approxeq,
     	arin: arin,
-    	aring: aring,
+    	aring: aring$1,
     	ascr: ascr,
     	ast: ast,
     	asymp: asymp,
     	asympeq: asympeq,
     	atild: atild,
-    	atilde: atilde,
+    	atilde: atilde$1,
     	aum: aum,
-    	auml: auml,
+    	auml: auml$1,
     	awconint: awconint,
     	awint: awint,
     	bNot: bNot,
@@ -5485,7 +5525,7 @@
     	bprime: bprime,
     	breve: breve,
     	brvba: brvba,
-    	brvbar: brvbar,
+    	brvbar: brvbar$1,
     	bscr: bscr,
     	bsemi: bsemi,
     	bsim: bsim,
@@ -5512,16 +5552,16 @@
     	ccaps: ccaps,
     	ccaron: ccaron,
     	ccedi: ccedi,
-    	ccedil: ccedil,
+    	ccedil: ccedil$1,
     	ccirc: ccirc,
     	ccups: ccups,
     	ccupssm: ccupssm,
     	cdot: cdot,
     	cedi: cedi,
-    	cedil: cedil,
+    	cedil: cedil$1,
     	cemptyv: cemptyv,
     	cen: cen,
-    	cent: cent,
+    	cent: cent$1,
     	centerdot: centerdot,
     	cfr: cfr,
     	chcy: chcy,
@@ -5560,7 +5600,7 @@
     	copf: copf,
     	coprod: coprod,
     	cop: cop,
-    	copy: copy,
+    	copy: copy$1,
     	copysr: copysr,
     	crarr: crarr,
     	cross: cross,
@@ -5590,7 +5630,7 @@
     	curlyvee: curlyvee,
     	curlywedge: curlywedge,
     	curre: curre,
-    	curren: curren,
+    	curren: curren$1,
     	curvearrowleft: curvearrowleft,
     	curvearrowright: curvearrowright,
     	cuvee: cuvee,
@@ -5614,7 +5654,7 @@
     	ddarr: ddarr,
     	ddotseq: ddotseq,
     	de: de,
-    	deg: deg,
+    	deg: deg$1,
     	delta: delta,
     	demptyv: demptyv,
     	dfisht: dfisht,
@@ -5630,7 +5670,7 @@
     	disin: disin,
     	div: div,
     	divid: divid,
-    	divide: divide,
+    	divide: divide$1,
     	divideontimes: divideontimes,
     	divonx: divonx,
     	djcy: djcy,
@@ -5667,11 +5707,11 @@
     	eDDot: eDDot,
     	eDot: eDot,
     	eacut: eacut,
-    	eacute: eacute,
+    	eacute: eacute$1,
     	easter: easter,
     	ecaron: ecaron,
     	ecir: ecir,
-    	ecirc: ecirc,
+    	ecirc: ecirc$1,
     	ecolon: ecolon,
     	ecy: ecy,
     	edot: edot,
@@ -5680,7 +5720,7 @@
     	efr: efr,
     	eg: eg,
     	egrav: egrav,
-    	egrave: egrave,
+    	egrave: egrave$1,
     	egs: egs,
     	egsdot: egsdot,
     	el: el,
@@ -5722,9 +5762,9 @@
     	esim: esim,
     	eta: eta,
     	et: et,
-    	eth: eth,
+    	eth: eth$1,
     	eum: eum,
-    	euml: euml,
+    	euml: euml$1,
     	euro: euro,
     	excl: excl,
     	exist: exist,
@@ -5749,16 +5789,16 @@
     	forkv: forkv,
     	fpartint: fpartint,
     	frac1: frac1,
-    	frac12: frac12,
+    	frac12: frac12$1,
     	frac13: frac13,
-    	frac14: frac14,
+    	frac14: frac14$1,
     	frac15: frac15,
     	frac16: frac16,
     	frac18: frac18,
     	frac23: frac23,
     	frac25: frac25,
     	frac3: frac3,
-    	frac34: frac34,
+    	frac34: frac34$1,
     	frac35: frac35,
     	frac38: frac38,
     	frac45: frac45,
@@ -5813,7 +5853,7 @@
     	gsime: gsime,
     	gsiml: gsiml,
     	g: g,
-    	gt: gt,
+    	gt: gt$1,
     	gtcc: gtcc,
     	gtcir: gtcir,
     	gtdot: gtdot,
@@ -5857,18 +5897,18 @@
     	hybull: hybull,
     	hyphen: hyphen,
     	iacut: iacut,
-    	iacute: iacute,
+    	iacute: iacute$1,
     	ic: ic,
     	icir: icir,
-    	icirc: icirc,
+    	icirc: icirc$1,
     	icy: icy,
     	iecy: iecy,
     	iexc: iexc,
-    	iexcl: iexcl,
+    	iexcl: iexcl$1,
     	iff: iff,
     	ifr: ifr,
     	igrav: igrav,
-    	igrave: igrave,
+    	igrave: igrave$1,
     	ii: ii,
     	iiiint: iiiint,
     	iiint: iiint,
@@ -5899,7 +5939,7 @@
     	iota: iota,
     	iprod: iprod,
     	iques: iques,
-    	iquest: iquest,
+    	iquest: iquest$1,
     	iscr: iscr,
     	isin: isin,
     	isinE: isinE,
@@ -5911,7 +5951,7 @@
     	itilde: itilde,
     	iukcy: iukcy,
     	ium: ium,
-    	iuml: iuml,
+    	iuml: iuml$1,
     	jcirc: jcirc,
     	jcy: jcy,
     	jfr: jfr,
@@ -5946,7 +5986,7 @@
     	langle: langle,
     	lap: lap,
     	laqu: laqu,
-    	laquo: laquo,
+    	laquo: laquo$1,
     	larr: larr,
     	larrb: larrb,
     	larrbfs: larrbfs,
@@ -6068,7 +6108,7 @@
     	lsquor: lsquor,
     	lstrok: lstrok,
     	l: l,
-    	lt: lt,
+    	lt: lt$1,
     	ltcc: ltcc,
     	ltcir: ltcir,
     	ltdot: ltdot,
@@ -6086,7 +6126,7 @@
     	lvnE: lvnE,
     	mDDot: mDDot,
     	mac: mac,
-    	macr: macr,
+    	macr: macr$1,
     	male: male,
     	malt: malt,
     	maltese: maltese,
@@ -6103,12 +6143,12 @@
     	mfr: mfr,
     	mho: mho,
     	micr: micr,
-    	micro: micro,
+    	micro: micro$1,
     	mid: mid,
     	midast: midast,
     	midcir: midcir,
     	middo: middo,
-    	middot: middot,
+    	middot: middot$1,
     	minus: minus,
     	minusb: minusb,
     	minusd: minusd,
@@ -6147,7 +6187,7 @@
     	natural: natural,
     	naturals: naturals,
     	nbs: nbs,
-    	nbsp: nbsp,
+    	nbsp: nbsp$1,
     	nbump: nbump,
     	nbumpe: nbumpe,
     	ncap: ncap,
@@ -6206,7 +6246,7 @@
     	nmid: nmid,
     	nopf: nopf,
     	no: no,
-    	not: not,
+    	not: not$1,
     	notin: notin,
     	notinE: notinE,
     	notindot: notindot,
@@ -6263,7 +6303,7 @@
     	nsupseteqq: nsupseteqq,
     	ntgl: ntgl,
     	ntild: ntild,
-    	ntilde: ntilde,
+    	ntilde: ntilde$1,
     	ntlg: ntlg,
     	ntriangleleft: ntriangleleft,
     	ntrianglelefteq: ntrianglelefteq,
@@ -6294,10 +6334,10 @@
     	nwnear: nwnear,
     	oS: oS,
     	oacut: oacut,
-    	oacute: oacute,
+    	oacute: oacute$1,
     	oast: oast,
     	ocir: ocir,
-    	ocirc: ocirc,
+    	ocirc: ocirc$1,
     	ocy: ocy,
     	odash: odash,
     	odblac: odblac,
@@ -6309,7 +6349,7 @@
     	ofr: ofr,
     	ogon: ogon,
     	ograv: ograv,
-    	ograve: ograve,
+    	ograve: ograve$1,
     	ogt: ogt,
     	ohbar: ohbar,
     	ohm: ohm,
@@ -6333,25 +6373,25 @@
     	ord: ord,
     	order: order$1,
     	orderof: orderof,
-    	ordf: ordf,
-    	ordm: ordm,
+    	ordf: ordf$1,
+    	ordm: ordm$1,
     	origof: origof,
     	oror: oror,
     	orslope: orslope,
     	orv: orv,
     	oscr: oscr,
     	oslas: oslas,
-    	oslash: oslash,
+    	oslash: oslash$1,
     	osol: osol,
     	otild: otild,
-    	otilde: otilde,
+    	otilde: otilde$1,
     	otimes: otimes,
     	otimesas: otimesas,
     	oum: oum,
-    	ouml: ouml,
+    	ouml: ouml$1,
     	ovbar: ovbar,
     	par: par,
-    	para: para,
+    	para: para$1,
     	parallel: parallel,
     	parsim: parsim,
     	parsl: parsl,
@@ -6381,14 +6421,14 @@
     	plusdu: plusdu,
     	pluse: pluse,
     	plusm: plusm,
-    	plusmn: plusmn,
+    	plusmn: plusmn$1,
     	plussim: plussim,
     	plustwo: plustwo,
     	pm: pm,
     	pointint: pointint,
     	popf: popf,
     	poun: poun,
-    	pound: pound,
+    	pound: pound$1,
     	pr: pr,
     	prE: prE,
     	prap: prap,
@@ -6428,7 +6468,7 @@
     	quest: quest,
     	questeq: questeq,
     	quo: quo,
-    	quot: quot,
+    	quot: quot$1,
     	rAarr: rAarr,
     	rArr: rArr,
     	rAtail: rAtail,
@@ -6443,7 +6483,7 @@
     	range: range,
     	rangle: rangle,
     	raqu: raqu,
-    	raquo: raquo,
+    	raquo: raquo$1,
     	rarr: rarr,
     	rarrap: rarrap,
     	rarrb: rarrb,
@@ -6482,7 +6522,7 @@
     	reals: reals,
     	rect: rect,
     	re: re,
-    	reg: reg,
+    	reg: reg$1,
     	rfisht: rfisht,
     	rfloor: rfloor,
     	rfr: rfr,
@@ -6557,7 +6597,7 @@
     	searr: searr,
     	searrow: searrow,
     	sec: sec,
-    	sect: sect,
+    	sect: sect$1,
     	semi: semi,
     	seswar: seswar,
     	setminus: setminus,
@@ -6571,7 +6611,7 @@
     	shortmid: shortmid,
     	shortparallel: shortparallel,
     	sh: sh,
-    	shy: shy,
+    	shy: shy$1,
     	sigma: sigma,
     	sigmaf: sigmaf,
     	sigmav: sigmav,
@@ -6658,9 +6698,9 @@
     	sum: sum,
     	sung: sung,
     	sup: sup,
-    	sup1: sup1,
-    	sup2: sup2,
-    	sup3: sup3,
+    	sup1: sup1$1,
+    	sup2: sup2$1,
+    	sup3: sup3$1,
     	supE: supE,
     	supdot: supdot,
     	supdsub: supdsub,
@@ -6687,7 +6727,7 @@
     	swarrow: swarrow,
     	swnwar: swnwar,
     	szli: szli,
-    	szlig: szlig,
+    	szlig: szlig$1,
     	target: target,
     	tau: tau,
     	tbrk: tbrk,
@@ -6708,10 +6748,10 @@
     	thkap: thkap,
     	thksim: thksim,
     	thor: thor,
-    	thorn: thorn,
+    	thorn: thorn$1,
     	tilde: tilde,
     	time: time,
-    	times: times,
+    	times: times$1,
     	timesb: timesb,
     	timesbar: timesbar,
     	timesd: timesd,
@@ -6749,12 +6789,12 @@
     	uArr: uArr,
     	uHar: uHar,
     	uacut: uacut,
-    	uacute: uacute,
+    	uacute: uacute$1,
     	uarr: uarr,
     	ubrcy: ubrcy,
     	ubreve: ubreve,
     	ucir: ucir,
-    	ucirc: ucirc,
+    	ucirc: ucirc$1,
     	ucy: ucy,
     	udarr: udarr,
     	udblac: udblac,
@@ -6762,7 +6802,7 @@
     	ufisht: ufisht,
     	ufr: ufr,
     	ugrav: ugrav,
-    	ugrave: ugrave,
+    	ugrave: ugrave$1,
     	uharl: uharl,
     	uharr: uharr,
     	uhblk: uhblk,
@@ -6772,7 +6812,7 @@
     	ultri: ultri,
     	umacr: umacr,
     	um: um,
-    	uml: uml,
+    	uml: uml$1,
     	uogon: uogon,
     	uopf: uopf,
     	uparrow: uparrow,
@@ -6796,7 +6836,7 @@
     	utrif: utrif,
     	uuarr: uuarr,
     	uum: uum,
-    	uuml: uuml,
+    	uuml: uuml$1,
     	uwangle: uwangle,
     	vArr: vArr,
     	vBar: vBar,
@@ -6876,19 +6916,19 @@
     	xvee: xvee,
     	xwedge: xwedge,
     	yacut: yacut,
-    	yacute: yacute,
+    	yacute: yacute$1,
     	yacy: yacy,
     	ycirc: ycirc,
     	ycy: ycy,
     	ye: ye,
-    	yen: yen,
+    	yen: yen$1,
     	yfr: yfr,
     	yicy: yicy,
     	yopf: yopf,
     	yscr: yscr,
     	yucy: yucy,
     	yum: yum,
-    	yuml: yuml,
+    	yuml: yuml$1,
     	zacute: zacute,
     	zcaron: zcaron,
     	zcy: zcy,
@@ -6904,2646 +6944,21 @@
     	zwnj: zwnj
     };
 
-    var characterEntities = /*#__PURE__*/Object.freeze({
-        AEli: AEli,
-        AElig: AElig,
-        AM: AM,
-        AMP: AMP,
-        Aacut: Aacut,
-        Aacute: Aacute,
-        Abreve: Abreve,
-        Acir: Acir,
-        Acirc: Acirc,
-        Acy: Acy,
-        Afr: Afr,
-        Agrav: Agrav,
-        Agrave: Agrave,
-        Alpha: Alpha,
-        Amacr: Amacr,
-        And: And,
-        Aogon: Aogon,
-        Aopf: Aopf,
-        ApplyFunction: ApplyFunction,
-        Arin: Arin,
-        Aring: Aring,
-        Ascr: Ascr,
-        Assign: Assign,
-        Atild: Atild,
-        Atilde: Atilde,
-        Aum: Aum,
-        Auml: Auml,
-        Backslash: Backslash,
-        Barv: Barv,
-        Barwed: Barwed,
-        Bcy: Bcy,
-        Because: Because,
-        Bernoullis: Bernoullis,
-        Beta: Beta,
-        Bfr: Bfr,
-        Bopf: Bopf,
-        Breve: Breve,
-        Bscr: Bscr,
-        Bumpeq: Bumpeq,
-        CHcy: CHcy,
-        COP: COP,
-        COPY: COPY,
-        Cacute: Cacute,
-        Cap: Cap,
-        CapitalDifferentialD: CapitalDifferentialD,
-        Cayleys: Cayleys,
-        Ccaron: Ccaron,
-        Ccedi: Ccedi,
-        Ccedil: Ccedil,
-        Ccirc: Ccirc,
-        Cconint: Cconint,
-        Cdot: Cdot,
-        Cedilla: Cedilla,
-        CenterDot: CenterDot,
-        Cfr: Cfr,
-        Chi: Chi,
-        CircleDot: CircleDot,
-        CircleMinus: CircleMinus,
-        CirclePlus: CirclePlus,
-        CircleTimes: CircleTimes,
-        ClockwiseContourIntegral: ClockwiseContourIntegral,
-        CloseCurlyDoubleQuote: CloseCurlyDoubleQuote,
-        CloseCurlyQuote: CloseCurlyQuote,
-        Colon: Colon,
-        Colone: Colone,
-        Congruent: Congruent,
-        Conint: Conint,
-        ContourIntegral: ContourIntegral,
-        Copf: Copf,
-        Coproduct: Coproduct,
-        CounterClockwiseContourIntegral: CounterClockwiseContourIntegral,
-        Cross: Cross,
-        Cscr: Cscr,
-        Cup: Cup,
-        CupCap: CupCap,
-        DD: DD,
-        DDotrahd: DDotrahd,
-        DJcy: DJcy,
-        DScy: DScy,
-        DZcy: DZcy,
-        Dagger: Dagger,
-        Darr: Darr,
-        Dashv: Dashv,
-        Dcaron: Dcaron,
-        Dcy: Dcy,
-        Del: Del,
-        Delta: Delta,
-        Dfr: Dfr,
-        DiacriticalAcute: DiacriticalAcute,
-        DiacriticalDot: DiacriticalDot,
-        DiacriticalDoubleAcute: DiacriticalDoubleAcute,
-        DiacriticalGrave: DiacriticalGrave,
-        DiacriticalTilde: DiacriticalTilde,
-        Diamond: Diamond,
-        DifferentialD: DifferentialD,
-        Dopf: Dopf,
-        Dot: Dot,
-        DotDot: DotDot,
-        DotEqual: DotEqual,
-        DoubleContourIntegral: DoubleContourIntegral,
-        DoubleDot: DoubleDot,
-        DoubleDownArrow: DoubleDownArrow,
-        DoubleLeftArrow: DoubleLeftArrow,
-        DoubleLeftRightArrow: DoubleLeftRightArrow,
-        DoubleLeftTee: DoubleLeftTee,
-        DoubleLongLeftArrow: DoubleLongLeftArrow,
-        DoubleLongLeftRightArrow: DoubleLongLeftRightArrow,
-        DoubleLongRightArrow: DoubleLongRightArrow,
-        DoubleRightArrow: DoubleRightArrow,
-        DoubleRightTee: DoubleRightTee,
-        DoubleUpArrow: DoubleUpArrow,
-        DoubleUpDownArrow: DoubleUpDownArrow,
-        DoubleVerticalBar: DoubleVerticalBar,
-        DownArrow: DownArrow,
-        DownArrowBar: DownArrowBar,
-        DownArrowUpArrow: DownArrowUpArrow,
-        DownBreve: DownBreve,
-        DownLeftRightVector: DownLeftRightVector,
-        DownLeftTeeVector: DownLeftTeeVector,
-        DownLeftVector: DownLeftVector,
-        DownLeftVectorBar: DownLeftVectorBar,
-        DownRightTeeVector: DownRightTeeVector,
-        DownRightVector: DownRightVector,
-        DownRightVectorBar: DownRightVectorBar,
-        DownTee: DownTee,
-        DownTeeArrow: DownTeeArrow,
-        Downarrow: Downarrow,
-        Dscr: Dscr,
-        Dstrok: Dstrok,
-        ENG: ENG,
-        ET: ET,
-        ETH: ETH,
-        Eacut: Eacut,
-        Eacute: Eacute,
-        Ecaron: Ecaron,
-        Ecir: Ecir,
-        Ecirc: Ecirc,
-        Ecy: Ecy,
-        Edot: Edot,
-        Efr: Efr,
-        Egrav: Egrav,
-        Egrave: Egrave,
-        Element: Element,
-        Emacr: Emacr,
-        EmptySmallSquare: EmptySmallSquare,
-        EmptyVerySmallSquare: EmptyVerySmallSquare,
-        Eogon: Eogon,
-        Eopf: Eopf,
-        Epsilon: Epsilon,
-        Equal: Equal,
-        EqualTilde: EqualTilde,
-        Equilibrium: Equilibrium,
-        Escr: Escr,
-        Esim: Esim,
-        Eta: Eta,
-        Eum: Eum,
-        Euml: Euml,
-        Exists: Exists,
-        ExponentialE: ExponentialE,
-        Fcy: Fcy,
-        Ffr: Ffr,
-        FilledSmallSquare: FilledSmallSquare,
-        FilledVerySmallSquare: FilledVerySmallSquare,
-        Fopf: Fopf,
-        ForAll: ForAll,
-        Fouriertrf: Fouriertrf,
-        Fscr: Fscr,
-        GJcy: GJcy,
-        G: G,
-        GT: GT,
-        Gamma: Gamma,
-        Gammad: Gammad,
-        Gbreve: Gbreve,
-        Gcedil: Gcedil,
-        Gcirc: Gcirc,
-        Gcy: Gcy,
-        Gdot: Gdot,
-        Gfr: Gfr,
-        Gg: Gg,
-        Gopf: Gopf,
-        GreaterEqual: GreaterEqual,
-        GreaterEqualLess: GreaterEqualLess,
-        GreaterFullEqual: GreaterFullEqual,
-        GreaterGreater: GreaterGreater,
-        GreaterLess: GreaterLess,
-        GreaterSlantEqual: GreaterSlantEqual,
-        GreaterTilde: GreaterTilde,
-        Gscr: Gscr,
-        Gt: Gt,
-        HARDcy: HARDcy,
-        Hacek: Hacek,
-        Hat: Hat,
-        Hcirc: Hcirc,
-        Hfr: Hfr,
-        HilbertSpace: HilbertSpace,
-        Hopf: Hopf,
-        HorizontalLine: HorizontalLine,
-        Hscr: Hscr,
-        Hstrok: Hstrok,
-        HumpDownHump: HumpDownHump,
-        HumpEqual: HumpEqual,
-        IEcy: IEcy,
-        IJlig: IJlig,
-        IOcy: IOcy,
-        Iacut: Iacut,
-        Iacute: Iacute,
-        Icir: Icir,
-        Icirc: Icirc,
-        Icy: Icy,
-        Idot: Idot,
-        Ifr: Ifr,
-        Igrav: Igrav,
-        Igrave: Igrave,
-        Im: Im,
-        Imacr: Imacr,
-        ImaginaryI: ImaginaryI,
-        Implies: Implies,
-        Int: Int,
-        Integral: Integral,
-        Intersection: Intersection,
-        InvisibleComma: InvisibleComma,
-        InvisibleTimes: InvisibleTimes,
-        Iogon: Iogon,
-        Iopf: Iopf,
-        Iota: Iota,
-        Iscr: Iscr,
-        Itilde: Itilde,
-        Iukcy: Iukcy,
-        Ium: Ium,
-        Iuml: Iuml,
-        Jcirc: Jcirc,
-        Jcy: Jcy,
-        Jfr: Jfr,
-        Jopf: Jopf,
-        Jscr: Jscr,
-        Jsercy: Jsercy,
-        Jukcy: Jukcy,
-        KHcy: KHcy,
-        KJcy: KJcy,
-        Kappa: Kappa,
-        Kcedil: Kcedil,
-        Kcy: Kcy,
-        Kfr: Kfr,
-        Kopf: Kopf,
-        Kscr: Kscr,
-        LJcy: LJcy,
-        L: L,
-        LT: LT,
-        Lacute: Lacute,
-        Lambda: Lambda,
-        Lang: Lang,
-        Laplacetrf: Laplacetrf,
-        Larr: Larr,
-        Lcaron: Lcaron,
-        Lcedil: Lcedil,
-        Lcy: Lcy,
-        LeftAngleBracket: LeftAngleBracket,
-        LeftArrow: LeftArrow,
-        LeftArrowBar: LeftArrowBar,
-        LeftArrowRightArrow: LeftArrowRightArrow,
-        LeftCeiling: LeftCeiling,
-        LeftDoubleBracket: LeftDoubleBracket,
-        LeftDownTeeVector: LeftDownTeeVector,
-        LeftDownVector: LeftDownVector,
-        LeftDownVectorBar: LeftDownVectorBar,
-        LeftFloor: LeftFloor,
-        LeftRightArrow: LeftRightArrow,
-        LeftRightVector: LeftRightVector,
-        LeftTee: LeftTee,
-        LeftTeeArrow: LeftTeeArrow,
-        LeftTeeVector: LeftTeeVector,
-        LeftTriangle: LeftTriangle,
-        LeftTriangleBar: LeftTriangleBar,
-        LeftTriangleEqual: LeftTriangleEqual,
-        LeftUpDownVector: LeftUpDownVector,
-        LeftUpTeeVector: LeftUpTeeVector,
-        LeftUpVector: LeftUpVector,
-        LeftUpVectorBar: LeftUpVectorBar,
-        LeftVector: LeftVector,
-        LeftVectorBar: LeftVectorBar,
-        Leftarrow: Leftarrow,
-        Leftrightarrow: Leftrightarrow,
-        LessEqualGreater: LessEqualGreater,
-        LessFullEqual: LessFullEqual,
-        LessGreater: LessGreater,
-        LessLess: LessLess,
-        LessSlantEqual: LessSlantEqual,
-        LessTilde: LessTilde,
-        Lfr: Lfr,
-        Ll: Ll,
-        Lleftarrow: Lleftarrow,
-        Lmidot: Lmidot,
-        LongLeftArrow: LongLeftArrow,
-        LongLeftRightArrow: LongLeftRightArrow,
-        LongRightArrow: LongRightArrow,
-        Longleftarrow: Longleftarrow,
-        Longleftrightarrow: Longleftrightarrow,
-        Longrightarrow: Longrightarrow,
-        Lopf: Lopf,
-        LowerLeftArrow: LowerLeftArrow,
-        LowerRightArrow: LowerRightArrow,
-        Lscr: Lscr,
-        Lsh: Lsh,
-        Lstrok: Lstrok,
-        Lt: Lt,
-        Mcy: Mcy,
-        MediumSpace: MediumSpace,
-        Mellintrf: Mellintrf,
-        Mfr: Mfr,
-        MinusPlus: MinusPlus,
-        Mopf: Mopf,
-        Mscr: Mscr,
-        Mu: Mu,
-        NJcy: NJcy,
-        Nacute: Nacute,
-        Ncaron: Ncaron,
-        Ncedil: Ncedil,
-        Ncy: Ncy,
-        NegativeMediumSpace: NegativeMediumSpace,
-        NegativeThickSpace: NegativeThickSpace,
-        NegativeThinSpace: NegativeThinSpace,
-        NegativeVeryThinSpace: NegativeVeryThinSpace,
-        NestedGreaterGreater: NestedGreaterGreater,
-        NestedLessLess: NestedLessLess,
-        NewLine: NewLine,
-        Nfr: Nfr,
-        NoBreak: NoBreak,
-        NonBreakingSpace: NonBreakingSpace,
-        Nopf: Nopf,
-        Not: Not,
-        NotCongruent: NotCongruent,
-        NotCupCap: NotCupCap,
-        NotDoubleVerticalBar: NotDoubleVerticalBar,
-        NotElement: NotElement,
-        NotEqual: NotEqual,
-        NotEqualTilde: NotEqualTilde,
-        NotExists: NotExists,
-        NotGreater: NotGreater,
-        NotGreaterEqual: NotGreaterEqual,
-        NotGreaterFullEqual: NotGreaterFullEqual,
-        NotGreaterGreater: NotGreaterGreater,
-        NotGreaterLess: NotGreaterLess,
-        NotGreaterSlantEqual: NotGreaterSlantEqual,
-        NotGreaterTilde: NotGreaterTilde,
-        NotHumpDownHump: NotHumpDownHump,
-        NotHumpEqual: NotHumpEqual,
-        NotLeftTriangle: NotLeftTriangle,
-        NotLeftTriangleBar: NotLeftTriangleBar,
-        NotLeftTriangleEqual: NotLeftTriangleEqual,
-        NotLess: NotLess,
-        NotLessEqual: NotLessEqual,
-        NotLessGreater: NotLessGreater,
-        NotLessLess: NotLessLess,
-        NotLessSlantEqual: NotLessSlantEqual,
-        NotLessTilde: NotLessTilde,
-        NotNestedGreaterGreater: NotNestedGreaterGreater,
-        NotNestedLessLess: NotNestedLessLess,
-        NotPrecedes: NotPrecedes,
-        NotPrecedesEqual: NotPrecedesEqual,
-        NotPrecedesSlantEqual: NotPrecedesSlantEqual,
-        NotReverseElement: NotReverseElement,
-        NotRightTriangle: NotRightTriangle,
-        NotRightTriangleBar: NotRightTriangleBar,
-        NotRightTriangleEqual: NotRightTriangleEqual,
-        NotSquareSubset: NotSquareSubset,
-        NotSquareSubsetEqual: NotSquareSubsetEqual,
-        NotSquareSuperset: NotSquareSuperset,
-        NotSquareSupersetEqual: NotSquareSupersetEqual,
-        NotSubset: NotSubset,
-        NotSubsetEqual: NotSubsetEqual,
-        NotSucceeds: NotSucceeds,
-        NotSucceedsEqual: NotSucceedsEqual,
-        NotSucceedsSlantEqual: NotSucceedsSlantEqual,
-        NotSucceedsTilde: NotSucceedsTilde,
-        NotSuperset: NotSuperset,
-        NotSupersetEqual: NotSupersetEqual,
-        NotTilde: NotTilde,
-        NotTildeEqual: NotTildeEqual,
-        NotTildeFullEqual: NotTildeFullEqual,
-        NotTildeTilde: NotTildeTilde,
-        NotVerticalBar: NotVerticalBar,
-        Nscr: Nscr,
-        Ntild: Ntild,
-        Ntilde: Ntilde,
-        Nu: Nu,
-        OElig: OElig,
-        Oacut: Oacut,
-        Oacute: Oacute,
-        Ocir: Ocir,
-        Ocirc: Ocirc,
-        Ocy: Ocy,
-        Odblac: Odblac,
-        Ofr: Ofr,
-        Ograv: Ograv,
-        Ograve: Ograve,
-        Omacr: Omacr,
-        Omega: Omega,
-        Omicron: Omicron,
-        Oopf: Oopf,
-        OpenCurlyDoubleQuote: OpenCurlyDoubleQuote,
-        OpenCurlyQuote: OpenCurlyQuote,
-        Or: Or,
-        Oscr: Oscr,
-        Oslas: Oslas,
-        Oslash: Oslash,
-        Otild: Otild,
-        Otilde: Otilde,
-        Otimes: Otimes,
-        Oum: Oum,
-        Ouml: Ouml,
-        OverBar: OverBar,
-        OverBrace: OverBrace,
-        OverBracket: OverBracket,
-        OverParenthesis: OverParenthesis,
-        PartialD: PartialD,
-        Pcy: Pcy,
-        Pfr: Pfr,
-        Phi: Phi,
-        Pi: Pi,
-        PlusMinus: PlusMinus,
-        Poincareplane: Poincareplane,
-        Popf: Popf,
-        Pr: Pr,
-        Precedes: Precedes,
-        PrecedesEqual: PrecedesEqual,
-        PrecedesSlantEqual: PrecedesSlantEqual,
-        PrecedesTilde: PrecedesTilde,
-        Prime: Prime,
-        Product: Product,
-        Proportion: Proportion,
-        Proportional: Proportional,
-        Pscr: Pscr,
-        Psi: Psi,
-        QUO: QUO,
-        QUOT: QUOT,
-        Qfr: Qfr,
-        Qopf: Qopf,
-        Qscr: Qscr,
-        RBarr: RBarr,
-        RE: RE,
-        REG: REG,
-        Racute: Racute,
-        Rang: Rang,
-        Rarr: Rarr,
-        Rarrtl: Rarrtl,
-        Rcaron: Rcaron,
-        Rcedil: Rcedil,
-        Rcy: Rcy,
-        Re: Re,
-        ReverseElement: ReverseElement,
-        ReverseEquilibrium: ReverseEquilibrium,
-        ReverseUpEquilibrium: ReverseUpEquilibrium,
-        Rfr: Rfr,
-        Rho: Rho,
-        RightAngleBracket: RightAngleBracket,
-        RightArrow: RightArrow,
-        RightArrowBar: RightArrowBar,
-        RightArrowLeftArrow: RightArrowLeftArrow,
-        RightCeiling: RightCeiling,
-        RightDoubleBracket: RightDoubleBracket,
-        RightDownTeeVector: RightDownTeeVector,
-        RightDownVector: RightDownVector,
-        RightDownVectorBar: RightDownVectorBar,
-        RightFloor: RightFloor,
-        RightTee: RightTee,
-        RightTeeArrow: RightTeeArrow,
-        RightTeeVector: RightTeeVector,
-        RightTriangle: RightTriangle,
-        RightTriangleBar: RightTriangleBar,
-        RightTriangleEqual: RightTriangleEqual,
-        RightUpDownVector: RightUpDownVector,
-        RightUpTeeVector: RightUpTeeVector,
-        RightUpVector: RightUpVector,
-        RightUpVectorBar: RightUpVectorBar,
-        RightVector: RightVector,
-        RightVectorBar: RightVectorBar,
-        Rightarrow: Rightarrow,
-        Ropf: Ropf,
-        RoundImplies: RoundImplies,
-        Rrightarrow: Rrightarrow,
-        Rscr: Rscr,
-        Rsh: Rsh,
-        RuleDelayed: RuleDelayed,
-        SHCHcy: SHCHcy,
-        SHcy: SHcy,
-        SOFTcy: SOFTcy,
-        Sacute: Sacute,
-        Sc: Sc,
-        Scaron: Scaron,
-        Scedil: Scedil,
-        Scirc: Scirc,
-        Scy: Scy,
-        Sfr: Sfr,
-        ShortDownArrow: ShortDownArrow,
-        ShortLeftArrow: ShortLeftArrow,
-        ShortRightArrow: ShortRightArrow,
-        ShortUpArrow: ShortUpArrow,
-        Sigma: Sigma,
-        SmallCircle: SmallCircle,
-        Sopf: Sopf,
-        Sqrt: Sqrt,
-        Square: Square,
-        SquareIntersection: SquareIntersection,
-        SquareSubset: SquareSubset,
-        SquareSubsetEqual: SquareSubsetEqual,
-        SquareSuperset: SquareSuperset,
-        SquareSupersetEqual: SquareSupersetEqual,
-        SquareUnion: SquareUnion,
-        Sscr: Sscr,
-        Star: Star,
-        Sub: Sub,
-        Subset: Subset,
-        SubsetEqual: SubsetEqual,
-        Succeeds: Succeeds,
-        SucceedsEqual: SucceedsEqual,
-        SucceedsSlantEqual: SucceedsSlantEqual,
-        SucceedsTilde: SucceedsTilde,
-        SuchThat: SuchThat,
-        Sum: Sum,
-        Sup: Sup,
-        Superset: Superset,
-        SupersetEqual: SupersetEqual,
-        Supset: Supset,
-        THOR: THOR,
-        THORN: THORN,
-        TRADE: TRADE,
-        TSHcy: TSHcy,
-        TScy: TScy,
-        Tab: Tab,
-        Tau: Tau,
-        Tcaron: Tcaron,
-        Tcedil: Tcedil,
-        Tcy: Tcy,
-        Tfr: Tfr,
-        Therefore: Therefore,
-        Theta: Theta,
-        ThickSpace: ThickSpace,
-        ThinSpace: ThinSpace,
-        Tilde: Tilde,
-        TildeEqual: TildeEqual,
-        TildeFullEqual: TildeFullEqual,
-        TildeTilde: TildeTilde,
-        Topf: Topf,
-        TripleDot: TripleDot,
-        Tscr: Tscr,
-        Tstrok: Tstrok,
-        Uacut: Uacut,
-        Uacute: Uacute,
-        Uarr: Uarr,
-        Uarrocir: Uarrocir,
-        Ubrcy: Ubrcy,
-        Ubreve: Ubreve,
-        Ucir: Ucir,
-        Ucirc: Ucirc,
-        Ucy: Ucy,
-        Udblac: Udblac,
-        Ufr: Ufr,
-        Ugrav: Ugrav,
-        Ugrave: Ugrave,
-        Umacr: Umacr,
-        UnderBar: UnderBar,
-        UnderBrace: UnderBrace,
-        UnderBracket: UnderBracket,
-        UnderParenthesis: UnderParenthesis,
-        Union: Union,
-        UnionPlus: UnionPlus,
-        Uogon: Uogon,
-        Uopf: Uopf,
-        UpArrow: UpArrow,
-        UpArrowBar: UpArrowBar,
-        UpArrowDownArrow: UpArrowDownArrow,
-        UpDownArrow: UpDownArrow,
-        UpEquilibrium: UpEquilibrium,
-        UpTee: UpTee,
-        UpTeeArrow: UpTeeArrow,
-        Uparrow: Uparrow,
-        Updownarrow: Updownarrow,
-        UpperLeftArrow: UpperLeftArrow,
-        UpperRightArrow: UpperRightArrow,
-        Upsi: Upsi,
-        Upsilon: Upsilon,
-        Uring: Uring,
-        Uscr: Uscr,
-        Utilde: Utilde,
-        Uum: Uum,
-        Uuml: Uuml,
-        VDash: VDash,
-        Vbar: Vbar,
-        Vcy: Vcy,
-        Vdash: Vdash,
-        Vdashl: Vdashl,
-        Vee: Vee,
-        Verbar: Verbar,
-        Vert: Vert,
-        VerticalBar: VerticalBar,
-        VerticalLine: VerticalLine,
-        VerticalSeparator: VerticalSeparator,
-        VerticalTilde: VerticalTilde,
-        VeryThinSpace: VeryThinSpace,
-        Vfr: Vfr,
-        Vopf: Vopf,
-        Vscr: Vscr,
-        Vvdash: Vvdash,
-        Wcirc: Wcirc,
-        Wedge: Wedge,
-        Wfr: Wfr,
-        Wopf: Wopf,
-        Wscr: Wscr,
-        Xfr: Xfr,
-        Xi: Xi,
-        Xopf: Xopf,
-        Xscr: Xscr,
-        YAcy: YAcy,
-        YIcy: YIcy,
-        YUcy: YUcy,
-        Yacut: Yacut,
-        Yacute: Yacute,
-        Ycirc: Ycirc,
-        Ycy: Ycy,
-        Yfr: Yfr,
-        Yopf: Yopf,
-        Yscr: Yscr,
-        Yuml: Yuml,
-        ZHcy: ZHcy,
-        Zacute: Zacute,
-        Zcaron: Zcaron,
-        Zcy: Zcy,
-        Zdot: Zdot,
-        ZeroWidthSpace: ZeroWidthSpace,
-        Zeta: Zeta,
-        Zfr: Zfr,
-        Zopf: Zopf,
-        Zscr: Zscr,
-        aacut: aacut,
-        aacute: aacute,
-        abreve: abreve,
-        ac: ac,
-        acE: acE,
-        acd: acd,
-        acir: acir,
-        acirc: acirc,
-        acut: acut,
-        acute: acute,
-        acy: acy,
-        aeli: aeli,
-        aelig: aelig,
-        af: af,
-        afr: afr,
-        agrav: agrav,
-        agrave: agrave,
-        alefsym: alefsym,
-        aleph: aleph,
-        alpha: alpha,
-        amacr: amacr,
-        amalg: amalg,
-        am: am,
-        amp: amp,
-        and: and,
-        andand: andand,
-        andd: andd,
-        andslope: andslope,
-        andv: andv,
-        ang: ang,
-        ange: ange,
-        angle: angle,
-        angmsd: angmsd,
-        angmsdaa: angmsdaa,
-        angmsdab: angmsdab,
-        angmsdac: angmsdac,
-        angmsdad: angmsdad,
-        angmsdae: angmsdae,
-        angmsdaf: angmsdaf,
-        angmsdag: angmsdag,
-        angmsdah: angmsdah,
-        angrt: angrt,
-        angrtvb: angrtvb,
-        angrtvbd: angrtvbd,
-        angsph: angsph,
-        angst: angst,
-        angzarr: angzarr,
-        aogon: aogon,
-        aopf: aopf,
-        ap: ap,
-        apE: apE,
-        apacir: apacir,
-        ape: ape,
-        apid: apid,
-        apos: apos,
-        approx: approx,
-        approxeq: approxeq,
-        arin: arin,
-        aring: aring,
-        ascr: ascr,
-        ast: ast,
-        asymp: asymp,
-        asympeq: asympeq,
-        atild: atild,
-        atilde: atilde,
-        aum: aum,
-        auml: auml,
-        awconint: awconint,
-        awint: awint,
-        bNot: bNot,
-        backcong: backcong,
-        backepsilon: backepsilon,
-        backprime: backprime,
-        backsim: backsim,
-        backsimeq: backsimeq,
-        barvee: barvee,
-        barwed: barwed,
-        barwedge: barwedge,
-        bbrk: bbrk,
-        bbrktbrk: bbrktbrk,
-        bcong: bcong,
-        bcy: bcy,
-        bdquo: bdquo,
-        becaus: becaus,
-        because: because,
-        bemptyv: bemptyv,
-        bepsi: bepsi,
-        bernou: bernou,
-        beta: beta,
-        beth: beth,
-        between: between,
-        bfr: bfr,
-        bigcap: bigcap,
-        bigcirc: bigcirc,
-        bigcup: bigcup,
-        bigodot: bigodot,
-        bigoplus: bigoplus,
-        bigotimes: bigotimes,
-        bigsqcup: bigsqcup,
-        bigstar: bigstar,
-        bigtriangledown: bigtriangledown,
-        bigtriangleup: bigtriangleup,
-        biguplus: biguplus,
-        bigvee: bigvee,
-        bigwedge: bigwedge,
-        bkarow: bkarow,
-        blacklozenge: blacklozenge,
-        blacksquare: blacksquare,
-        blacktriangle: blacktriangle,
-        blacktriangledown: blacktriangledown,
-        blacktriangleleft: blacktriangleleft,
-        blacktriangleright: blacktriangleright,
-        blank: blank,
-        blk12: blk12,
-        blk14: blk14,
-        blk34: blk34,
-        block: block,
-        bne: bne,
-        bnequiv: bnequiv,
-        bnot: bnot,
-        bopf: bopf,
-        bot: bot,
-        bottom: bottom,
-        bowtie: bowtie,
-        boxDL: boxDL,
-        boxDR: boxDR,
-        boxDl: boxDl,
-        boxDr: boxDr,
-        boxH: boxH,
-        boxHD: boxHD,
-        boxHU: boxHU,
-        boxHd: boxHd,
-        boxHu: boxHu,
-        boxUL: boxUL,
-        boxUR: boxUR,
-        boxUl: boxUl,
-        boxUr: boxUr,
-        boxV: boxV,
-        boxVH: boxVH,
-        boxVL: boxVL,
-        boxVR: boxVR,
-        boxVh: boxVh,
-        boxVl: boxVl,
-        boxVr: boxVr,
-        boxbox: boxbox,
-        boxdL: boxdL,
-        boxdR: boxdR,
-        boxdl: boxdl,
-        boxdr: boxdr,
-        boxh: boxh,
-        boxhD: boxhD,
-        boxhU: boxhU,
-        boxhd: boxhd,
-        boxhu: boxhu,
-        boxminus: boxminus,
-        boxplus: boxplus,
-        boxtimes: boxtimes,
-        boxuL: boxuL,
-        boxuR: boxuR,
-        boxul: boxul,
-        boxur: boxur,
-        boxv: boxv,
-        boxvH: boxvH,
-        boxvL: boxvL,
-        boxvR: boxvR,
-        boxvh: boxvh,
-        boxvl: boxvl,
-        boxvr: boxvr,
-        bprime: bprime,
-        breve: breve,
-        brvba: brvba,
-        brvbar: brvbar,
-        bscr: bscr,
-        bsemi: bsemi,
-        bsim: bsim,
-        bsime: bsime,
-        bsol: bsol,
-        bsolb: bsolb,
-        bsolhsub: bsolhsub,
-        bull: bull,
-        bullet: bullet,
-        bump: bump,
-        bumpE: bumpE,
-        bumpe: bumpe,
-        bumpeq: bumpeq,
-        cacute: cacute,
-        cap: cap,
-        capand: capand,
-        capbrcup: capbrcup,
-        capcap: capcap,
-        capcup: capcup,
-        capdot: capdot,
-        caps: caps,
-        caret: caret,
-        caron: caron,
-        ccaps: ccaps,
-        ccaron: ccaron,
-        ccedi: ccedi,
-        ccedil: ccedil,
-        ccirc: ccirc,
-        ccups: ccups,
-        ccupssm: ccupssm,
-        cdot: cdot,
-        cedi: cedi,
-        cedil: cedil,
-        cemptyv: cemptyv,
-        cen: cen,
-        cent: cent,
-        centerdot: centerdot,
-        cfr: cfr,
-        chcy: chcy,
-        check: check,
-        checkmark: checkmark,
-        chi: chi,
-        cir: cir,
-        cirE: cirE,
-        circ: circ,
-        circeq: circeq,
-        circlearrowleft: circlearrowleft,
-        circlearrowright: circlearrowright,
-        circledR: circledR,
-        circledS: circledS,
-        circledast: circledast,
-        circledcirc: circledcirc,
-        circleddash: circleddash,
-        cire: cire,
-        cirfnint: cirfnint,
-        cirmid: cirmid,
-        cirscir: cirscir,
-        clubs: clubs,
-        clubsuit: clubsuit,
-        colon: colon,
-        colone: colone,
-        coloneq: coloneq,
-        comma: comma,
-        commat: commat,
-        comp: comp,
-        compfn: compfn,
-        complement: complement,
-        complexes: complexes,
-        cong: cong,
-        congdot: congdot,
-        conint: conint,
-        copf: copf,
-        coprod: coprod,
-        cop: cop,
-        copy: copy,
-        copysr: copysr,
-        crarr: crarr,
-        cross: cross,
-        cscr: cscr,
-        csub: csub,
-        csube: csube,
-        csup: csup,
-        csupe: csupe,
-        ctdot: ctdot,
-        cudarrl: cudarrl,
-        cudarrr: cudarrr,
-        cuepr: cuepr,
-        cuesc: cuesc,
-        cularr: cularr,
-        cularrp: cularrp,
-        cup: cup,
-        cupbrcap: cupbrcap,
-        cupcap: cupcap,
-        cupcup: cupcup,
-        cupdot: cupdot,
-        cupor: cupor,
-        cups: cups,
-        curarr: curarr,
-        curarrm: curarrm,
-        curlyeqprec: curlyeqprec,
-        curlyeqsucc: curlyeqsucc,
-        curlyvee: curlyvee,
-        curlywedge: curlywedge,
-        curre: curre,
-        curren: curren,
-        curvearrowleft: curvearrowleft,
-        curvearrowright: curvearrowright,
-        cuvee: cuvee,
-        cuwed: cuwed,
-        cwconint: cwconint,
-        cwint: cwint,
-        cylcty: cylcty,
-        dArr: dArr,
-        dHar: dHar,
-        dagger: dagger,
-        daleth: daleth,
-        darr: darr,
-        dash: dash,
-        dashv: dashv,
-        dbkarow: dbkarow,
-        dblac: dblac,
-        dcaron: dcaron,
-        dcy: dcy,
-        dd: dd,
-        ddagger: ddagger,
-        ddarr: ddarr,
-        ddotseq: ddotseq,
-        de: de,
-        deg: deg,
-        delta: delta,
-        demptyv: demptyv,
-        dfisht: dfisht,
-        dfr: dfr,
-        dharl: dharl,
-        dharr: dharr,
-        diam: diam,
-        diamond: diamond,
-        diamondsuit: diamondsuit,
-        diams: diams,
-        die: die,
-        digamma: digamma,
-        disin: disin,
-        div: div,
-        divid: divid,
-        divide: divide,
-        divideontimes: divideontimes,
-        divonx: divonx,
-        djcy: djcy,
-        dlcorn: dlcorn,
-        dlcrop: dlcrop,
-        dollar: dollar,
-        dopf: dopf,
-        dot: dot,
-        doteq: doteq,
-        doteqdot: doteqdot,
-        dotminus: dotminus,
-        dotplus: dotplus,
-        dotsquare: dotsquare,
-        doublebarwedge: doublebarwedge,
-        downarrow: downarrow,
-        downdownarrows: downdownarrows,
-        downharpoonleft: downharpoonleft,
-        downharpoonright: downharpoonright,
-        drbkarow: drbkarow,
-        drcorn: drcorn,
-        drcrop: drcrop,
-        dscr: dscr,
-        dscy: dscy,
-        dsol: dsol,
-        dstrok: dstrok,
-        dtdot: dtdot,
-        dtri: dtri,
-        dtrif: dtrif,
-        duarr: duarr,
-        duhar: duhar,
-        dwangle: dwangle,
-        dzcy: dzcy,
-        dzigrarr: dzigrarr,
-        eDDot: eDDot,
-        eDot: eDot,
-        eacut: eacut,
-        eacute: eacute,
-        easter: easter,
-        ecaron: ecaron,
-        ecir: ecir,
-        ecirc: ecirc,
-        ecolon: ecolon,
-        ecy: ecy,
-        edot: edot,
-        ee: ee,
-        efDot: efDot,
-        efr: efr,
-        eg: eg,
-        egrav: egrav,
-        egrave: egrave,
-        egs: egs,
-        egsdot: egsdot,
-        el: el,
-        elinters: elinters,
-        ell: ell,
-        els: els,
-        elsdot: elsdot,
-        emacr: emacr,
-        empty: empty,
-        emptyset: emptyset,
-        emptyv: emptyv,
-        emsp13: emsp13,
-        emsp14: emsp14,
-        emsp: emsp,
-        eng: eng,
-        ensp: ensp,
-        eogon: eogon,
-        eopf: eopf,
-        epar: epar,
-        eparsl: eparsl,
-        eplus: eplus,
-        epsi: epsi,
-        epsilon: epsilon,
-        epsiv: epsiv,
-        eqcirc: eqcirc,
-        eqcolon: eqcolon,
-        eqsim: eqsim,
-        eqslantgtr: eqslantgtr,
-        eqslantless: eqslantless,
-        equals: equals,
-        equest: equest,
-        equiv: equiv,
-        equivDD: equivDD,
-        eqvparsl: eqvparsl,
-        erDot: erDot,
-        erarr: erarr,
-        escr: escr,
-        esdot: esdot,
-        esim: esim,
-        eta: eta,
-        et: et,
-        eth: eth,
-        eum: eum,
-        euml: euml,
-        euro: euro,
-        excl: excl,
-        exist: exist,
-        expectation: expectation,
-        exponentiale: exponentiale,
-        fallingdotseq: fallingdotseq,
-        fcy: fcy,
-        female: female,
-        ffilig: ffilig,
-        fflig: fflig,
-        ffllig: ffllig,
-        ffr: ffr,
-        filig: filig,
-        fjlig: fjlig,
-        flat: flat,
-        fllig: fllig,
-        fltns: fltns,
-        fnof: fnof,
-        fopf: fopf,
-        forall: forall,
-        fork: fork,
-        forkv: forkv,
-        fpartint: fpartint,
-        frac1: frac1,
-        frac12: frac12,
-        frac13: frac13,
-        frac14: frac14,
-        frac15: frac15,
-        frac16: frac16,
-        frac18: frac18,
-        frac23: frac23,
-        frac25: frac25,
-        frac3: frac3,
-        frac34: frac34,
-        frac35: frac35,
-        frac38: frac38,
-        frac45: frac45,
-        frac56: frac56,
-        frac58: frac58,
-        frac78: frac78,
-        frasl: frasl,
-        frown: frown,
-        fscr: fscr,
-        gE: gE,
-        gEl: gEl,
-        gacute: gacute,
-        gamma: gamma,
-        gammad: gammad,
-        gap: gap,
-        gbreve: gbreve,
-        gcirc: gcirc,
-        gcy: gcy,
-        gdot: gdot,
-        ge: ge,
-        gel: gel,
-        geq: geq,
-        geqq: geqq,
-        geqslant: geqslant,
-        ges: ges,
-        gescc: gescc,
-        gesdot: gesdot,
-        gesdoto: gesdoto,
-        gesdotol: gesdotol,
-        gesl: gesl,
-        gesles: gesles,
-        gfr: gfr,
-        gg: gg,
-        ggg: ggg,
-        gimel: gimel,
-        gjcy: gjcy,
-        gl: gl,
-        glE: glE,
-        gla: gla,
-        glj: glj,
-        gnE: gnE,
-        gnap: gnap,
-        gnapprox: gnapprox,
-        gne: gne,
-        gneq: gneq,
-        gneqq: gneqq,
-        gnsim: gnsim,
-        gopf: gopf,
-        grave: grave,
-        gscr: gscr,
-        gsim: gsim,
-        gsime: gsime,
-        gsiml: gsiml,
-        g: g,
-        gt: gt,
-        gtcc: gtcc,
-        gtcir: gtcir,
-        gtdot: gtdot,
-        gtlPar: gtlPar,
-        gtquest: gtquest,
-        gtrapprox: gtrapprox,
-        gtrarr: gtrarr,
-        gtrdot: gtrdot,
-        gtreqless: gtreqless,
-        gtreqqless: gtreqqless,
-        gtrless: gtrless,
-        gtrsim: gtrsim,
-        gvertneqq: gvertneqq,
-        gvnE: gvnE,
-        hArr: hArr,
-        hairsp: hairsp,
-        half: half,
-        hamilt: hamilt,
-        hardcy: hardcy,
-        harr: harr,
-        harrcir: harrcir,
-        harrw: harrw,
-        hbar: hbar,
-        hcirc: hcirc,
-        hearts: hearts,
-        heartsuit: heartsuit,
-        hellip: hellip,
-        hercon: hercon,
-        hfr: hfr,
-        hksearow: hksearow,
-        hkswarow: hkswarow,
-        hoarr: hoarr,
-        homtht: homtht,
-        hookleftarrow: hookleftarrow,
-        hookrightarrow: hookrightarrow,
-        hopf: hopf,
-        horbar: horbar,
-        hscr: hscr,
-        hslash: hslash,
-        hstrok: hstrok,
-        hybull: hybull,
-        hyphen: hyphen,
-        iacut: iacut,
-        iacute: iacute,
-        ic: ic,
-        icir: icir,
-        icirc: icirc,
-        icy: icy,
-        iecy: iecy,
-        iexc: iexc,
-        iexcl: iexcl,
-        iff: iff,
-        ifr: ifr,
-        igrav: igrav,
-        igrave: igrave,
-        ii: ii,
-        iiiint: iiiint,
-        iiint: iiint,
-        iinfin: iinfin,
-        iiota: iiota,
-        ijlig: ijlig,
-        imacr: imacr,
-        image: image,
-        imagline: imagline,
-        imagpart: imagpart,
-        imath: imath,
-        imof: imof,
-        imped: imped,
-        incare: incare,
-        infin: infin,
-        infintie: infintie,
-        inodot: inodot,
-        int: int,
-        intcal: intcal,
-        integers: integers,
-        intercal: intercal,
-        intlarhk: intlarhk,
-        intprod: intprod,
-        iocy: iocy,
-        iogon: iogon,
-        iopf: iopf,
-        iota: iota,
-        iprod: iprod,
-        iques: iques,
-        iquest: iquest,
-        iscr: iscr,
-        isin: isin,
-        isinE: isinE,
-        isindot: isindot,
-        isins: isins,
-        isinsv: isinsv,
-        isinv: isinv,
-        it: it,
-        itilde: itilde,
-        iukcy: iukcy,
-        ium: ium,
-        iuml: iuml,
-        jcirc: jcirc,
-        jcy: jcy,
-        jfr: jfr,
-        jmath: jmath,
-        jopf: jopf,
-        jscr: jscr,
-        jsercy: jsercy,
-        jukcy: jukcy,
-        kappa: kappa,
-        kappav: kappav,
-        kcedil: kcedil,
-        kcy: kcy,
-        kfr: kfr,
-        kgreen: kgreen,
-        khcy: khcy,
-        kjcy: kjcy,
-        kopf: kopf,
-        kscr: kscr,
-        lAarr: lAarr,
-        lArr: lArr,
-        lAtail: lAtail,
-        lBarr: lBarr,
-        lE: lE,
-        lEg: lEg,
-        lHar: lHar,
-        lacute: lacute,
-        laemptyv: laemptyv,
-        lagran: lagran,
-        lambda: lambda,
-        lang: lang,
-        langd: langd,
-        langle: langle,
-        lap: lap,
-        laqu: laqu,
-        laquo: laquo,
-        larr: larr,
-        larrb: larrb,
-        larrbfs: larrbfs,
-        larrfs: larrfs,
-        larrhk: larrhk,
-        larrlp: larrlp,
-        larrpl: larrpl,
-        larrsim: larrsim,
-        larrtl: larrtl,
-        lat: lat,
-        latail: latail,
-        late: late,
-        lates: lates,
-        lbarr: lbarr,
-        lbbrk: lbbrk,
-        lbrace: lbrace,
-        lbrack: lbrack,
-        lbrke: lbrke,
-        lbrksld: lbrksld,
-        lbrkslu: lbrkslu,
-        lcaron: lcaron,
-        lcedil: lcedil,
-        lceil: lceil,
-        lcub: lcub,
-        lcy: lcy,
-        ldca: ldca,
-        ldquo: ldquo,
-        ldquor: ldquor,
-        ldrdhar: ldrdhar,
-        ldrushar: ldrushar,
-        ldsh: ldsh,
-        le: le,
-        leftarrow: leftarrow,
-        leftarrowtail: leftarrowtail,
-        leftharpoondown: leftharpoondown,
-        leftharpoonup: leftharpoonup,
-        leftleftarrows: leftleftarrows,
-        leftrightarrow: leftrightarrow,
-        leftrightarrows: leftrightarrows,
-        leftrightharpoons: leftrightharpoons,
-        leftrightsquigarrow: leftrightsquigarrow,
-        leftthreetimes: leftthreetimes,
-        leg: leg,
-        leq: leq,
-        leqq: leqq,
-        leqslant: leqslant,
-        les: les,
-        lescc: lescc,
-        lesdot: lesdot,
-        lesdoto: lesdoto,
-        lesdotor: lesdotor,
-        lesg: lesg,
-        lesges: lesges,
-        lessapprox: lessapprox,
-        lessdot: lessdot,
-        lesseqgtr: lesseqgtr,
-        lesseqqgtr: lesseqqgtr,
-        lessgtr: lessgtr,
-        lesssim: lesssim,
-        lfisht: lfisht,
-        lfloor: lfloor,
-        lfr: lfr,
-        lg: lg,
-        lgE: lgE,
-        lhard: lhard,
-        lharu: lharu,
-        lharul: lharul,
-        lhblk: lhblk,
-        ljcy: ljcy,
-        ll: ll,
-        llarr: llarr,
-        llcorner: llcorner,
-        llhard: llhard,
-        lltri: lltri,
-        lmidot: lmidot,
-        lmoust: lmoust,
-        lmoustache: lmoustache,
-        lnE: lnE,
-        lnap: lnap,
-        lnapprox: lnapprox,
-        lne: lne,
-        lneq: lneq,
-        lneqq: lneqq,
-        lnsim: lnsim,
-        loang: loang,
-        loarr: loarr,
-        lobrk: lobrk,
-        longleftarrow: longleftarrow,
-        longleftrightarrow: longleftrightarrow,
-        longmapsto: longmapsto,
-        longrightarrow: longrightarrow,
-        looparrowleft: looparrowleft,
-        looparrowright: looparrowright,
-        lopar: lopar,
-        lopf: lopf,
-        loplus: loplus,
-        lotimes: lotimes,
-        lowast: lowast,
-        lowbar: lowbar,
-        loz: loz,
-        lozenge: lozenge,
-        lozf: lozf,
-        lpar: lpar,
-        lparlt: lparlt,
-        lrarr: lrarr,
-        lrcorner: lrcorner,
-        lrhar: lrhar,
-        lrhard: lrhard,
-        lrm: lrm,
-        lrtri: lrtri,
-        lsaquo: lsaquo,
-        lscr: lscr,
-        lsh: lsh,
-        lsim: lsim,
-        lsime: lsime,
-        lsimg: lsimg,
-        lsqb: lsqb,
-        lsquo: lsquo,
-        lsquor: lsquor,
-        lstrok: lstrok,
-        l: l,
-        lt: lt,
-        ltcc: ltcc,
-        ltcir: ltcir,
-        ltdot: ltdot,
-        lthree: lthree,
-        ltimes: ltimes,
-        ltlarr: ltlarr,
-        ltquest: ltquest,
-        ltrPar: ltrPar,
-        ltri: ltri,
-        ltrie: ltrie,
-        ltrif: ltrif,
-        lurdshar: lurdshar,
-        luruhar: luruhar,
-        lvertneqq: lvertneqq,
-        lvnE: lvnE,
-        mDDot: mDDot,
-        mac: mac,
-        macr: macr,
-        male: male,
-        malt: malt,
-        maltese: maltese,
-        map: map,
-        mapsto: mapsto,
-        mapstodown: mapstodown,
-        mapstoleft: mapstoleft,
-        mapstoup: mapstoup,
-        marker: marker,
-        mcomma: mcomma,
-        mcy: mcy,
-        mdash: mdash,
-        measuredangle: measuredangle,
-        mfr: mfr,
-        mho: mho,
-        micr: micr,
-        micro: micro,
-        mid: mid,
-        midast: midast,
-        midcir: midcir,
-        middo: middo,
-        middot: middot,
-        minus: minus,
-        minusb: minusb,
-        minusd: minusd,
-        minusdu: minusdu,
-        mlcp: mlcp,
-        mldr: mldr,
-        mnplus: mnplus,
-        models: models,
-        mopf: mopf,
-        mp: mp,
-        mscr: mscr,
-        mstpos: mstpos,
-        mu: mu,
-        multimap: multimap,
-        mumap: mumap,
-        nGg: nGg,
-        nGt: nGt,
-        nGtv: nGtv,
-        nLeftarrow: nLeftarrow,
-        nLeftrightarrow: nLeftrightarrow,
-        nLl: nLl,
-        nLt: nLt,
-        nLtv: nLtv,
-        nRightarrow: nRightarrow,
-        nVDash: nVDash,
-        nVdash: nVdash,
-        nabla: nabla,
-        nacute: nacute,
-        nang: nang,
-        nap: nap,
-        napE: napE,
-        napid: napid,
-        napos: napos,
-        napprox: napprox,
-        natur: natur,
-        natural: natural,
-        naturals: naturals,
-        nbs: nbs,
-        nbsp: nbsp,
-        nbump: nbump,
-        nbumpe: nbumpe,
-        ncap: ncap,
-        ncaron: ncaron,
-        ncedil: ncedil,
-        ncong: ncong,
-        ncongdot: ncongdot,
-        ncup: ncup,
-        ncy: ncy,
-        ndash: ndash,
-        ne: ne,
-        neArr: neArr,
-        nearhk: nearhk,
-        nearr: nearr,
-        nearrow: nearrow,
-        nedot: nedot,
-        nequiv: nequiv,
-        nesear: nesear,
-        nesim: nesim,
-        nexist: nexist,
-        nexists: nexists,
-        nfr: nfr,
-        ngE: ngE,
-        nge: nge,
-        ngeq: ngeq,
-        ngeqq: ngeqq,
-        ngeqslant: ngeqslant,
-        nges: nges,
-        ngsim: ngsim,
-        ngt: ngt,
-        ngtr: ngtr,
-        nhArr: nhArr,
-        nharr: nharr,
-        nhpar: nhpar,
-        ni: ni,
-        nis: nis,
-        nisd: nisd,
-        niv: niv,
-        njcy: njcy,
-        nlArr: nlArr,
-        nlE: nlE,
-        nlarr: nlarr,
-        nldr: nldr,
-        nle: nle,
-        nleftarrow: nleftarrow,
-        nleftrightarrow: nleftrightarrow,
-        nleq: nleq,
-        nleqq: nleqq,
-        nleqslant: nleqslant,
-        nles: nles,
-        nless: nless,
-        nlsim: nlsim,
-        nlt: nlt,
-        nltri: nltri,
-        nltrie: nltrie,
-        nmid: nmid,
-        nopf: nopf,
-        no: no,
-        not: not,
-        notin: notin,
-        notinE: notinE,
-        notindot: notindot,
-        notinva: notinva,
-        notinvb: notinvb,
-        notinvc: notinvc,
-        notni: notni,
-        notniva: notniva,
-        notnivb: notnivb,
-        notnivc: notnivc,
-        npar: npar,
-        nparallel: nparallel,
-        nparsl: nparsl,
-        npart: npart,
-        npolint: npolint,
-        npr: npr,
-        nprcue: nprcue,
-        npre: npre,
-        nprec: nprec,
-        npreceq: npreceq,
-        nrArr: nrArr,
-        nrarr: nrarr,
-        nrarrc: nrarrc,
-        nrarrw: nrarrw,
-        nrightarrow: nrightarrow,
-        nrtri: nrtri,
-        nrtrie: nrtrie,
-        nsc: nsc,
-        nsccue: nsccue,
-        nsce: nsce,
-        nscr: nscr,
-        nshortmid: nshortmid,
-        nshortparallel: nshortparallel,
-        nsim: nsim,
-        nsime: nsime,
-        nsimeq: nsimeq,
-        nsmid: nsmid,
-        nspar: nspar,
-        nsqsube: nsqsube,
-        nsqsupe: nsqsupe,
-        nsub: nsub,
-        nsubE: nsubE,
-        nsube: nsube,
-        nsubset: nsubset,
-        nsubseteq: nsubseteq,
-        nsubseteqq: nsubseteqq,
-        nsucc: nsucc,
-        nsucceq: nsucceq,
-        nsup: nsup,
-        nsupE: nsupE,
-        nsupe: nsupe,
-        nsupset: nsupset,
-        nsupseteq: nsupseteq,
-        nsupseteqq: nsupseteqq,
-        ntgl: ntgl,
-        ntild: ntild,
-        ntilde: ntilde,
-        ntlg: ntlg,
-        ntriangleleft: ntriangleleft,
-        ntrianglelefteq: ntrianglelefteq,
-        ntriangleright: ntriangleright,
-        ntrianglerighteq: ntrianglerighteq,
-        nu: nu,
-        num: num,
-        numero: numero,
-        numsp: numsp,
-        nvDash: nvDash,
-        nvHarr: nvHarr,
-        nvap: nvap,
-        nvdash: nvdash,
-        nvge: nvge,
-        nvgt: nvgt,
-        nvinfin: nvinfin,
-        nvlArr: nvlArr,
-        nvle: nvle,
-        nvlt: nvlt,
-        nvltrie: nvltrie,
-        nvrArr: nvrArr,
-        nvrtrie: nvrtrie,
-        nvsim: nvsim,
-        nwArr: nwArr,
-        nwarhk: nwarhk,
-        nwarr: nwarr,
-        nwarrow: nwarrow,
-        nwnear: nwnear,
-        oS: oS,
-        oacut: oacut,
-        oacute: oacute,
-        oast: oast,
-        ocir: ocir,
-        ocirc: ocirc,
-        ocy: ocy,
-        odash: odash,
-        odblac: odblac,
-        odiv: odiv,
-        odot: odot,
-        odsold: odsold,
-        oelig: oelig,
-        ofcir: ofcir,
-        ofr: ofr,
-        ogon: ogon,
-        ograv: ograv,
-        ograve: ograve,
-        ogt: ogt,
-        ohbar: ohbar,
-        ohm: ohm,
-        oint: oint,
-        olarr: olarr,
-        olcir: olcir,
-        olcross: olcross,
-        oline: oline,
-        olt: olt,
-        omacr: omacr,
-        omega: omega,
-        omicron: omicron,
-        omid: omid,
-        ominus: ominus,
-        oopf: oopf,
-        opar: opar,
-        operp: operp,
-        oplus: oplus,
-        or: or,
-        orarr: orarr,
-        ord: ord,
-        order: order$1,
-        orderof: orderof,
-        ordf: ordf,
-        ordm: ordm,
-        origof: origof,
-        oror: oror,
-        orslope: orslope,
-        orv: orv,
-        oscr: oscr,
-        oslas: oslas,
-        oslash: oslash,
-        osol: osol,
-        otild: otild,
-        otilde: otilde,
-        otimes: otimes,
-        otimesas: otimesas,
-        oum: oum,
-        ouml: ouml,
-        ovbar: ovbar,
-        par: par,
-        para: para,
-        parallel: parallel,
-        parsim: parsim,
-        parsl: parsl,
-        part: part,
-        pcy: pcy,
-        percnt: percnt,
-        period: period,
-        permil: permil,
-        perp: perp,
-        pertenk: pertenk,
-        pfr: pfr,
-        phi: phi,
-        phiv: phiv,
-        phmmat: phmmat,
-        phone: phone,
-        pi: pi,
-        pitchfork: pitchfork,
-        piv: piv,
-        planck: planck,
-        planckh: planckh,
-        plankv: plankv,
-        plus: plus,
-        plusacir: plusacir,
-        plusb: plusb,
-        pluscir: pluscir,
-        plusdo: plusdo,
-        plusdu: plusdu,
-        pluse: pluse,
-        plusm: plusm,
-        plusmn: plusmn,
-        plussim: plussim,
-        plustwo: plustwo,
-        pm: pm,
-        pointint: pointint,
-        popf: popf,
-        poun: poun,
-        pound: pound,
-        pr: pr,
-        prE: prE,
-        prap: prap,
-        prcue: prcue,
-        pre: pre,
-        prec: prec,
-        precapprox: precapprox,
-        preccurlyeq: preccurlyeq,
-        preceq: preceq,
-        precnapprox: precnapprox,
-        precneqq: precneqq,
-        precnsim: precnsim,
-        precsim: precsim,
-        prime: prime,
-        primes: primes,
-        prnE: prnE,
-        prnap: prnap,
-        prnsim: prnsim,
-        prod: prod,
-        profalar: profalar,
-        profline: profline,
-        profsurf: profsurf,
-        prop: prop,
-        propto: propto,
-        prsim: prsim,
-        prurel: prurel,
-        pscr: pscr,
-        psi: psi,
-        puncsp: puncsp,
-        qfr: qfr,
-        qint: qint,
-        qopf: qopf,
-        qprime: qprime,
-        qscr: qscr,
-        quaternions: quaternions,
-        quatint: quatint,
-        quest: quest,
-        questeq: questeq,
-        quo: quo,
-        quot: quot,
-        rAarr: rAarr,
-        rArr: rArr,
-        rAtail: rAtail,
-        rBarr: rBarr,
-        rHar: rHar,
-        race: race,
-        racute: racute,
-        radic: radic,
-        raemptyv: raemptyv,
-        rang: rang,
-        rangd: rangd,
-        range: range,
-        rangle: rangle,
-        raqu: raqu,
-        raquo: raquo,
-        rarr: rarr,
-        rarrap: rarrap,
-        rarrb: rarrb,
-        rarrbfs: rarrbfs,
-        rarrc: rarrc,
-        rarrfs: rarrfs,
-        rarrhk: rarrhk,
-        rarrlp: rarrlp,
-        rarrpl: rarrpl,
-        rarrsim: rarrsim,
-        rarrtl: rarrtl,
-        rarrw: rarrw,
-        ratail: ratail,
-        ratio: ratio,
-        rationals: rationals,
-        rbarr: rbarr,
-        rbbrk: rbbrk,
-        rbrace: rbrace,
-        rbrack: rbrack,
-        rbrke: rbrke,
-        rbrksld: rbrksld,
-        rbrkslu: rbrkslu,
-        rcaron: rcaron,
-        rcedil: rcedil,
-        rceil: rceil,
-        rcub: rcub,
-        rcy: rcy,
-        rdca: rdca,
-        rdldhar: rdldhar,
-        rdquo: rdquo,
-        rdquor: rdquor,
-        rdsh: rdsh,
-        real: real,
-        realine: realine,
-        realpart: realpart,
-        reals: reals,
-        rect: rect,
-        re: re,
-        reg: reg,
-        rfisht: rfisht,
-        rfloor: rfloor,
-        rfr: rfr,
-        rhard: rhard,
-        rharu: rharu,
-        rharul: rharul,
-        rho: rho,
-        rhov: rhov,
-        rightarrow: rightarrow,
-        rightarrowtail: rightarrowtail,
-        rightharpoondown: rightharpoondown,
-        rightharpoonup: rightharpoonup,
-        rightleftarrows: rightleftarrows,
-        rightleftharpoons: rightleftharpoons,
-        rightrightarrows: rightrightarrows,
-        rightsquigarrow: rightsquigarrow,
-        rightthreetimes: rightthreetimes,
-        ring: ring,
-        risingdotseq: risingdotseq,
-        rlarr: rlarr,
-        rlhar: rlhar,
-        rlm: rlm,
-        rmoust: rmoust,
-        rmoustache: rmoustache,
-        rnmid: rnmid,
-        roang: roang,
-        roarr: roarr,
-        robrk: robrk,
-        ropar: ropar,
-        ropf: ropf,
-        roplus: roplus,
-        rotimes: rotimes,
-        rpar: rpar,
-        rpargt: rpargt,
-        rppolint: rppolint,
-        rrarr: rrarr,
-        rsaquo: rsaquo,
-        rscr: rscr,
-        rsh: rsh,
-        rsqb: rsqb,
-        rsquo: rsquo,
-        rsquor: rsquor,
-        rthree: rthree,
-        rtimes: rtimes,
-        rtri: rtri,
-        rtrie: rtrie,
-        rtrif: rtrif,
-        rtriltri: rtriltri,
-        ruluhar: ruluhar,
-        rx: rx,
-        sacute: sacute,
-        sbquo: sbquo,
-        sc: sc,
-        scE: scE,
-        scap: scap,
-        scaron: scaron,
-        sccue: sccue,
-        sce: sce,
-        scedil: scedil,
-        scirc: scirc,
-        scnE: scnE,
-        scnap: scnap,
-        scnsim: scnsim,
-        scpolint: scpolint,
-        scsim: scsim,
-        scy: scy,
-        sdot: sdot,
-        sdotb: sdotb,
-        sdote: sdote,
-        seArr: seArr,
-        searhk: searhk,
-        searr: searr,
-        searrow: searrow,
-        sec: sec,
-        sect: sect,
-        semi: semi,
-        seswar: seswar,
-        setminus: setminus,
-        setmn: setmn,
-        sext: sext,
-        sfr: sfr,
-        sfrown: sfrown,
-        sharp: sharp,
-        shchcy: shchcy,
-        shcy: shcy,
-        shortmid: shortmid,
-        shortparallel: shortparallel,
-        sh: sh,
-        shy: shy,
-        sigma: sigma,
-        sigmaf: sigmaf,
-        sigmav: sigmav,
-        sim: sim,
-        simdot: simdot,
-        sime: sime,
-        simeq: simeq,
-        simg: simg,
-        simgE: simgE,
-        siml: siml,
-        simlE: simlE,
-        simne: simne,
-        simplus: simplus,
-        simrarr: simrarr,
-        slarr: slarr,
-        smallsetminus: smallsetminus,
-        smashp: smashp,
-        smeparsl: smeparsl,
-        smid: smid,
-        smile: smile,
-        smt: smt,
-        smte: smte,
-        smtes: smtes,
-        softcy: softcy,
-        sol: sol,
-        solb: solb,
-        solbar: solbar,
-        sopf: sopf,
-        spades: spades,
-        spadesuit: spadesuit,
-        spar: spar,
-        sqcap: sqcap,
-        sqcaps: sqcaps,
-        sqcup: sqcup,
-        sqcups: sqcups,
-        sqsub: sqsub,
-        sqsube: sqsube,
-        sqsubset: sqsubset,
-        sqsubseteq: sqsubseteq,
-        sqsup: sqsup,
-        sqsupe: sqsupe,
-        sqsupset: sqsupset,
-        sqsupseteq: sqsupseteq,
-        squ: squ,
-        square: square,
-        squarf: squarf,
-        squf: squf,
-        srarr: srarr,
-        sscr: sscr,
-        ssetmn: ssetmn,
-        ssmile: ssmile,
-        sstarf: sstarf,
-        star: star,
-        starf: starf,
-        straightepsilon: straightepsilon,
-        straightphi: straightphi,
-        strns: strns,
-        sub: sub,
-        subE: subE,
-        subdot: subdot,
-        sube: sube,
-        subedot: subedot,
-        submult: submult,
-        subnE: subnE,
-        subne: subne,
-        subplus: subplus,
-        subrarr: subrarr,
-        subset: subset,
-        subseteq: subseteq,
-        subseteqq: subseteqq,
-        subsetneq: subsetneq,
-        subsetneqq: subsetneqq,
-        subsim: subsim,
-        subsub: subsub,
-        subsup: subsup,
-        succ: succ,
-        succapprox: succapprox,
-        succcurlyeq: succcurlyeq,
-        succeq: succeq,
-        succnapprox: succnapprox,
-        succneqq: succneqq,
-        succnsim: succnsim,
-        succsim: succsim,
-        sum: sum,
-        sung: sung,
-        sup: sup,
-        sup1: sup1,
-        sup2: sup2,
-        sup3: sup3,
-        supE: supE,
-        supdot: supdot,
-        supdsub: supdsub,
-        supe: supe,
-        supedot: supedot,
-        suphsol: suphsol,
-        suphsub: suphsub,
-        suplarr: suplarr,
-        supmult: supmult,
-        supnE: supnE,
-        supne: supne,
-        supplus: supplus,
-        supset: supset,
-        supseteq: supseteq,
-        supseteqq: supseteqq,
-        supsetneq: supsetneq,
-        supsetneqq: supsetneqq,
-        supsim: supsim,
-        supsub: supsub,
-        supsup: supsup,
-        swArr: swArr,
-        swarhk: swarhk,
-        swarr: swarr,
-        swarrow: swarrow,
-        swnwar: swnwar,
-        szli: szli,
-        szlig: szlig,
-        target: target,
-        tau: tau,
-        tbrk: tbrk,
-        tcaron: tcaron,
-        tcedil: tcedil,
-        tcy: tcy,
-        tdot: tdot,
-        telrec: telrec,
-        tfr: tfr,
-        there4: there4,
-        therefore: therefore,
-        theta: theta,
-        thetasym: thetasym,
-        thetav: thetav,
-        thickapprox: thickapprox,
-        thicksim: thicksim,
-        thinsp: thinsp,
-        thkap: thkap,
-        thksim: thksim,
-        thor: thor,
-        thorn: thorn,
-        tilde: tilde,
-        time: time,
-        times: times,
-        timesb: timesb,
-        timesbar: timesbar,
-        timesd: timesd,
-        tint: tint,
-        toea: toea,
-        top: top,
-        topbot: topbot,
-        topcir: topcir,
-        topf: topf,
-        topfork: topfork,
-        tosa: tosa,
-        tprime: tprime,
-        trade: trade,
-        triangle: triangle,
-        triangledown: triangledown,
-        triangleleft: triangleleft,
-        trianglelefteq: trianglelefteq,
-        triangleq: triangleq,
-        triangleright: triangleright,
-        trianglerighteq: trianglerighteq,
-        tridot: tridot,
-        trie: trie,
-        triminus: triminus,
-        triplus: triplus,
-        trisb: trisb,
-        tritime: tritime,
-        trpezium: trpezium,
-        tscr: tscr,
-        tscy: tscy,
-        tshcy: tshcy,
-        tstrok: tstrok,
-        twixt: twixt,
-        twoheadleftarrow: twoheadleftarrow,
-        twoheadrightarrow: twoheadrightarrow,
-        uArr: uArr,
-        uHar: uHar,
-        uacut: uacut,
-        uacute: uacute,
-        uarr: uarr,
-        ubrcy: ubrcy,
-        ubreve: ubreve,
-        ucir: ucir,
-        ucirc: ucirc,
-        ucy: ucy,
-        udarr: udarr,
-        udblac: udblac,
-        udhar: udhar,
-        ufisht: ufisht,
-        ufr: ufr,
-        ugrav: ugrav,
-        ugrave: ugrave,
-        uharl: uharl,
-        uharr: uharr,
-        uhblk: uhblk,
-        ulcorn: ulcorn,
-        ulcorner: ulcorner,
-        ulcrop: ulcrop,
-        ultri: ultri,
-        umacr: umacr,
-        um: um,
-        uml: uml,
-        uogon: uogon,
-        uopf: uopf,
-        uparrow: uparrow,
-        updownarrow: updownarrow,
-        upharpoonleft: upharpoonleft,
-        upharpoonright: upharpoonright,
-        uplus: uplus,
-        upsi: upsi,
-        upsih: upsih,
-        upsilon: upsilon,
-        upuparrows: upuparrows,
-        urcorn: urcorn,
-        urcorner: urcorner,
-        urcrop: urcrop,
-        uring: uring,
-        urtri: urtri,
-        uscr: uscr,
-        utdot: utdot,
-        utilde: utilde,
-        utri: utri,
-        utrif: utrif,
-        uuarr: uuarr,
-        uum: uum,
-        uuml: uuml,
-        uwangle: uwangle,
-        vArr: vArr,
-        vBar: vBar,
-        vBarv: vBarv,
-        vDash: vDash,
-        vangrt: vangrt,
-        varepsilon: varepsilon,
-        varkappa: varkappa,
-        varnothing: varnothing,
-        varphi: varphi,
-        varpi: varpi,
-        varpropto: varpropto,
-        varr: varr,
-        varrho: varrho,
-        varsigma: varsigma,
-        varsubsetneq: varsubsetneq,
-        varsubsetneqq: varsubsetneqq,
-        varsupsetneq: varsupsetneq,
-        varsupsetneqq: varsupsetneqq,
-        vartheta: vartheta,
-        vartriangleleft: vartriangleleft,
-        vartriangleright: vartriangleright,
-        vcy: vcy,
-        vdash: vdash,
-        vee: vee,
-        veebar: veebar,
-        veeeq: veeeq,
-        vellip: vellip,
-        verbar: verbar,
-        vert: vert,
-        vfr: vfr,
-        vltri: vltri,
-        vnsub: vnsub,
-        vnsup: vnsup,
-        vopf: vopf,
-        vprop: vprop,
-        vrtri: vrtri,
-        vscr: vscr,
-        vsubnE: vsubnE,
-        vsubne: vsubne,
-        vsupnE: vsupnE,
-        vsupne: vsupne,
-        vzigzag: vzigzag,
-        wcirc: wcirc,
-        wedbar: wedbar,
-        wedge: wedge,
-        wedgeq: wedgeq,
-        weierp: weierp,
-        wfr: wfr,
-        wopf: wopf,
-        wp: wp,
-        wr: wr,
-        wreath: wreath,
-        wscr: wscr,
-        xcap: xcap,
-        xcirc: xcirc,
-        xcup: xcup,
-        xdtri: xdtri,
-        xfr: xfr,
-        xhArr: xhArr,
-        xharr: xharr,
-        xi: xi,
-        xlArr: xlArr,
-        xlarr: xlarr,
-        xmap: xmap,
-        xnis: xnis,
-        xodot: xodot,
-        xopf: xopf,
-        xoplus: xoplus,
-        xotime: xotime,
-        xrArr: xrArr,
-        xrarr: xrarr,
-        xscr: xscr,
-        xsqcup: xsqcup,
-        xuplus: xuplus,
-        xutri: xutri,
-        xvee: xvee,
-        xwedge: xwedge,
-        yacut: yacut,
-        yacute: yacute,
-        yacy: yacy,
-        ycirc: ycirc,
-        ycy: ycy,
-        ye: ye,
-        yen: yen,
-        yfr: yfr,
-        yicy: yicy,
-        yopf: yopf,
-        yscr: yscr,
-        yucy: yucy,
-        yum: yum,
-        yuml: yuml,
-        zacute: zacute,
-        zcaron: zcaron,
-        zcy: zcy,
-        zdot: zdot,
-        zeetrf: zeetrf,
-        zeta: zeta,
-        zfr: zfr,
-        zhcy: zhcy,
-        zigrarr: zigrarr,
-        zopf: zopf,
-        zscr: zscr,
-        zwj: zwj,
-        zwnj: zwnj,
-        default: index$1
-    });
+    var decodeEntity_1 = decodeEntity;
 
-    var AElig$1 = "Æ";
-    var AMP$1 = "&";
-    var Aacute$1 = "Á";
-    var Acirc$1 = "Â";
-    var Agrave$1 = "À";
-    var Aring$1 = "Å";
-    var Atilde$1 = "Ã";
-    var Auml$1 = "Ä";
-    var COPY$1 = "©";
-    var Ccedil$1 = "Ç";
-    var ETH$1 = "Ð";
-    var Eacute$1 = "É";
-    var Ecirc$1 = "Ê";
-    var Egrave$1 = "È";
-    var Euml$1 = "Ë";
-    var GT$1 = ">";
-    var Iacute$1 = "Í";
-    var Icirc$1 = "Î";
-    var Igrave$1 = "Ì";
-    var Iuml$1 = "Ï";
-    var LT$1 = "<";
-    var Ntilde$1 = "Ñ";
-    var Oacute$1 = "Ó";
-    var Ocirc$1 = "Ô";
-    var Ograve$1 = "Ò";
-    var Oslash$1 = "Ø";
-    var Otilde$1 = "Õ";
-    var Ouml$1 = "Ö";
-    var QUOT$1 = "\"";
-    var REG$1 = "®";
-    var THORN$1 = "Þ";
-    var Uacute$1 = "Ú";
-    var Ucirc$1 = "Û";
-    var Ugrave$1 = "Ù";
-    var Uuml$1 = "Ü";
-    var Yacute$1 = "Ý";
-    var aacute$1 = "á";
-    var acirc$1 = "â";
-    var acute$1 = "´";
-    var aelig$1 = "æ";
-    var agrave$1 = "à";
-    var amp$1 = "&";
-    var aring$1 = "å";
-    var atilde$1 = "ã";
-    var auml$1 = "ä";
-    var brvbar$1 = "¦";
-    var ccedil$1 = "ç";
-    var cedil$1 = "¸";
-    var cent$1 = "¢";
-    var copy$1 = "©";
-    var curren$1 = "¤";
-    var deg$1 = "°";
-    var divide$1 = "÷";
-    var eacute$1 = "é";
-    var ecirc$1 = "ê";
-    var egrave$1 = "è";
-    var eth$1 = "ð";
-    var euml$1 = "ë";
-    var frac12$1 = "½";
-    var frac14$1 = "¼";
-    var frac34$1 = "¾";
-    var gt$1 = ">";
-    var iacute$1 = "í";
-    var icirc$1 = "î";
-    var iexcl$1 = "¡";
-    var igrave$1 = "ì";
-    var iquest$1 = "¿";
-    var iuml$1 = "ï";
-    var laquo$1 = "«";
-    var lt$1 = "<";
-    var macr$1 = "¯";
-    var micro$1 = "µ";
-    var middot$1 = "·";
-    var nbsp$1 = " ";
-    var not$1 = "¬";
-    var ntilde$1 = "ñ";
-    var oacute$1 = "ó";
-    var ocirc$1 = "ô";
-    var ograve$1 = "ò";
-    var ordf$1 = "ª";
-    var ordm$1 = "º";
-    var oslash$1 = "ø";
-    var otilde$1 = "õ";
-    var ouml$1 = "ö";
-    var para$1 = "¶";
-    var plusmn$1 = "±";
-    var pound$1 = "£";
-    var quot$1 = "\"";
-    var raquo$1 = "»";
-    var reg$1 = "®";
-    var sect$1 = "§";
-    var shy$1 = "­";
-    var sup1$1 = "¹";
-    var sup2$1 = "²";
-    var sup3$1 = "³";
-    var szlig$1 = "ß";
-    var thorn$1 = "þ";
-    var times$1 = "×";
-    var uacute$1 = "ú";
-    var ucirc$1 = "û";
-    var ugrave$1 = "ù";
-    var uml$1 = "¨";
-    var uuml$1 = "ü";
-    var yacute$1 = "ý";
-    var yen$1 = "¥";
-    var yuml$1 = "ÿ";
-    var index$2 = {
-    	AElig: AElig$1,
-    	AMP: AMP$1,
-    	Aacute: Aacute$1,
-    	Acirc: Acirc$1,
-    	Agrave: Agrave$1,
-    	Aring: Aring$1,
-    	Atilde: Atilde$1,
-    	Auml: Auml$1,
-    	COPY: COPY$1,
-    	Ccedil: Ccedil$1,
-    	ETH: ETH$1,
-    	Eacute: Eacute$1,
-    	Ecirc: Ecirc$1,
-    	Egrave: Egrave$1,
-    	Euml: Euml$1,
-    	GT: GT$1,
-    	Iacute: Iacute$1,
-    	Icirc: Icirc$1,
-    	Igrave: Igrave$1,
-    	Iuml: Iuml$1,
-    	LT: LT$1,
-    	Ntilde: Ntilde$1,
-    	Oacute: Oacute$1,
-    	Ocirc: Ocirc$1,
-    	Ograve: Ograve$1,
-    	Oslash: Oslash$1,
-    	Otilde: Otilde$1,
-    	Ouml: Ouml$1,
-    	QUOT: QUOT$1,
-    	REG: REG$1,
-    	THORN: THORN$1,
-    	Uacute: Uacute$1,
-    	Ucirc: Ucirc$1,
-    	Ugrave: Ugrave$1,
-    	Uuml: Uuml$1,
-    	Yacute: Yacute$1,
-    	aacute: aacute$1,
-    	acirc: acirc$1,
-    	acute: acute$1,
-    	aelig: aelig$1,
-    	agrave: agrave$1,
-    	amp: amp$1,
-    	aring: aring$1,
-    	atilde: atilde$1,
-    	auml: auml$1,
-    	brvbar: brvbar$1,
-    	ccedil: ccedil$1,
-    	cedil: cedil$1,
-    	cent: cent$1,
-    	copy: copy$1,
-    	curren: curren$1,
-    	deg: deg$1,
-    	divide: divide$1,
-    	eacute: eacute$1,
-    	ecirc: ecirc$1,
-    	egrave: egrave$1,
-    	eth: eth$1,
-    	euml: euml$1,
-    	frac12: frac12$1,
-    	frac14: frac14$1,
-    	frac34: frac34$1,
-    	gt: gt$1,
-    	iacute: iacute$1,
-    	icirc: icirc$1,
-    	iexcl: iexcl$1,
-    	igrave: igrave$1,
-    	iquest: iquest$1,
-    	iuml: iuml$1,
-    	laquo: laquo$1,
-    	lt: lt$1,
-    	macr: macr$1,
-    	micro: micro$1,
-    	middot: middot$1,
-    	nbsp: nbsp$1,
-    	not: not$1,
-    	ntilde: ntilde$1,
-    	oacute: oacute$1,
-    	ocirc: ocirc$1,
-    	ograve: ograve$1,
-    	ordf: ordf$1,
-    	ordm: ordm$1,
-    	oslash: oslash$1,
-    	otilde: otilde$1,
-    	ouml: ouml$1,
-    	para: para$1,
-    	plusmn: plusmn$1,
-    	pound: pound$1,
-    	quot: quot$1,
-    	raquo: raquo$1,
-    	reg: reg$1,
-    	sect: sect$1,
-    	shy: shy$1,
-    	sup1: sup1$1,
-    	sup2: sup2$1,
-    	sup3: sup3$1,
-    	szlig: szlig$1,
-    	thorn: thorn$1,
-    	times: times$1,
-    	uacute: uacute$1,
-    	ucirc: ucirc$1,
-    	ugrave: ugrave$1,
-    	uml: uml$1,
-    	uuml: uuml$1,
-    	yacute: yacute$1,
-    	yen: yen$1,
-    	yuml: yuml$1
-    };
+    var own$3 = {}.hasOwnProperty;
 
-    var characterEntitiesLegacy = /*#__PURE__*/Object.freeze({
-        AElig: AElig$1,
-        AMP: AMP$1,
-        Aacute: Aacute$1,
-        Acirc: Acirc$1,
-        Agrave: Agrave$1,
-        Aring: Aring$1,
-        Atilde: Atilde$1,
-        Auml: Auml$1,
-        COPY: COPY$1,
-        Ccedil: Ccedil$1,
-        ETH: ETH$1,
-        Eacute: Eacute$1,
-        Ecirc: Ecirc$1,
-        Egrave: Egrave$1,
-        Euml: Euml$1,
-        GT: GT$1,
-        Iacute: Iacute$1,
-        Icirc: Icirc$1,
-        Igrave: Igrave$1,
-        Iuml: Iuml$1,
-        LT: LT$1,
-        Ntilde: Ntilde$1,
-        Oacute: Oacute$1,
-        Ocirc: Ocirc$1,
-        Ograve: Ograve$1,
-        Oslash: Oslash$1,
-        Otilde: Otilde$1,
-        Ouml: Ouml$1,
-        QUOT: QUOT$1,
-        REG: REG$1,
-        THORN: THORN$1,
-        Uacute: Uacute$1,
-        Ucirc: Ucirc$1,
-        Ugrave: Ugrave$1,
-        Uuml: Uuml$1,
-        Yacute: Yacute$1,
-        aacute: aacute$1,
-        acirc: acirc$1,
-        acute: acute$1,
-        aelig: aelig$1,
-        agrave: agrave$1,
-        amp: amp$1,
-        aring: aring$1,
-        atilde: atilde$1,
-        auml: auml$1,
-        brvbar: brvbar$1,
-        ccedil: ccedil$1,
-        cedil: cedil$1,
-        cent: cent$1,
-        copy: copy$1,
-        curren: curren$1,
-        deg: deg$1,
-        divide: divide$1,
-        eacute: eacute$1,
-        ecirc: ecirc$1,
-        egrave: egrave$1,
-        eth: eth$1,
-        euml: euml$1,
-        frac12: frac12$1,
-        frac14: frac14$1,
-        frac34: frac34$1,
-        gt: gt$1,
-        iacute: iacute$1,
-        icirc: icirc$1,
-        iexcl: iexcl$1,
-        igrave: igrave$1,
-        iquest: iquest$1,
-        iuml: iuml$1,
-        laquo: laquo$1,
-        lt: lt$1,
-        macr: macr$1,
-        micro: micro$1,
-        middot: middot$1,
-        nbsp: nbsp$1,
-        not: not$1,
-        ntilde: ntilde$1,
-        oacute: oacute$1,
-        ocirc: ocirc$1,
-        ograve: ograve$1,
-        ordf: ordf$1,
-        ordm: ordm$1,
-        oslash: oslash$1,
-        otilde: otilde$1,
-        ouml: ouml$1,
-        para: para$1,
-        plusmn: plusmn$1,
-        pound: pound$1,
-        quot: quot$1,
-        raquo: raquo$1,
-        reg: reg$1,
-        sect: sect$1,
-        shy: shy$1,
-        sup1: sup1$1,
-        sup2: sup2$1,
-        sup3: sup3$1,
-        szlig: szlig$1,
-        thorn: thorn$1,
-        times: times$1,
-        uacute: uacute$1,
-        ucirc: ucirc$1,
-        ugrave: ugrave$1,
-        uml: uml$1,
-        uuml: uuml$1,
-        yacute: yacute$1,
-        yen: yen$1,
-        yuml: yuml$1,
-        default: index$2
-    });
-
-    var index$3 = {
-    	"0": "�",
-    	"128": "€",
-    	"130": "‚",
-    	"131": "ƒ",
-    	"132": "„",
-    	"133": "…",
-    	"134": "†",
-    	"135": "‡",
-    	"136": "ˆ",
-    	"137": "‰",
-    	"138": "Š",
-    	"139": "‹",
-    	"140": "Œ",
-    	"142": "Ž",
-    	"145": "‘",
-    	"146": "’",
-    	"147": "“",
-    	"148": "”",
-    	"149": "•",
-    	"150": "–",
-    	"151": "—",
-    	"152": "˜",
-    	"153": "™",
-    	"154": "š",
-    	"155": "›",
-    	"156": "œ",
-    	"158": "ž",
-    	"159": "Ÿ"
-    };
-
-    var characterReferenceInvalid = /*#__PURE__*/Object.freeze({
-        default: index$3
-    });
-
-    var isDecimal = decimal;
-
-    /* Check if the given character code, or the character
-     * code at the first character, is decimal. */
-    function decimal(character) {
-      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
-
-      return code >= 48 && code <= 57 /* 0-9 */
+    function decodeEntity(characters) {
+      return own$3.call(characterEntities, characters)
+        ? characterEntities[characters]
+        : false
     }
-
-    var isHexadecimal = hexadecimal;
-
-    /* Check if the given character code, or the character
-     * code at the first character, is hexadecimal. */
-    function hexadecimal(character) {
-      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
-
-      return (
-        (code >= 97 /* a */ && code <= 102) /* z */ ||
-        (code >= 65 /* A */ && code <= 70) /* Z */ ||
-        (code >= 48 /* A */ && code <= 57) /* Z */
-      )
-    }
-
-    var isAlphabetical = alphabetical;
-
-    /* Check if the given character code, or the character
-     * code at the first character, is alphabetical. */
-    function alphabetical(character) {
-      var code = typeof character === 'string' ? character.charCodeAt(0) : character;
-
-      return (
-        (code >= 97 && code <= 122) /* a-z */ ||
-        (code >= 65 && code <= 90) /* A-Z */
-      )
-    }
-
-    var isAlphanumerical = alphanumerical;
-
-    /* Check if the given character code, or the character
-     * code at the first character, is alphanumerical. */
-    function alphanumerical(character) {
-      return isAlphabetical(character) || isDecimal(character)
-    }
-
-    var characterEntities$1 = ( characterEntities && index$1 ) || characterEntities;
-
-    var legacy = ( characterEntitiesLegacy && index$2 ) || characterEntitiesLegacy;
-
-    var invalid = ( characterReferenceInvalid && index$3 ) || characterReferenceInvalid;
 
     var parseEntities_1 = parseEntities;
 
-    var own$3 = {}.hasOwnProperty;
+    var own$4 = {}.hasOwnProperty;
     var fromCharCode = String.fromCharCode;
-    var noop$1 = Function.prototype;
+    var noop = Function.prototype;
 
     /* Default settings. */
     var defaults = {
@@ -9647,6 +7062,7 @@
       var queue = '';
       var result = [];
       var entityCharacters;
+      var namedEntity;
       var terminated;
       var characters;
       var character;
@@ -9669,7 +7085,7 @@
       prev = now();
 
       /* Wrap `handleWarning`. */
-      warning = handleWarning ? parseError : noop$1;
+      warning = handleWarning ? parseError : noop;
 
       /* Ensure the algorithm walks over the first character
        * and the end (inclusive). */
@@ -9767,7 +7183,7 @@
              * last viable named reference.  This
              * ensures we do not need to walk backwards
              * later. */
-            if (type === NAMED && own$3.call(legacy, characters)) {
+            if (type === NAMED && own$4.call(legacy, characters)) {
               entityCharacters = characters;
               entity = legacy[characters];
             }
@@ -9778,9 +7194,11 @@
           if (terminated) {
             end++;
 
-            if (type === NAMED && own$3.call(characterEntities$1, characters)) {
+            namedEntity = type === NAMED ? decodeEntity_1(characters) : false;
+
+            if (namedEntity) {
               entityCharacters = characters;
-              entity = characterEntities$1[characters];
+              entity = namedEntity;
             }
           }
 
@@ -10419,81 +7837,74 @@
       return settings.gfm ? gfm : defaults$1
     }
 
-    var blockElements = [
-      "address",
-      "article",
-      "aside",
-      "base",
-      "basefont",
-      "blockquote",
-      "body",
-      "caption",
-      "center",
-      "col",
-      "colgroup",
-      "dd",
-      "details",
-      "dialog",
-      "dir",
-      "div",
-      "dl",
-      "dt",
-      "fieldset",
-      "figcaption",
-      "figure",
-      "footer",
-      "form",
-      "frame",
-      "frameset",
-      "h1",
-      "h2",
-      "h3",
-      "h4",
-      "h5",
-      "h6",
-      "head",
-      "header",
-      "hgroup",
-      "hr",
-      "html",
-      "iframe",
-      "legend",
-      "li",
-      "link",
-      "main",
-      "menu",
-      "menuitem",
-      "meta",
-      "nav",
-      "noframes",
-      "ol",
-      "optgroup",
-      "option",
-      "p",
-      "param",
-      "pre",
-      "section",
-      "source",
-      "title",
-      "summary",
-      "table",
-      "tbody",
-      "td",
-      "tfoot",
-      "th",
-      "thead",
-      "title",
-      "tr",
-      "track",
-      "ul"
-    ]
-    ;
-
-    var blockElements$1 = /*#__PURE__*/Object.freeze({
-        default: blockElements
-    });
-
-    var require$$0$1 = ( blockElements$1 && blockElements ) || blockElements$1;
+    var require$$0$1 = [
+    	"address",
+    	"article",
+    	"aside",
+    	"base",
+    	"basefont",
+    	"blockquote",
+    	"body",
+    	"caption",
+    	"center",
+    	"col",
+    	"colgroup",
+    	"dd",
+    	"details",
+    	"dialog",
+    	"dir",
+    	"div",
+    	"dl",
+    	"dt",
+    	"fieldset",
+    	"figcaption",
+    	"figure",
+    	"footer",
+    	"form",
+    	"frame",
+    	"frameset",
+    	"h1",
+    	"h2",
+    	"h3",
+    	"h4",
+    	"h5",
+    	"h6",
+    	"head",
+    	"header",
+    	"hgroup",
+    	"hr",
+    	"html",
+    	"iframe",
+    	"legend",
+    	"li",
+    	"link",
+    	"main",
+    	"menu",
+    	"menuitem",
+    	"meta",
+    	"nav",
+    	"noframes",
+    	"ol",
+    	"optgroup",
+    	"option",
+    	"p",
+    	"param",
+    	"pre",
+    	"section",
+    	"source",
+    	"title",
+    	"summary",
+    	"table",
+    	"tbody",
+    	"td",
+    	"tfoot",
+    	"th",
+    	"thead",
+    	"title",
+    	"tr",
+    	"track",
+    	"ul"
+    ];
 
     var defaults$2 = {
       position: true,
@@ -13743,7 +11154,7 @@
     var link_1 = link$1;
     link$1.locator = link;
 
-    var own$4 = {}.hasOwnProperty;
+    var own$5 = {}.hasOwnProperty;
 
     var C_BACKSLASH$3 = '\\';
     var C_BRACKET_OPEN$3 = '[';
@@ -13954,7 +11365,7 @@
         while (index < length) {
           character = value.charAt(index);
 
-          if (subqueue && own$4.call(markers, character)) {
+          if (subqueue && own$5.call(markers, character)) {
             break;
           }
 
@@ -14012,7 +11423,7 @@
       subvalue += queue;
 
       /* Eat the title. */
-      if (queue && own$4.call(markers, character)) {
+      if (queue && own$5.call(markers, character)) {
         index++;
         subvalue += character;
         queue = '';
@@ -14973,6 +12384,303 @@
       this.Parser = Local;
     }
 
+    var reactIs_production_min = createCommonjsModule(function (module, exports) {
+    Object.defineProperty(exports,"__esModule",{value:!0});
+    var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.memo"):
+    60115,r=b?Symbol.for("react.lazy"):60116;function t(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case h:return a;default:return u}}case r:case q:case d:return u}}}function v(a){return t(a)===m}exports.typeOf=t;exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;
+    exports.Fragment=e;exports.Lazy=r;exports.Memo=q;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||"object"===typeof a&&null!==a&&(a.$$typeof===r||a.$$typeof===q||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n)};exports.isAsyncMode=function(a){return v(a)||t(a)===l};exports.isConcurrentMode=v;exports.isContextConsumer=function(a){return t(a)===k};
+    exports.isContextProvider=function(a){return t(a)===h};exports.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return t(a)===n};exports.isFragment=function(a){return t(a)===e};exports.isLazy=function(a){return t(a)===r};exports.isMemo=function(a){return t(a)===q};exports.isPortal=function(a){return t(a)===d};exports.isProfiler=function(a){return t(a)===g};exports.isStrictMode=function(a){return t(a)===f};
+    exports.isSuspense=function(a){return t(a)===p};
+    });
+
+    unwrapExports(reactIs_production_min);
+    var reactIs_production_min_1 = reactIs_production_min.typeOf;
+    var reactIs_production_min_2 = reactIs_production_min.AsyncMode;
+    var reactIs_production_min_3 = reactIs_production_min.ConcurrentMode;
+    var reactIs_production_min_4 = reactIs_production_min.ContextConsumer;
+    var reactIs_production_min_5 = reactIs_production_min.ContextProvider;
+    var reactIs_production_min_6 = reactIs_production_min.Element;
+    var reactIs_production_min_7 = reactIs_production_min.ForwardRef;
+    var reactIs_production_min_8 = reactIs_production_min.Fragment;
+    var reactIs_production_min_9 = reactIs_production_min.Lazy;
+    var reactIs_production_min_10 = reactIs_production_min.Memo;
+    var reactIs_production_min_11 = reactIs_production_min.Portal;
+    var reactIs_production_min_12 = reactIs_production_min.Profiler;
+    var reactIs_production_min_13 = reactIs_production_min.StrictMode;
+    var reactIs_production_min_14 = reactIs_production_min.Suspense;
+    var reactIs_production_min_15 = reactIs_production_min.isValidElementType;
+    var reactIs_production_min_16 = reactIs_production_min.isAsyncMode;
+    var reactIs_production_min_17 = reactIs_production_min.isConcurrentMode;
+    var reactIs_production_min_18 = reactIs_production_min.isContextConsumer;
+    var reactIs_production_min_19 = reactIs_production_min.isContextProvider;
+    var reactIs_production_min_20 = reactIs_production_min.isElement;
+    var reactIs_production_min_21 = reactIs_production_min.isForwardRef;
+    var reactIs_production_min_22 = reactIs_production_min.isFragment;
+    var reactIs_production_min_23 = reactIs_production_min.isLazy;
+    var reactIs_production_min_24 = reactIs_production_min.isMemo;
+    var reactIs_production_min_25 = reactIs_production_min.isPortal;
+    var reactIs_production_min_26 = reactIs_production_min.isProfiler;
+    var reactIs_production_min_27 = reactIs_production_min.isStrictMode;
+    var reactIs_production_min_28 = reactIs_production_min.isSuspense;
+
+    var reactIs_development = createCommonjsModule(function (module, exports) {
+
+
+
+    if (process.env.NODE_ENV !== "production") {
+      (function() {
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    // nor polyfill, then a plain number is used for performance.
+    var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+
+    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace;
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+
+    function isValidElementType(type) {
+      return typeof type === 'string' || typeof type === 'function' ||
+      // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
+    }
+
+    /**
+     * Forked from fbjs/warning:
+     * https://github.com/facebook/fbjs/blob/e66ba20ad5be433eb54423f2b097d829324d9de6/packages/fbjs/src/__forks__/warning.js
+     *
+     * Only change is we use console.warn instead of console.error,
+     * and do nothing when 'console' is not supported.
+     * This really simplifies the code.
+     * ---
+     * Similar to invariant but only logs a warning if the condition is not met.
+     * This can be used to log issues in development environments in critical
+     * paths. Removing the logging code for production environments will keep the
+     * same logic and follow the same code paths.
+     */
+
+    var lowPriorityWarning = function () {};
+
+    {
+      var printWarning = function (format) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        var argIndex = 0;
+        var message = 'Warning: ' + format.replace(/%s/g, function () {
+          return args[argIndex++];
+        });
+        if (typeof console !== 'undefined') {
+          console.warn(message);
+        }
+        try {
+          // --- Welcome to debugging React ---
+          // This error was thrown as a convenience so that you can use this stack
+          // to find the callsite that caused this warning to fire.
+          throw new Error(message);
+        } catch (x) {}
+      };
+
+      lowPriorityWarning = function (condition, format) {
+        if (format === undefined) {
+          throw new Error('`lowPriorityWarning(condition, format, ...args)` requires a warning ' + 'message argument');
+        }
+        if (!condition) {
+          for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+            args[_key2 - 2] = arguments[_key2];
+          }
+
+          printWarning.apply(undefined, [format].concat(args));
+        }
+      };
+    }
+
+    var lowPriorityWarning$1 = lowPriorityWarning;
+
+    function typeOf(object) {
+      if (typeof object === 'object' && object !== null) {
+        var $$typeof = object.$$typeof;
+        switch ($$typeof) {
+          case REACT_ELEMENT_TYPE:
+            var type = object.type;
+
+            switch (type) {
+              case REACT_ASYNC_MODE_TYPE:
+              case REACT_CONCURRENT_MODE_TYPE:
+              case REACT_FRAGMENT_TYPE:
+              case REACT_PROFILER_TYPE:
+              case REACT_STRICT_MODE_TYPE:
+              case REACT_SUSPENSE_TYPE:
+                return type;
+              default:
+                var $$typeofType = type && type.$$typeof;
+
+                switch ($$typeofType) {
+                  case REACT_CONTEXT_TYPE:
+                  case REACT_FORWARD_REF_TYPE:
+                  case REACT_PROVIDER_TYPE:
+                    return $$typeofType;
+                  default:
+                    return $$typeof;
+                }
+            }
+          case REACT_LAZY_TYPE:
+          case REACT_MEMO_TYPE:
+          case REACT_PORTAL_TYPE:
+            return $$typeof;
+        }
+      }
+
+      return undefined;
+    }
+
+    // AsyncMode is deprecated along with isAsyncMode
+    var AsyncMode = REACT_ASYNC_MODE_TYPE;
+    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+    var ContextConsumer = REACT_CONTEXT_TYPE;
+    var ContextProvider = REACT_PROVIDER_TYPE;
+    var Element = REACT_ELEMENT_TYPE;
+    var ForwardRef = REACT_FORWARD_REF_TYPE;
+    var Fragment = REACT_FRAGMENT_TYPE;
+    var Lazy = REACT_LAZY_TYPE;
+    var Memo = REACT_MEMO_TYPE;
+    var Portal = REACT_PORTAL_TYPE;
+    var Profiler = REACT_PROFILER_TYPE;
+    var StrictMode = REACT_STRICT_MODE_TYPE;
+    var Suspense = REACT_SUSPENSE_TYPE;
+
+    var hasWarnedAboutDeprecatedIsAsyncMode = false;
+
+    // AsyncMode should be deprecated
+    function isAsyncMode(object) {
+      {
+        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+          hasWarnedAboutDeprecatedIsAsyncMode = true;
+          lowPriorityWarning$1(false, 'The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+        }
+      }
+      return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+    }
+    function isConcurrentMode(object) {
+      return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+    }
+    function isContextConsumer(object) {
+      return typeOf(object) === REACT_CONTEXT_TYPE;
+    }
+    function isContextProvider(object) {
+      return typeOf(object) === REACT_PROVIDER_TYPE;
+    }
+    function isElement(object) {
+      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+    }
+    function isForwardRef(object) {
+      return typeOf(object) === REACT_FORWARD_REF_TYPE;
+    }
+    function isFragment(object) {
+      return typeOf(object) === REACT_FRAGMENT_TYPE;
+    }
+    function isLazy(object) {
+      return typeOf(object) === REACT_LAZY_TYPE;
+    }
+    function isMemo(object) {
+      return typeOf(object) === REACT_MEMO_TYPE;
+    }
+    function isPortal(object) {
+      return typeOf(object) === REACT_PORTAL_TYPE;
+    }
+    function isProfiler(object) {
+      return typeOf(object) === REACT_PROFILER_TYPE;
+    }
+    function isStrictMode(object) {
+      return typeOf(object) === REACT_STRICT_MODE_TYPE;
+    }
+    function isSuspense(object) {
+      return typeOf(object) === REACT_SUSPENSE_TYPE;
+    }
+
+    exports.typeOf = typeOf;
+    exports.AsyncMode = AsyncMode;
+    exports.ConcurrentMode = ConcurrentMode;
+    exports.ContextConsumer = ContextConsumer;
+    exports.ContextProvider = ContextProvider;
+    exports.Element = Element;
+    exports.ForwardRef = ForwardRef;
+    exports.Fragment = Fragment;
+    exports.Lazy = Lazy;
+    exports.Memo = Memo;
+    exports.Portal = Portal;
+    exports.Profiler = Profiler;
+    exports.StrictMode = StrictMode;
+    exports.Suspense = Suspense;
+    exports.isValidElementType = isValidElementType;
+    exports.isAsyncMode = isAsyncMode;
+    exports.isConcurrentMode = isConcurrentMode;
+    exports.isContextConsumer = isContextConsumer;
+    exports.isContextProvider = isContextProvider;
+    exports.isElement = isElement;
+    exports.isForwardRef = isForwardRef;
+    exports.isFragment = isFragment;
+    exports.isLazy = isLazy;
+    exports.isMemo = isMemo;
+    exports.isPortal = isPortal;
+    exports.isProfiler = isProfiler;
+    exports.isStrictMode = isStrictMode;
+    exports.isSuspense = isSuspense;
+      })();
+    }
+    });
+
+    unwrapExports(reactIs_development);
+    var reactIs_development_1 = reactIs_development.typeOf;
+    var reactIs_development_2 = reactIs_development.AsyncMode;
+    var reactIs_development_3 = reactIs_development.ConcurrentMode;
+    var reactIs_development_4 = reactIs_development.ContextConsumer;
+    var reactIs_development_5 = reactIs_development.ContextProvider;
+    var reactIs_development_6 = reactIs_development.Element;
+    var reactIs_development_7 = reactIs_development.ForwardRef;
+    var reactIs_development_8 = reactIs_development.Fragment;
+    var reactIs_development_9 = reactIs_development.Lazy;
+    var reactIs_development_10 = reactIs_development.Memo;
+    var reactIs_development_11 = reactIs_development.Portal;
+    var reactIs_development_12 = reactIs_development.Profiler;
+    var reactIs_development_13 = reactIs_development.StrictMode;
+    var reactIs_development_14 = reactIs_development.Suspense;
+    var reactIs_development_15 = reactIs_development.isValidElementType;
+    var reactIs_development_16 = reactIs_development.isAsyncMode;
+    var reactIs_development_17 = reactIs_development.isConcurrentMode;
+    var reactIs_development_18 = reactIs_development.isContextConsumer;
+    var reactIs_development_19 = reactIs_development.isContextProvider;
+    var reactIs_development_20 = reactIs_development.isElement;
+    var reactIs_development_21 = reactIs_development.isForwardRef;
+    var reactIs_development_22 = reactIs_development.isFragment;
+    var reactIs_development_23 = reactIs_development.isLazy;
+    var reactIs_development_24 = reactIs_development.isMemo;
+    var reactIs_development_25 = reactIs_development.isPortal;
+    var reactIs_development_26 = reactIs_development.isProfiler;
+    var reactIs_development_27 = reactIs_development.isStrictMode;
+    var reactIs_development_28 = reactIs_development.isSuspense;
+
+    var reactIs = createCommonjsModule(function (module) {
+
+    if (process.env.NODE_ENV === 'production') {
+      module.exports = reactIs_production_min;
+    } else {
+      module.exports = reactIs_development;
+    }
+    });
+
     /*
     object-assign
     (c) Sindre Sorhus
@@ -15078,6 +12786,7 @@
     if (process.env.NODE_ENV !== 'production') {
       var ReactPropTypesSecret$1 = ReactPropTypesSecret_1;
       var loggedTypeFailures = {};
+      var has = Function.call.bind(Object.prototype.hasOwnProperty);
 
       printWarning = function(text) {
         var message = 'Warning: ' + text;
@@ -15107,7 +12816,7 @@
     function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
       if (process.env.NODE_ENV !== 'production') {
         for (var typeSpecName in typeSpecs) {
-          if (typeSpecs.hasOwnProperty(typeSpecName)) {
+          if (has(typeSpecs, typeSpecName)) {
             var error;
             // Prop type validation may throw. In case they do, we don't want to
             // fail the render phase where it didn't fail before. So we log it.
@@ -15136,7 +12845,6 @@
                 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
                 'shape all require an argument).'
               );
-
             }
             if (error instanceof Error && !(error.message in loggedTypeFailures)) {
               // Only monitor this failure once because there tends to be a lot of the
@@ -15154,8 +12862,20 @@
       }
     }
 
+    /**
+     * Resets warning cache when testing.
+     *
+     * @private
+     */
+    checkPropTypes.resetWarningCache = function() {
+      if (process.env.NODE_ENV !== 'production') {
+        loggedTypeFailures = {};
+      }
+    };
+
     var checkPropTypes_1 = checkPropTypes;
 
+    var has$1 = Function.call.bind(Object.prototype.hasOwnProperty);
     var printWarning$1 = function() {};
 
     if (process.env.NODE_ENV !== 'production') {
@@ -15266,6 +12986,7 @@
         any: createAnyTypeChecker(),
         arrayOf: createArrayOfTypeChecker,
         element: createElementTypeChecker(),
+        elementType: createElementTypeTypeChecker(),
         instanceOf: createInstanceTypeChecker,
         node: createNodeChecker(),
         objectOf: createObjectOfTypeChecker,
@@ -15419,6 +13140,18 @@
         return createChainableTypeChecker(validate);
       }
 
+      function createElementTypeTypeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+          var propValue = props[propName];
+          if (!reactIs.isValidElementType(propValue)) {
+            var propType = getPropType(propValue);
+            return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+
       function createInstanceTypeChecker(expectedClass) {
         function validate(props, propName, componentName, location, propFullName) {
           if (!(props[propName] instanceof expectedClass)) {
@@ -15433,7 +13166,16 @@
 
       function createEnumTypeChecker(expectedValues) {
         if (!Array.isArray(expectedValues)) {
-          process.env.NODE_ENV !== 'production' ? printWarning$1('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+          if (process.env.NODE_ENV !== 'production') {
+            if (arguments.length > 1) {
+              printWarning$1(
+                'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
+                'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
+              );
+            } else {
+              printWarning$1('Invalid argument supplied to oneOf, expected an array.');
+            }
+          }
           return emptyFunctionThatReturnsNull;
         }
 
@@ -15445,8 +13187,14 @@
             }
           }
 
-          var valuesString = JSON.stringify(expectedValues);
-          return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+          var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
+            var type = getPreciseType(value);
+            if (type === 'symbol') {
+              return String(value);
+            }
+            return value;
+          });
+          return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
         }
         return createChainableTypeChecker(validate);
       }
@@ -15462,7 +13210,7 @@
             return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
           }
           for (var key in propValue) {
-            if (propValue.hasOwnProperty(key)) {
+            if (has$1(propValue, key)) {
               var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret_1);
               if (error instanceof Error) {
                 return error;
@@ -15619,6 +13367,11 @@
           return true;
         }
 
+        // falsy value can't be a Symbol
+        if (!propValue) {
+          return false;
+        }
+
         // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
         if (propValue['@@toStringTag'] === 'Symbol') {
           return true;
@@ -15693,12 +13446,15 @@
       }
 
       ReactPropTypes.checkPropTypes = checkPropTypes_1;
+      ReactPropTypes.resetWarningCache = checkPropTypes_1.resetWarningCache;
       ReactPropTypes.PropTypes = ReactPropTypes;
 
       return ReactPropTypes;
     };
 
     function emptyFunction() {}
+    function emptyFunctionWithReset() {}
+    emptyFunctionWithReset.resetWarningCache = emptyFunction;
 
     var factoryWithThrowingShims = function() {
       function shim(props, propName, componentName, location, propFullName, secret) {
@@ -15730,16 +13486,19 @@
         any: shim,
         arrayOf: getShim,
         element: shim,
+        elementType: shim,
         instanceOf: getShim,
         node: shim,
         objectOf: getShim,
         oneOf: getShim,
         oneOfType: getShim,
         shape: getShim,
-        exact: getShim
+        exact: getShim,
+
+        checkPropTypes: emptyFunctionWithReset,
+        resetWarningCache: emptyFunction
       };
 
-      ReactPropTypes.checkPropTypes = emptyFunction;
       ReactPropTypes.PropTypes = ReactPropTypes;
 
       return ReactPropTypes;
@@ -15754,21 +13513,12 @@
      */
 
     if (process.env.NODE_ENV !== 'production') {
-      var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-        Symbol.for &&
-        Symbol.for('react.element')) ||
-        0xeac7;
-
-      var isValidElement = function(object) {
-        return typeof object === 'object' &&
-          object !== null &&
-          object.$$typeof === REACT_ELEMENT_TYPE;
-      };
+      var ReactIs = reactIs;
 
       // By explicitly using `prop-types` you are opting into new development behavior.
       // http://fb.me/prop-types-in-prod
       var throwOnDirectAccess = true;
-      module.exports = factoryWithTypeCheckers(isValidElement, throwOnDirectAccess);
+      module.exports = factoryWithTypeCheckers(ReactIs.isElement, throwOnDirectAccess);
     } else {
       // By explicitly using `prop-types` you are opting into new production behavior.
       // http://fb.me/prop-types-in-prod
@@ -15859,8 +13609,8 @@
     var simpleTagRe = /^<(\/?)([a-z]+)\s*>$/;
 
     var naiveHtml = function (tree) {
-      var open = void 0;
-      var currentParent = void 0;
+      var open;
+      var currentParent;
       unistUtilVisit(tree, 'html', function (node, index, parent) {
         if (currentParent !== parent) {
           open = [];
@@ -15868,6 +13618,7 @@
         }
 
         var selfClosing = getSelfClosing(node);
+
         if (selfClosing) {
           parent.children.splice(index, 1, {
             type: type,
@@ -15878,6 +13629,7 @@
         }
 
         var current = getSimpleTag(node, parent);
+
         if (!current) {
           return true;
         }
@@ -15893,12 +13645,12 @@
         return true;
       }, true // Iterate in reverse
       );
-
       return tree;
     };
 
     function findAndPull(open, matchingTag) {
       var i = open.length;
+
       while (i--) {
         if (open[i].tag === matchingTag) {
           return open.splice(i, 1)[0];
@@ -15910,7 +13662,11 @@
 
     function getSimpleTag(node, parent) {
       var match = node.value.match(simpleTagRe);
-      return match ? { tag: match[2], opening: !match[1], node: node } : false;
+      return match ? {
+        tag: match[2],
+        opening: !match[1],
+        node: node
+      } : false;
     }
 
     function getSelfClosing(node) {
@@ -15921,7 +13677,6 @@
     function virtual(fromNode, toNode, parent) {
       var fromIndex = parent.children.indexOf(fromNode.node);
       var toIndex = parent.children.indexOf(toNode.node);
-
       var extracted = parent.children.splice(fromIndex, toIndex - fromIndex + 1);
       var children = extracted.slice(1, -1);
       return {
@@ -15986,51 +13741,47 @@
     function astToReact(node, options) {
       var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       var index = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-
       var renderer = options.renderers[node.type];
-
       var pos = node.position.start;
       var key = [node.type, pos.line, pos.column].join('-');
 
-      if (node.type === 'text') {
-        return renderer ? renderer(node.value, key) : node.value;
-      }
-
       if (typeof renderer !== 'function' && typeof renderer !== 'string' && !isReactFragment(renderer)) {
-        throw new Error('Renderer for type `' + node.type + '` not defined or is not renderable');
+        throw new Error("Renderer for type `".concat(node.type, "` not defined or is not renderable"));
       }
 
       var nodeProps = getNodeProps(node, key, options, renderer, parent, index);
-
       return React__default.createElement(renderer, nodeProps, nodeProps.children || resolveChildren() || undefined);
 
       function resolveChildren() {
         return node.children && node.children.map(function (childNode, i) {
-          return astToReact(childNode, options, { node: node, props: nodeProps }, i);
+          return astToReact(childNode, options, {
+            node: node,
+            props: nodeProps
+          }, i);
         });
       }
     }
 
     function isReactFragment(renderer) {
       return React__default.Fragment && React__default.Fragment === renderer;
-    }
+    } // eslint-disable-next-line max-params, complexity
 
-    // eslint-disable-next-line max-params, complexity
+
     function getNodeProps(node, key, opts, renderer, parent, index) {
-      var props = { key: key };
+      var props = {
+        key: key
+      };
+      var isTagRenderer = typeof renderer === 'string'; // `sourcePos` is true if the user wants source information (line/column info from markdown source)
 
-      var isTagRenderer = typeof renderer === 'string';
-
-      // `sourcePos` is true if the user wants source information (line/column info from markdown source)
       if (opts.sourcePos && node.position) {
         props['data-sourcepos'] = flattenPosition(node.position);
       }
 
       if (opts.rawSourcePos && !isTagRenderer) {
         props.sourcePosition = node.position;
-      }
+      } // If `includeNodeIndex` is true, pass node index info to all non-tag renderers
 
-      // If `includeNodeIndex` is true, pass node index info to all non-tag renderers
+
       if (opts.includeNodeIndex && parent.node && parent.node.children && !isTagRenderer) {
         props.index = parent.node.children.indexOf(node);
         props.parentChildCount = parent.node.children.length;
@@ -16040,36 +13791,59 @@
 
       switch (node.type) {
         case 'root':
-          assignDefined(props, { className: opts.className });
+          assignDefined(props, {
+            className: opts.className
+          });
           break;
+
+        case 'text':
+          props.nodeKey = key;
+          props.children = node.value;
+          break;
+
         case 'heading':
           props.level = node.depth;
           break;
+
         case 'list':
           props.start = node.start;
           props.ordered = node.ordered;
           props.tight = !node.loose;
           props.depth = node.depth;
           break;
+
         case 'listItem':
           props.checked = node.checked;
           props.tight = !node.loose;
           props.ordered = node.ordered;
           props.index = node.index;
-          props.children = (props.tight ? unwrapParagraphs(node) : node.children).map(function (childNode, i) {
-            return astToReact(childNode, opts, { node: node, props: props }, i);
+          props.children = getListItemChildren(node, parent).map(function (childNode, i) {
+            return astToReact(childNode, opts, {
+              node: node,
+              props: props
+            }, i);
           });
           break;
+
         case 'definition':
-          assignDefined(props, { identifier: node.identifier, title: node.title, url: node.url });
+          assignDefined(props, {
+            identifier: node.identifier,
+            title: node.title,
+            url: node.url
+          });
           break;
+
         case 'code':
-          assignDefined(props, { language: node.lang && node.lang.split(/\s/, 1)[0] });
+          assignDefined(props, {
+            language: node.lang && node.lang.split(/\s/, 1)[0]
+          });
           break;
+
         case 'inlineCode':
           props.children = node.value;
           props.inline = true;
           break;
+
         case 'link':
           assignDefined(props, {
             title: node.title || undefined,
@@ -16077,6 +13851,7 @@
             href: opts.transformLinkUri ? opts.transformLinkUri(node.url, node.children, node.title) : node.url
           });
           break;
+
         case 'image':
           assignDefined(props, {
             alt: node.alt || undefined,
@@ -16084,11 +13859,13 @@
             src: opts.transformImageUri ? opts.transformImageUri(node.url, node.children, node.title, node.alt) : node.url
           });
           break;
+
         case 'linkReference':
           assignDefined(props, immutable(ref, {
             href: opts.transformLinkUri ? opts.transformLinkUri(ref.href) : ref.href
           }));
           break;
+
         case 'imageReference':
           assignDefined(props, {
             src: opts.transformImageUri && ref.href ? opts.transformImageUri(ref.href, node.children, ref.title, node.alt) : ref.href,
@@ -16096,30 +13873,55 @@
             alt: node.alt || undefined
           });
           break;
+
         case 'table':
         case 'tableHead':
         case 'tableBody':
           props.columnAlignment = node.align;
           break;
+
         case 'tableRow':
           props.isHeader = parent.node.type === 'tableHead';
           props.columnAlignment = parent.props.columnAlignment;
           break;
+
         case 'tableCell':
           assignDefined(props, {
             isHeader: parent.props.isHeader,
             align: parent.props.columnAlignment[index]
           });
           break;
+
         case 'virtualHtml':
           props.tag = node.tag;
           break;
+
         case 'html':
           // @todo find a better way than this
           props.isBlock = node.position.start.line !== node.position.end.line;
           props.escapeHtml = opts.escapeHtml;
           props.skipHtml = opts.skipHtml;
           break;
+
+        case 'parsedHtml':
+          {
+            var parsedChildren;
+
+            if (node.children) {
+              parsedChildren = node.children.map(function (child, i) {
+                return astToReact(child, opts, {
+                  node: node,
+                  props: props
+                }, i);
+              });
+            }
+
+            props.escapeHtml = opts.escapeHtml;
+            props.skipHtml = opts.skipHtml;
+            props.element = mergeNodeChildren(node, parsedChildren);
+            break;
+          }
+
         default:
           assignDefined(props, immutable(node, {
             type: undefined,
@@ -16143,8 +13945,36 @@
       }
     }
 
+    function mergeNodeChildren(node, parsedChildren) {
+      var el = node.element;
+
+      if (Array.isArray(el)) {
+        var Fragment = React__default.Fragment || 'div';
+        return React__default.createElement(Fragment, null, el);
+      }
+
+      if (el.props.children || parsedChildren) {
+        var children = React__default.Children.toArray(el.props.children).concat(parsedChildren);
+        return React__default.cloneElement(el, null, children);
+      }
+
+      return React__default.cloneElement(el, null);
+    }
+
     function flattenPosition(pos) {
       return [pos.start.line, ':', pos.start.column, '-', pos.end.line, ':', pos.end.column].map(String).join('');
+    }
+
+    function getListItemChildren(node, parent) {
+      if (node.loose) {
+        return node.children;
+      }
+
+      if (parent.node && node.index > 0 && parent.node.children[node.index - 1].loose) {
+        return node.children;
+      }
+
+      return unwrapParagraphs(node);
     }
 
     function unwrapParagraphs(node) {
@@ -16168,6 +13998,7 @@
         children: [children[0]],
         position: children[0].position
       }];
+
       if (children.length > 1) {
         table.children.push({
           type: 'tableBody',
@@ -16183,7 +14014,6 @@
 
     var getDefinitions = function getDefinitions(node) {
       var defs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
       return (node.children || []).reduce(function (definitions, child) {
         if (child.type === 'definition') {
           definitions[child.identifier] = {
@@ -16207,6 +14037,7 @@
       }
 
       var colon = url.indexOf(':');
+
       if (colon === -1) {
         return url;
       }
@@ -16217,29 +14048,30 @@
       while (++index < length) {
         var protocol = protocols[index];
 
-        if (colon === protocol.length && url.slice(0, protocol.length) === protocol) {
+        if (colon === protocol.length && url.slice(0, protocol.length).toLowerCase() === protocol) {
           return url;
         }
       }
 
       index = url.indexOf('?');
+
       if (index !== -1 && colon > index) {
         return url;
       }
 
       index = url.indexOf('#');
+
       if (index !== -1 && colon > index) {
         return url;
-      }
+      } // eslint-disable-next-line no-script-url
 
-      // eslint-disable-next-line no-script-url
+
       return 'javascript:void(0)';
     };
 
+    var supportsStringRender = parseInt((React__default.version || '16').slice(0, 2), 10) >= 16;
     var createElement = React__default.createElement;
-
     var renderers = {
-      root: 'div',
       break: 'br',
       paragraph: 'p',
       emphasis: 'em',
@@ -16256,7 +14088,8 @@
       tableBody: SimpleRenderer.bind(null, 'tbody'),
       tableRow: SimpleRenderer.bind(null, 'tr'),
       tableCell: TableCell,
-
+      root: Root,
+      text: TextRenderer,
       list: List,
       listItem: ListItem,
       definition: NullRenderer,
@@ -16264,25 +14097,41 @@
       inlineCode: InlineCode,
       code: CodeBlock,
       html: Html,
-      virtualHtml: VirtualHtml
+      virtualHtml: VirtualHtml,
+      parsedHtml: ParsedHtml
     };
+
+    function TextRenderer(props) {
+      return supportsStringRender ? props.children : createElement('span', null, props.children);
+    }
+
+    function Root(props) {
+      var useFragment = !props.className;
+      var root = useFragment ? React__default.Fragment || 'div' : 'div';
+      return createElement(root, useFragment ? null : props, props.children);
+    }
 
     function SimpleRenderer(tag, props) {
       return createElement(tag, getCoreProps(props), props.children);
     }
 
     function TableCell(props) {
-      var style = props.align ? { textAlign: props.align } : undefined;
+      var style = props.align ? {
+        textAlign: props.align
+      } : undefined;
       var coreProps = getCoreProps(props);
-      return createElement(props.isHeader ? 'th' : 'td', style ? immutable({ style: style }, coreProps) : coreProps, props.children);
+      return createElement(props.isHeader ? 'th' : 'td', style ? immutable({
+        style: style
+      }, coreProps) : coreProps, props.children);
     }
 
     function Heading(props) {
-      return createElement('h' + props.level, getCoreProps(props), props.children);
+      return createElement("h".concat(props.level), getCoreProps(props), props.children);
     }
 
     function List(props) {
       var attrs = getCoreProps(props);
+
       if (props.start !== null && props.start !== 1) {
         attrs.start = props.start.toString();
       }
@@ -16292,17 +14141,24 @@
 
     function ListItem(props) {
       var checkbox = null;
+
       if (props.checked !== null) {
         var checked = props.checked;
-        checkbox = createElement('input', { type: 'checkbox', checked: checked, readOnly: true });
+        checkbox = createElement('input', {
+          type: 'checkbox',
+          checked: checked,
+          readOnly: true
+        });
       }
 
       return createElement('li', getCoreProps(props), checkbox, props.children);
     }
 
     function CodeBlock(props) {
-      var className = props.language && 'language-' + props.language;
-      var code = createElement('code', className ? { className: className } : null, props.value);
+      var className = props.language && "language-".concat(props.language);
+      var code = createElement('code', className ? {
+        className: className
+      } : null, props.value);
       return createElement('pre', getCoreProps(props), code);
     }
 
@@ -16316,13 +14172,24 @@
       }
 
       var tag = props.isBlock ? 'div' : 'span';
+
       if (props.escapeHtml) {
-        // @todo when fiber lands, we can simply render props.value
-        return createElement(tag, null, props.value);
+        var comp = React__default.Fragment || tag;
+        return createElement(comp, null, props.value);
       }
 
-      var nodeProps = { dangerouslySetInnerHTML: { __html: props.value } };
+      var nodeProps = {
+        dangerouslySetInnerHTML: {
+          __html: props.value
+        }
+      };
       return createElement(tag, nodeProps);
+    }
+
+    function ParsedHtml(props) {
+      return props['data-sourcepos'] ? React__default.cloneElement(props.element, {
+        'data-sourcepos': props['data-sourcepos']
+      }) : props.element;
     }
 
     function VirtualHtml(props) {
@@ -16334,10 +14201,38 @@
     }
 
     function getCoreProps(props) {
-      return props['data-sourcepos'] ? { 'data-sourcepos': props['data-sourcepos'] } : {};
+      return props['data-sourcepos'] ? {
+        'data-sourcepos': props['data-sourcepos']
+      } : {};
     }
 
-    function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+    var HtmlParser = '__RMD_HTML_PARSER__';
+    var HtmlParser_1 = typeof Symbol === 'undefined' ? HtmlParser : Symbol(HtmlParser);
+
+    var symbols = {
+    	HtmlParser: HtmlParser_1
+    };
+
+    function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+    function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+    function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+    function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -16361,22 +14256,18 @@
         throw new Error('Only one of `allowedTypes` and `disallowedTypes` should be defined');
       }
 
-      var renderers$$1 = immutable(renderers, props.renderers);
-
+      var renderers$1 = immutable(renderers, props.renderers);
       var plugins = [remarkParse].concat(props.plugins || []);
       var parser = plugins.reduce(applyParserPlugin, unified_1());
-
       var rawAst = parser.parse(src);
       var renderProps = immutable(props, {
-        renderers: renderers$$1,
+        renderers: renderers$1,
         definitions: getDefinitions(rawAst)
       });
-
       var astPlugins = determineAstPlugins(props);
       var ast = astPlugins.reduce(function (node, plugin) {
         return plugin(node, renderProps);
       }, rawAst);
-
       return astToReact_1(ast, renderProps);
     };
 
@@ -16386,8 +14277,8 @@
 
     function determineAstPlugins(props) {
       var plugins = [wrapTableRows, mdastAddListMetadata()];
-
       var disallowedTypes = props.disallowedTypes;
+
       if (props.allowedTypes) {
         disallowedTypes = allTypes.filter(function (type) {
           return type !== 'root' && props.allowedTypes.indexOf(type) === -1;
@@ -16395,6 +14286,7 @@
       }
 
       var removalMethod = props.unwrapDisallowed ? 'unwrap' : 'remove';
+
       if (disallowedTypes && disallowedTypes.length > 0) {
         plugins.push(disallowNode.ofType(disallowedTypes, removalMethod));
       }
@@ -16404,7 +14296,12 @@
       }
 
       var renderHtml = !props.escapeHtml && !props.skipHtml;
-      if (renderHtml) {
+      var hasHtmlParser = (props.astPlugins || []).some(function (item) {
+        var plugin = Array.isArray(item) ? item[0] : item;
+        return plugin.identity === symbols.HtmlParser;
+      });
+
+      if (renderHtml && !hasHtmlParser) {
         plugins.push(naiveHtml);
       }
 
@@ -16421,7 +14318,6 @@
       astPlugins: [],
       plugins: []
     };
-
     ReactMarkdown.propTypes = {
       className: propTypes.string,
       source: propTypes.string,
@@ -16441,11 +14337,9 @@
       renderers: propTypes.object,
       plugins: propTypes.array
     };
-
     ReactMarkdown.types = allTypes;
     ReactMarkdown.renderers = renderers;
     ReactMarkdown.uriTransformer = uriTransformer;
-
     var reactMarkdown = ReactMarkdown;
 
     /**
@@ -16855,7 +14749,7 @@
     	safeAttrValue: safeAttrValue_1
     };
 
-    var util$2 = {
+    var util = {
       indexOf: function (arr, item) {
         var i, j;
         if (Array.prototype.indexOf) {
@@ -16909,7 +14803,7 @@
      * @return {String}
      */
     function parseStyle (css, onAttr) {
-      css = util$2.trimRight(css);
+      css = util.trimRight(css);
       if (css[css.length - 1] !== ';') css += ';';
       var cssLength = css.length;
       var isParenthesisOpen = false;
@@ -16920,11 +14814,11 @@
       function addNewAttr () {
         // 如果没有正常的闭合圆括号，则直接忽略当前属性
         if (!isParenthesisOpen) {
-          var source = util$2.trim(css.slice(lastPos, i));
+          var source = util.trim(css.slice(lastPos, i));
           var j = source.indexOf(':');
           if (j !== -1) {
-            var name = util$2.trim(source.slice(0, j));
-            var value = util$2.trim(source.slice(j + 1));
+            var name = util.trim(source.slice(0, j));
+            var value = util.trim(source.slice(j + 1));
             // 必须有属性名称
             if (name) {
               var ret = onAttr(lastPos, retCSS.length, name, value, source);
@@ -16959,7 +14853,7 @@
         }
       }
 
-      return util$2.trim(retCSS);
+      return util.trim(retCSS);
     }
 
     var parser$1 = parseStyle;
@@ -17111,7 +15005,7 @@
     });
     var lib_1 = lib.FilterCSS;
 
-    var util$3 = {
+    var util$1 = {
       indexOf: function(arr, item) {
         var i, j;
         if (Array.prototype.indexOf) {
@@ -17299,7 +15193,7 @@
       if (name === "href" || name === "src") {
         // filter `href` and `src` attribute
         // only allow the value that starts with `http://` | `https://` | `mailto:` | `/` | `#`
-        value = util$3.trim(value);
+        value = util$1.trim(value);
         if (value === "#") return "#";
         if (
           !(
@@ -17414,7 +15308,7 @@
       for (var i = 0, len = str.length; i < len; i++) {
         str2 += str.charCodeAt(i) < 32 ? " " : str.charAt(i);
       }
-      return util$3.trim(str2);
+      return util$1.trim(str2);
     }
 
     /**
@@ -17465,7 +15359,7 @@
       var isRemoveAllTag = !Array.isArray(tags);
       function isRemoveTag(tag) {
         if (isRemoveAllTag) return true;
-        return util$3.indexOf(tags, tag) !== -1;
+        return util$1.indexOf(tags, tag) !== -1;
       }
 
       var removeList = [];
@@ -17496,7 +15390,7 @@
         remove: function(html) {
           var rethtml = "";
           var lastPos = 0;
-          util$3.forEach(removeList, function(pos) {
+          util$1.forEach(removeList, function(pos) {
             rethtml += html.slice(lastPos, pos[0]);
             lastPos = pos[1];
           });
@@ -17598,13 +15492,13 @@
      * @return {String}
      */
     function getTagName(html) {
-      var i = util$3.spaceIndex(html);
+      var i = util$1.spaceIndex(html);
       if (i === -1) {
         var tagName = html.slice(1, -1);
       } else {
         var tagName = html.slice(1, i + 1);
       }
-      tagName = util$3.trim(tagName).toLowerCase();
+      tagName = util$1.trim(tagName).toLowerCase();
       if (tagName.slice(0, 1) === "/") tagName = tagName.slice(1);
       if (tagName.slice(-1) === "/") tagName = tagName.slice(0, -1);
       return tagName;
@@ -17707,7 +15601,7 @@
       var len = html.length;
 
       function addAttr(name, value) {
-        name = util$3.trim(name);
+        name = util$1.trim(name);
         name = name.replace(REGEXP_ILLEGAL_ATTR_NAME, "").toLowerCase();
         if (name.length < 1) return;
         var ret = onAttr(name, value || "");
@@ -17733,7 +15627,7 @@
             if (j === -1) {
               break;
             } else {
-              v = util$3.trim(html.slice(lastPos + 1, j));
+              v = util$1.trim(html.slice(lastPos + 1, j));
               addAttr(tmpName, v);
               tmpName = false;
               i = j;
@@ -17747,7 +15641,7 @@
           if (tmpName === false) {
             j = findNextEqual(html, i);
             if (j === -1) {
-              v = util$3.trim(html.slice(lastPos, i));
+              v = util$1.trim(html.slice(lastPos, i));
               addAttr(v);
               tmpName = false;
               lastPos = i + 1;
@@ -17759,7 +15653,7 @@
           } else {
             j = findBeforeEqual(html, i - 1);
             if (j === -1) {
-              v = util$3.trim(html.slice(lastPos, i));
+              v = util$1.trim(html.slice(lastPos, i));
               v = stripQuoteWrap(v);
               addAttr(tmpName, v);
               tmpName = false;
@@ -17776,11 +15670,11 @@
         if (tmpName === false) {
           addAttr(html.slice(lastPos));
         } else {
-          addAttr(tmpName, stripQuoteWrap(util$3.trim(html.slice(lastPos))));
+          addAttr(tmpName, stripQuoteWrap(util$1.trim(html.slice(lastPos))));
         }
       }
 
-      return util$3.trim(retAttrs.join(" "));
+      return util$1.trim(retAttrs.join(" "));
     }
 
     function findNextEqual(str, i) {
@@ -17860,16 +15754,16 @@
      *   - {Boolean} closing
      */
     function getAttrs(html) {
-      var i = util$3.spaceIndex(html);
+      var i = util$1.spaceIndex(html);
       if (i === -1) {
         return {
           html: "",
           closing: html[html.length - 2] === "/"
         };
       }
-      html = util$3.trim(html.slice(i + 1, -1));
+      html = util$1.trim(html.slice(i + 1, -1));
       var isClosing = html[html.length - 1] === "/";
-      if (isClosing) html = util$3.trim(html.slice(0, -1));
+      if (isClosing) html = util$1.trim(html.slice(0, -1));
       return {
         html: html,
         closing: isClosing
@@ -17994,7 +15888,7 @@
             var whiteAttrList = whiteList[tag];
             var attrsHtml = parseAttr$1(attrs.html, function(name, value) {
               // call `onTagAttr()`
-              var isWhiteAttr = util$3.indexOf(whiteAttrList, name) !== -1;
+              var isWhiteAttr = util$1.indexOf(whiteAttrList, name) !== -1;
               var ret = onTagAttr(tag, name, value, isWhiteAttr);
               if (!isNull$2(ret)) return ret;
 
@@ -18059,11 +15953,12 @@
      * @return {String}
      */
     function filterXSS(html, options) {
-      var xss$$1 = new xss(options);
-      return xss$$1.process(html);
+      var xss$1 = new xss(options);
+      return xss$1.process(html);
     }
 
     exports = module.exports = filterXSS;
+    exports.filterXSS = filterXSS;
     exports.FilterXSS = xss;
     for (var i in _default$1) exports[i] = _default$1[i];
     for (var i in parser$2) exports[i] = parser$2[i];
@@ -18081,7 +15976,8 @@
       self.filterXSS = module.exports;
     }
     });
-    var lib_1$1 = lib$1.FilterXSS;
+    var lib_1$1 = lib$1.filterXSS;
+    var lib_2 = lib$1.FilterXSS;
 
     var FormattedText = (function (_super) {
         tslib_1.__extends(FormattedText, _super);
@@ -18099,10 +15995,10 @@
                 ],
             } : _b;
             var options = {
-                whiteList: tslib_1.__assign({}, lib$1.getDefaultWhiteList(), whiteList),
+                whiteList: tslib_1.__assign({}, getDefaultWhiteList_1$1(), whiteList),
                 stripIgnoreTagBody: ['script'],
             };
-            return lib$1(value, options);
+            return lib_1$1(value, options);
         };
         FormattedText.prototype.render = function () {
             var _a = this.props, value = _a.value, _b = _a.allowFilteredHtml, allowFilteredHtml = _b === void 0 ? false : _b, whiteList = _a.whiteList;
@@ -18182,10 +16078,10 @@
         return MdTextarea;
     }(React.PureComponent));
 
-    exports.Textarea = MdTextarea;
     exports.FormattedText = FormattedText;
+    exports.Textarea = MdTextarea;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=textarea.umd.js.map

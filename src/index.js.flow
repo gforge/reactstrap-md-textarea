@@ -11,7 +11,7 @@ declare module 'reactstrap-md-textarea' {
     allowFilteredHtml?: boolean,
     toggle?: boolean,
     whiteList?: {
-      [propName: string]: string[]
+      [propName: string]: string[],
     },
     name?: string;
     valid?: boolean;
@@ -29,7 +29,6 @@ declare module 'reactstrap-md-textarea' {
     onFocus?: (event: SyntheticFocusEvent<HTMLInputElement>) => void;
     onBlur?: (event: SyntheticFocusEvent<HTMLInputElement>) => void;
   };
-
 
   declare export interface FilterInput {
     value: string;
