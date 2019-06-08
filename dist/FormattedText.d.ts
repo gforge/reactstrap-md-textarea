@@ -9,6 +9,6 @@ export interface Props extends FilterInput {
     allowFilteredHtml?: boolean;
 }
 export default class FormattedText extends React.PureComponent<Props> {
-    static filterXss({ value, whiteList }: FilterInput): string;
+    static filterXss({ value, whiteList, }: FilterInput): string;
     render(): JSX.Element | null;
 }

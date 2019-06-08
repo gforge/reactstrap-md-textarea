@@ -28,16 +28,13 @@ export default class InputTabMD extends React.PureComponent<Props> {
 
     return (
       <InputWrapper>
-        {allowFilteredHtml &&
+        {allowFilteredHtml && (
           <p>
             You can input markdown or html (start with &lt; to indicate html)
             for styling the text.
-              </p>
-        }
-        <Input
-          type="textarea"
-          {...other}
-        />
+          </p>
+        )}
+        <Input type="textarea" {...other} />
       </InputWrapper>
     );
   }

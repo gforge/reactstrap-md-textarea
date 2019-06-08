@@ -28,10 +28,8 @@ export default class PreviewTabMD extends React.Component<Props> {
 
     return (
       <InputWrapper>
-        <FormattedText
-          value={value}
-          allowFilteredHtml={allowFilteredHtml}
-        />
-      </InputWrapper>);
+        <FormattedText value={value} allowFilteredHtml={allowFilteredHtml} />
+      </InputWrapper>
+    );
   }
 }

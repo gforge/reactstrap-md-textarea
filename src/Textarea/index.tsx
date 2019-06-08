@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  Nav, NavItem, NavLink,
-  TabContent,
-  TabPane,
-} from 'reactstrap';
+import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import InputTab, { Props as InputProps } from './InputTab';
 import PreviewTab from './PreviewTab';
 import { default as FormattedText } from '../FormattedText';
@@ -40,10 +36,25 @@ class MdTextarea extends React.PureComponent<Props, State> {
 
   render() {
     const {
-      id, value, toggle, allowFilteredHtml,
-      rows, cols, onChange, onFocus, onBlur,
-      valid, invalid, bsSize, name,
-      autoFocus, disabled, maxLength, readOnly, required, wrap,
+      id,
+      value,
+      toggle,
+      allowFilteredHtml,
+      rows,
+      cols,
+      onChange,
+      onFocus,
+      onBlur,
+      valid,
+      invalid,
+      bsSize,
+      name,
+      autoFocus,
+      disabled,
+      maxLength,
+      readOnly,
+      required,
+      wrap,
     } = this.props;
     const { showEdit } = this.state;
 
