@@ -19,8 +19,7 @@
         InputTabMD.prototype.render = function () {
             var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, other = tslib_1.__rest(_a, ["allowFilteredHtml"]);
             return (React.createElement(wrapper, null,
-                allowFilteredHtml &&
-                    React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text."),
+                allowFilteredHtml && (React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text.")),
                 React.createElement(reactstrap.Input, tslib_1.__assign({ type: "textarea" }, other))));
         };
         return InputTabMD;
@@ -15960,8 +15959,9 @@
       self.filterXSS = module.exports;
     }
     });
-    var lib_1$1 = lib$1.filterXSS;
-    var lib_2 = lib$1.FilterXSS;
+    var lib_1$1 = lib$1.getDefaultWhiteList;
+    var lib_2 = lib$1.filterXSS;
+    var lib_3 = lib$1.FilterXSS;
 
     var FormattedText = (function (_super) {
         tslib_1.__extends(FormattedText, _super);
@@ -15973,16 +15973,21 @@
                 source: ['src', 'type'],
                 img: ['src', 'alt', 'title', 'width', 'height', 'style'],
                 video: [
-                    'autoplay', 'controls', 'loop',
-                    'preload', 'src', 'height',
-                    'width', 'style',
+                    'autoplay',
+                    'controls',
+                    'loop',
+                    'preload',
+                    'src',
+                    'height',
+                    'width',
+                    'style',
                 ],
             } : _b;
             var options = {
-                whiteList: tslib_1.__assign({}, getDefaultWhiteList_1$1(), whiteList),
+                whiteList: tslib_1.__assign({}, lib_1$1(), whiteList),
                 stripIgnoreTagBody: ['script'],
             };
-            return lib_1$1(value, options);
+            return lib_2(value, options);
         };
         FormattedText.prototype.render = function () {
             var _a = this.props, value = _a.value, _b = _a.allowFilteredHtml, allowFilteredHtml = _b === void 0 ? false : _b, whiteList = _a.whiteList;
@@ -15990,9 +15995,9 @@
                 return null;
             if (allowFilteredHtml && value.indexOf('<') === 0) {
                 var filteredContent = FormattedText.filterXss({ value: value, whiteList: whiteList });
-                return (React.createElement("div", { dangerouslySetInnerHTML: { __html: filteredContent } }));
+                return React.createElement("div", { dangerouslySetInnerHTML: { __html: filteredContent } });
             }
-            return (React.createElement(reactMarkdown, { source: value, escapeHtml: false }));
+            return React.createElement(reactMarkdown, { source: value, escapeHtml: false });
         };
         return FormattedText;
     }(React.PureComponent));
