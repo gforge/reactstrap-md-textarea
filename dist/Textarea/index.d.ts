@@ -1,30 +1,15 @@
 import * as React from 'react';
-import { Props as InputProps } from './InputTab';
+import { InputProps } from 'reactstrap';
 export interface State {
     showEdit: boolean;
 }
-export interface Props extends InputProps {
-    id: string;
-    value: string;
-    allowFilteredHtml: boolean;
+export interface TextareaProps extends InputProps {
+    allowFilteredHtml?: boolean;
     toggle?: boolean;
     whiteList?: {
         [propName: string]: string[];
     };
+    filteredValue?: React.MutableRefObject<string | undefined>;
 }
-declare class MdTextarea extends React.PureComponent<Props, State> {
-    static defaultProps: {
-        allowFilteredHtml: boolean;
-        id: string;
-    };
-    state: {
-        showEdit: boolean;
-    };
-    toggle(show?: boolean): void;
-    handleToggle: () => void;
-    activateEdit: () => void;
-    deActivateEdit: () => void;
-    render(): JSX.Element;
-    getFilteredValue(): string;
-}
-export default MdTextarea;
+declare const _default: React.MemoExoticComponent<(props: TextareaProps) => JSX.Element>;
+export default _default;

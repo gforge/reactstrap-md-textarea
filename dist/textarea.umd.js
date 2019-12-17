@@ -2,28 +2,23 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('react'), require('reactstrap')) :
     typeof define === 'function' && define.amd ? define(['exports', 'tslib', 'react', 'reactstrap'], factory) :
     (global = global || self, factory(global['reactstrap-md-textarea'] = {}, global.tslib, global.React, global.reactstrap));
-}(this, function (exports, tslib_1, React, reactstrap) { 'use strict';
+}(this, (function (exports, tslib, React, reactstrap) { 'use strict';
 
     var React__default = 'default' in React ? React['default'] : React;
 
     var wrapper = function (_a) {
         var children = _a.children, _b = _a.style, style = _b === void 0 ? {} : _b;
-        return (React.createElement("div", { style: tslib_1.__assign({ border: '1px solid #ddd', borderTop: '0px', borderRadius: '5px', borderTopLeftRadius: '0px', borderTopRightRadius: '0px', padding: '10px', backgroundColor: '#fff', textAlign: 'left' }, style) }, children));
+        return (React.createElement("div", { style: tslib.__assign({ border: '1px solid #ddd', borderTop: '0px', borderRadius: '5px', borderTopLeftRadius: '0px', borderTopRightRadius: '0px', padding: '10px', backgroundColor: '#fff', textAlign: 'left' }, style) }, children));
     };
+    var InputWrapper = React.memo(wrapper);
 
-    var InputTabMD = (function (_super) {
-        tslib_1.__extends(InputTabMD, _super);
-        function InputTabMD() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        InputTabMD.prototype.render = function () {
-            var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, other = tslib_1.__rest(_a, ["allowFilteredHtml"]);
-            return (React.createElement(wrapper, null,
-                allowFilteredHtml && (React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text.")),
-                React.createElement(reactstrap.Input, tslib_1.__assign({ type: "textarea" }, other))));
-        };
-        return InputTabMD;
-    }(React.PureComponent));
+    var InputTabMD = function (props) {
+        var allowFilteredHtml = props.allowFilteredHtml, other = tslib.__rest(props, ["allowFilteredHtml"]);
+        return (React.createElement(InputWrapper, null,
+            allowFilteredHtml && (React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text.")),
+            React.createElement(reactstrap.Input, tslib.__assign({ type: "textarea" }, other))));
+    };
+    var InputTab = React.memo(InputTabMD);
 
     var immutable = extend;
 
@@ -1410,20 +1405,6 @@
     	return module = { exports: {} }, fn(module, module.exports), module.exports;
     }
 
-    // shim for using process in browser
-    if (typeof global.setTimeout === 'function') ;
-    if (typeof global.clearTimeout === 'function') ;
-
-    // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
-    var performance = global.performance || {};
-    var performanceNow =
-      performance.now        ||
-      performance.mozNow     ||
-      performance.msNow      ||
-      performance.oNow       ||
-      performance.webkitNow  ||
-      function(){ return (new Date()).getTime() };
-
     var inherits;
     if (typeof Object.create === 'function'){
       inherits = function inherits(ctor, superCtor) {
@@ -1518,7 +1499,7 @@
     var debugEnviron;
     function debuglog(set) {
       if (isUndefined(debugEnviron))
-        debugEnviron = '';
+        debugEnviron =  '';
       set = set.toUpperCase();
       if (!debugs[set]) {
         if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -2001,24 +1982,28 @@
     if (typeof Object.create === 'function') {
       // implementation from standard node.js 'util' module
       module.exports = function inherits(ctor, superCtor) {
-        ctor.super_ = superCtor;
-        ctor.prototype = Object.create(superCtor.prototype, {
-          constructor: {
-            value: ctor,
-            enumerable: false,
-            writable: true,
-            configurable: true
-          }
-        });
+        if (superCtor) {
+          ctor.super_ = superCtor;
+          ctor.prototype = Object.create(superCtor.prototype, {
+            constructor: {
+              value: ctor,
+              enumerable: false,
+              writable: true,
+              configurable: true
+            }
+          });
+        }
       };
     } else {
       // old school shim for old browsers
       module.exports = function inherits(ctor, superCtor) {
-        ctor.super_ = superCtor;
-        var TempCtor = function () {};
-        TempCtor.prototype = superCtor.prototype;
-        ctor.prototype = new TempCtor();
-        ctor.prototype.constructor = ctor;
+        if (superCtor) {
+          ctor.super_ = superCtor;
+          var TempCtor = function () {};
+          TempCtor.prototype = superCtor.prototype;
+          ctor.prototype = new TempCtor();
+          ctor.prototype.constructor = ctor;
+        }
       };
     }
     });
@@ -2026,9 +2011,11 @@
     var inherits$2 = createCommonjsModule(function (module) {
     try {
       var util = require$$0;
+      /* istanbul ignore next */
       if (typeof util.inherits !== 'function') throw '';
       module.exports = util.inherits;
     } catch (e) {
+      /* istanbul ignore next */
       module.exports = inherits_browser;
     }
     });
@@ -12369,11 +12356,11 @@
 
     var reactIs_production_min = createCommonjsModule(function (module, exports) {
     Object.defineProperty(exports,"__esModule",{value:!0});
-    var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.memo"):
-    60115,r=b?Symbol.for("react.lazy"):60116;function t(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case h:return a;default:return u}}case r:case q:case d:return u}}}function v(a){return t(a)===m}exports.typeOf=t;exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;
-    exports.Fragment=e;exports.Lazy=r;exports.Memo=q;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||"object"===typeof a&&null!==a&&(a.$$typeof===r||a.$$typeof===q||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n)};exports.isAsyncMode=function(a){return v(a)||t(a)===l};exports.isConcurrentMode=v;exports.isContextConsumer=function(a){return t(a)===k};
-    exports.isContextProvider=function(a){return t(a)===h};exports.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return t(a)===n};exports.isFragment=function(a){return t(a)===e};exports.isLazy=function(a){return t(a)===r};exports.isMemo=function(a){return t(a)===q};exports.isPortal=function(a){return t(a)===d};exports.isProfiler=function(a){return t(a)===g};exports.isStrictMode=function(a){return t(a)===f};
-    exports.isSuspense=function(a){return t(a)===p};
+    var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.suspense_list"):
+    60120,r=b?Symbol.for("react.memo"):60115,t=b?Symbol.for("react.lazy"):60116,v=b?Symbol.for("react.fundamental"):60117,w=b?Symbol.for("react.responder"):60118,x=b?Symbol.for("react.scope"):60119;function y(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case t:case r:case h:return a;default:return u}}case d:return u}}}function z(a){return y(a)===m}
+    exports.typeOf=y;exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;exports.Fragment=e;exports.Lazy=t;exports.Memo=r;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;
+    exports.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===v||a.$$typeof===w||a.$$typeof===x)};exports.isAsyncMode=function(a){return z(a)||y(a)===l};exports.isConcurrentMode=z;exports.isContextConsumer=function(a){return y(a)===k};exports.isContextProvider=function(a){return y(a)===h};
+    exports.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return y(a)===n};exports.isFragment=function(a){return y(a)===e};exports.isLazy=function(a){return y(a)===t};exports.isMemo=function(a){return y(a)===r};exports.isPortal=function(a){return y(a)===d};exports.isProfiler=function(a){return y(a)===g};exports.isStrictMode=function(a){return y(a)===f};exports.isSuspense=function(a){return y(a)===p};
     });
 
     unwrapExports(reactIs_production_min);
@@ -12418,25 +12405,29 @@
     // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
     // nor polyfill, then a plain number is used for performance.
     var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-
     var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
     var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
     var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
     var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
     var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
     var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
-    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace;
+    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+    // (unstable) APIs that have been removed. Can we remove the symbols?
+
     var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
     var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
     var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
     var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
     var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
     var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
 
     function isValidElementType(type) {
-      return typeof type === 'string' || typeof type === 'function' ||
-      // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
+      return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE);
     }
 
     /**
@@ -12452,12 +12443,11 @@
      * paths. Removing the logging code for production environments will keep the
      * same logic and follow the same code paths.
      */
-
-    var lowPriorityWarning = function () {};
+    var lowPriorityWarningWithoutStack = function () {};
 
     {
       var printWarning = function (format) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
           args[_key - 1] = arguments[_key];
         }
 
@@ -12465,9 +12455,11 @@
         var message = 'Warning: ' + format.replace(/%s/g, function () {
           return args[argIndex++];
         });
+
         if (typeof console !== 'undefined') {
           console.warn(message);
         }
+
         try {
           // --- Welcome to debugging React ---
           // This error was thrown as a convenience so that you can use this stack
@@ -12476,25 +12468,27 @@
         } catch (x) {}
       };
 
-      lowPriorityWarning = function (condition, format) {
+      lowPriorityWarningWithoutStack = function (condition, format) {
         if (format === undefined) {
-          throw new Error('`lowPriorityWarning(condition, format, ...args)` requires a warning ' + 'message argument');
+          throw new Error('`lowPriorityWarningWithoutStack(condition, format, ...args)` requires a warning ' + 'message argument');
         }
+
         if (!condition) {
-          for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+          for (var _len2 = arguments.length, args = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
             args[_key2 - 2] = arguments[_key2];
           }
 
-          printWarning.apply(undefined, [format].concat(args));
+          printWarning.apply(void 0, [format].concat(args));
         }
       };
     }
 
-    var lowPriorityWarning$1 = lowPriorityWarning;
+    var lowPriorityWarningWithoutStack$1 = lowPriorityWarningWithoutStack;
 
     function typeOf(object) {
       if (typeof object === 'object' && object !== null) {
         var $$typeof = object.$$typeof;
+
         switch ($$typeof) {
           case REACT_ELEMENT_TYPE:
             var type = object.type;
@@ -12507,29 +12501,32 @@
               case REACT_STRICT_MODE_TYPE:
               case REACT_SUSPENSE_TYPE:
                 return type;
+
               default:
                 var $$typeofType = type && type.$$typeof;
 
                 switch ($$typeofType) {
                   case REACT_CONTEXT_TYPE:
                   case REACT_FORWARD_REF_TYPE:
+                  case REACT_LAZY_TYPE:
+                  case REACT_MEMO_TYPE:
                   case REACT_PROVIDER_TYPE:
                     return $$typeofType;
+
                   default:
                     return $$typeof;
                 }
+
             }
-          case REACT_LAZY_TYPE:
-          case REACT_MEMO_TYPE:
+
           case REACT_PORTAL_TYPE:
             return $$typeof;
         }
       }
 
       return undefined;
-    }
+    } // AsyncMode is deprecated along with isAsyncMode
 
-    // AsyncMode is deprecated along with isAsyncMode
     var AsyncMode = REACT_ASYNC_MODE_TYPE;
     var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
     var ContextConsumer = REACT_CONTEXT_TYPE;
@@ -12543,17 +12540,16 @@
     var Profiler = REACT_PROFILER_TYPE;
     var StrictMode = REACT_STRICT_MODE_TYPE;
     var Suspense = REACT_SUSPENSE_TYPE;
+    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
 
-    var hasWarnedAboutDeprecatedIsAsyncMode = false;
-
-    // AsyncMode should be deprecated
     function isAsyncMode(object) {
       {
         if (!hasWarnedAboutDeprecatedIsAsyncMode) {
           hasWarnedAboutDeprecatedIsAsyncMode = true;
-          lowPriorityWarning$1(false, 'The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+          lowPriorityWarningWithoutStack$1(false, 'The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
         }
       }
+
       return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
     }
     function isConcurrentMode(object) {
@@ -13721,14 +13717,34 @@
     	ifNotMatch: ifNotMatch
     };
 
+    var defaultNodePosition = {
+      start: {
+        line: 1,
+        column: 1,
+        offset: 0
+      },
+      end: {
+        line: 1,
+        column: 1,
+        offset: 0
+      }
+    };
+
     function astToReact(node, options) {
       var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       var index = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-      var renderer = options.renderers[node.type];
-      var pos = node.position.start;
-      var key = [node.type, pos.line, pos.column].join('-');
+      var renderer = options.renderers[node.type]; // nodes generated by plugins may not have position data
+      // much of the code after this point will attempt to access properties of the node.position
+      // this will set the node position to the parent node's position to prevent errors
 
-      if (typeof renderer !== 'function' && typeof renderer !== 'string' && !isReactFragment(renderer)) {
+      if (node.position === undefined) {
+        node.position = parent.node && parent.node.position || defaultNodePosition;
+      }
+
+      var pos = node.position.start;
+      var key = [node.type, pos.line, pos.column, index].join('-');
+
+      if (!reactIs.isValidElementType(renderer)) {
         throw new Error("Renderer for type `".concat(node.type, "` not defined or is not renderable"));
       }
 
@@ -13743,10 +13759,6 @@
           }, i);
         });
       }
-    }
-
-    function isReactFragment(renderer) {
-      return React__default.Fragment && React__default.Fragment === renderer;
     } // eslint-disable-next-line max-params, complexity
 
 
@@ -14115,7 +14127,7 @@
     function List(props) {
       var attrs = getCoreProps(props);
 
-      if (props.start !== null && props.start !== 1) {
+      if (props.start !== null && props.start !== 1 && props.start !== undefined) {
         attrs.start = props.start.toString();
       }
 
@@ -14125,7 +14137,7 @@
     function ListItem(props) {
       var checkbox = null;
 
-      if (props.checked !== null) {
+      if (props.checked !== null && props.checked !== undefined) {
         var checked = props.checked;
         checkbox = createElement('input', {
           type: 'checkbox',
@@ -14234,23 +14246,26 @@
 
     var ReactMarkdown = function ReactMarkdown(props) {
       var src = props.source || props.children || '';
+      var parserOptions = props.parserOptions;
 
       if (props.allowedTypes && props.disallowedTypes) {
         throw new Error('Only one of `allowedTypes` and `disallowedTypes` should be defined');
       }
 
       var renderers$1 = immutable(renderers, props.renderers);
-      var plugins = [remarkParse].concat(props.plugins || []);
+      var plugins = [[remarkParse, parserOptions]].concat(props.plugins || []);
       var parser = plugins.reduce(applyParserPlugin, unified_1());
       var rawAst = parser.parse(src);
       var renderProps = immutable(props, {
         renderers: renderers$1,
         definitions: getDefinitions(rawAst)
       });
-      var astPlugins = determineAstPlugins(props);
+      var astPlugins = determineAstPlugins(props); // eslint-disable-next-line no-sync
+
+      var transformedAst = parser.runSync(rawAst);
       var ast = astPlugins.reduce(function (node, plugin) {
         return plugin(node, renderProps);
-      }, rawAst);
+      }, transformedAst);
       return astToReact_1(ast, renderProps);
     };
 
@@ -14299,7 +14314,8 @@
       rawSourcePos: false,
       transformLinkUri: uriTransformer,
       astPlugins: [],
-      plugins: []
+      plugins: [],
+      parserOptions: {}
     };
     ReactMarkdown.propTypes = {
       className: propTypes.string,
@@ -14318,7 +14334,8 @@
       astPlugins: propTypes.arrayOf(propTypes.func),
       unwrapDisallowed: propTypes.bool,
       renderers: propTypes.object,
-      plugins: propTypes.array
+      plugins: propTypes.array,
+      parserOptions: propTypes.object
     };
     ReactMarkdown.types = allTypes;
     ReactMarkdown.renderers = renderers;
@@ -15964,7 +15981,7 @@
     var lib_3 = lib$1.FilterXSS;
 
     var FormattedText = (function (_super) {
-        tslib_1.__extends(FormattedText, _super);
+        tslib.__extends(FormattedText, _super);
         function FormattedText() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -15984,7 +16001,7 @@
                 ],
             } : _b;
             var options = {
-                whiteList: tslib_1.__assign({}, lib_1$1(), whiteList),
+                whiteList: tslib.__assign(tslib.__assign({}, lib_1$1()), whiteList),
                 stripIgnoreTagBody: ['script'],
             };
             return lib_2(value, options);
@@ -16002,75 +16019,72 @@
         return FormattedText;
     }(React.PureComponent));
 
-    var PreviewTabMD = (function (_super) {
-        tslib_1.__extends(PreviewTabMD, _super);
-        function PreviewTabMD() {
-            return _super !== null && _super.apply(this, arguments) || this;
+    var PreviewTabMD = function (props) {
+        var allowFilteredHtml = props.allowFilteredHtml, value = props.value;
+        if (typeof value !== 'string') {
+            return React.createElement(InputWrapper, null, "-");
         }
-        PreviewTabMD.prototype.shouldComponentUpdate = function (newProps) {
-            if (newProps.skipRender)
-                return false;
-            var _a = this.props, value = _a.value, allowFilteredHtml = _a.allowFilteredHtml;
-            if (newProps.value !== value ||
-                newProps.allowFilteredHtml !== allowFilteredHtml) {
-                return true;
-            }
+        return (React.createElement(InputWrapper, null,
+            React.createElement(FormattedText, { value: value, allowFilteredHtml: allowFilteredHtml })));
+    };
+    var PreviewTab = React.memo(PreviewTabMD, function (prevProps, newProps) {
+        if (newProps.skipRender)
             return false;
-        };
-        PreviewTabMD.prototype.render = function () {
-            var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, value = _a.value;
-            return (React.createElement(wrapper, null,
-                React.createElement(FormattedText, { value: value, allowFilteredHtml: allowFilteredHtml })));
-        };
-        return PreviewTabMD;
-    }(React.Component));
-
-    var MdTextarea = (function (_super) {
-        tslib_1.__extends(MdTextarea, _super);
-        function MdTextarea() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.state = {
-                showEdit: true,
-            };
-            _this.handleToggle = function () { return _this.toggle(); };
-            _this.activateEdit = function () { return _this.toggle(true); };
-            _this.deActivateEdit = function () { return _this.toggle(false); };
-            return _this;
+        var value = prevProps.value, allowFilteredHtml = prevProps.allowFilteredHtml;
+        if (newProps.value !== value ||
+            newProps.allowFilteredHtml !== allowFilteredHtml) {
+            return true;
         }
-        MdTextarea.prototype.toggle = function (show) {
-            if (show === void 0) { show = !this.state.showEdit; }
-            this.setState({ showEdit: show });
-        };
-        MdTextarea.prototype.render = function () {
-            var _a = this.props, id = _a.id, value = _a.value, toggle = _a.toggle, allowFilteredHtml = _a.allowFilteredHtml, rows = _a.rows, cols = _a.cols, onChange = _a.onChange, onFocus = _a.onFocus, onBlur = _a.onBlur, valid = _a.valid, invalid = _a.invalid, bsSize = _a.bsSize, name = _a.name, autoFocus = _a.autoFocus, disabled = _a.disabled, maxLength = _a.maxLength, readOnly = _a.readOnly, required = _a.required, wrap = _a.wrap;
-            var showEdit = this.state.showEdit;
-            return (React.createElement(React.Fragment, null,
-                React.createElement(reactstrap.Nav, { tabs: true, key: "Nav" },
-                    React.createElement(reactstrap.NavItem, null,
-                        React.createElement(reactstrap.NavLink, { active: showEdit, onClick: toggle ? this.handleToggle : this.activateEdit }, "Edit")),
-                    React.createElement(reactstrap.NavItem, null,
-                        React.createElement(reactstrap.NavLink, { active: !showEdit, onClick: toggle ? this.handleToggle : this.deActivateEdit }, "Preview"))),
-                React.createElement(reactstrap.TabContent, { key: "Content", id: "tabpane_" + id, activeTab: showEdit ? 'Edit' : 'Preview' },
-                    React.createElement(reactstrap.TabPane, { tabId: "Edit" },
-                        React.createElement(InputTabMD, tslib_1.__assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
-                    React.createElement(reactstrap.TabPane, { tabId: "Preview" },
-                        React.createElement(PreviewTabMD, { allowFilteredHtml: allowFilteredHtml, value: value, skipRender: !showEdit })))));
-        };
-        MdTextarea.prototype.getFilteredValue = function () {
-            var _a = this.props, value = _a.value, whiteList = _a.whiteList;
-            return FormattedText.filterXss({ value: value, whiteList: whiteList });
-        };
-        MdTextarea.defaultProps = {
-            allowFilteredHtml: false,
-            id: 'unknown_markdown_id',
-        };
-        return MdTextarea;
-    }(React.PureComponent));
+        return false;
+    });
+
+    var MdTextarea = function (props) {
+        var _a = props.id, id = _a === void 0 ? 'unknown_markdown_id' : _a, value = props.value, toggle = props.toggle, _b = props.allowFilteredHtml, allowFilteredHtml = _b === void 0 ? false : _b, rows = props.rows, cols = props.cols, onChange = props.onChange, onFocus = props.onFocus, onBlur = props.onBlur, valid = props.valid, invalid = props.invalid, bsSize = props.bsSize, name = props.name, autoFocus = props.autoFocus, disabled = props.disabled, maxLength = props.maxLength, readOnly = props.readOnly, required = props.required, wrap = props.wrap, whiteList = props.whiteList, filteredValue = props.filteredValue;
+        var _c = React.useState(true), showEdit = _c[0], setShowEdit = _c[1];
+        var onEditClick = React.useCallback(function () {
+            if (toggle) {
+                setShowEdit(!showEdit);
+            }
+            else {
+                setShowEdit(true);
+            }
+        }, [showEdit]);
+        var onPreviewClick = React.useCallback(function () {
+            if (toggle) {
+                setShowEdit(!showEdit);
+            }
+            else {
+                setShowEdit(false);
+            }
+        }, [showEdit]);
+        React.useEffect(function () {
+            if (!filteredValue) {
+                return;
+            }
+            if (typeof value !== 'string') {
+                filteredValue.current = undefined;
+                return;
+            }
+            filteredValue.current = FormattedText.filterXss({ value: value, whiteList: whiteList });
+        }, [value, whiteList]);
+        return (React.createElement(React.Fragment, null,
+            React.createElement(reactstrap.Nav, { tabs: true, key: "Nav" },
+                React.createElement(reactstrap.NavItem, null,
+                    React.createElement(reactstrap.NavLink, { active: showEdit, onClick: onEditClick }, "Edit")),
+                React.createElement(reactstrap.NavItem, null,
+                    React.createElement(reactstrap.NavLink, { active: !showEdit, onClick: onPreviewClick }, "Preview"))),
+            React.createElement(reactstrap.TabContent, { key: "Content", id: "tabpane_" + id, activeTab: showEdit ? 'Edit' : 'Preview' },
+                React.createElement(reactstrap.TabPane, { tabId: "Edit" },
+                    React.createElement(InputTab, tslib.__assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
+                React.createElement(reactstrap.TabPane, { tabId: "Preview" },
+                    React.createElement(PreviewTab, { allowFilteredHtml: allowFilteredHtml, value: value, skipRender: !showEdit })))));
+    };
+    var index$1 = React.memo(MdTextarea);
 
     exports.FormattedText = FormattedText;
-    exports.Textarea = MdTextarea;
+    exports.Textarea = index$1;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=textarea.umd.js.map

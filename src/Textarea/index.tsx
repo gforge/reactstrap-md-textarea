@@ -1,6 +1,13 @@
 import * as React from 'react';
-import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import InputTab, { Props as InputProps } from './InputTab';
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+  InputProps,
+} from 'reactstrap';
+import InputTab from './InputTab';
 import PreviewTab from './PreviewTab';
 import { default as FormattedText } from '../FormattedText';
 
@@ -8,108 +15,106 @@ export interface State {
   showEdit: boolean;
 }
 
-export interface Props extends InputProps {
-  id: string;
-  value: string;
-  allowFilteredHtml: boolean;
+export interface TextareaProps extends InputProps {
+  allowFilteredHtml?: boolean;
   toggle?: boolean;
   whiteList?: { [propName: string]: string[] };
+  filteredValue?: React.MutableRefObject<string | undefined>;
 }
 
-class MdTextarea extends React.PureComponent<Props, State> {
-  static defaultProps = {
-    allowFilteredHtml: false,
-    id: 'unknown_markdown_id',
-  };
+const MdTextarea = (props: TextareaProps) => {
+  const {
+    id = 'unknown_markdown_id',
+    value,
+    toggle,
+    allowFilteredHtml = false,
+    rows,
+    cols,
+    onChange,
+    onFocus,
+    onBlur,
+    valid,
+    invalid,
+    bsSize,
+    name,
+    autoFocus,
+    disabled,
+    maxLength,
+    readOnly,
+    required,
+    wrap,
+    whiteList,
+    filteredValue,
+  } = props;
+  const [showEdit, setShowEdit] = React.useState(true);
+  const onEditClick = React.useCallback(() => {
+    if (toggle) {
+      setShowEdit(!showEdit);
+    } else {
+      setShowEdit(true);
+    }
+  }, [showEdit]);
+  const onPreviewClick = React.useCallback(() => {
+    if (toggle) {
+      setShowEdit(!showEdit);
+    } else {
+      setShowEdit(false);
+    }
+  }, [showEdit]);
 
-  state = {
-    showEdit: true,
-  };
+  React.useEffect(() => {
+    if (!filteredValue) {
+      return;
+    }
 
-  toggle(show: boolean = !this.state.showEdit) {
-    this.setState({ showEdit: show });
-  }
+    if (typeof value !== 'string') {
+      filteredValue.current = undefined;
+      return;
+    }
 
-  handleToggle = () => this.toggle();
-  activateEdit = () => this.toggle(true);
-  deActivateEdit = () => this.toggle(false);
+    filteredValue.current = FormattedText.filterXss({ value, whiteList });
+  }, [value, whiteList]);
 
-  render() {
-    const {
-      id,
-      value,
-      toggle,
-      allowFilteredHtml,
-      rows,
-      cols,
-      onChange,
-      onFocus,
-      onBlur,
-      valid,
-      invalid,
-      bsSize,
-      name,
-      autoFocus,
-      disabled,
-      maxLength,
-      readOnly,
-      required,
-      wrap,
-    } = this.props;
-    const { showEdit } = this.state;
+  return (
+    <>
+      <Nav tabs={true} key="Nav">
+        <NavItem>
+          <NavLink active={showEdit} onClick={onEditClick}>
+            Edit
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink active={!showEdit} onClick={onPreviewClick}>
+            Preview
+          </NavLink>
+        </NavItem>
+      </Nav>
+      <TabContent
+        key="Content"
+        id={`tabpane_${id}`}
+        activeTab={showEdit ? 'Edit' : 'Preview'}
+      >
+        <TabPane tabId="Edit">
+          <InputTab
+            allowFilteredHtml={allowFilteredHtml}
+            value={value}
+            rows={rows}
+            cols={cols}
+            {...{ onChange, onFocus, onBlur }}
+            {...{ valid, name, invalid, bsSize }}
+            {...{ autoFocus, disabled, maxLength, readOnly, required, wrap }}
+          />
+        </TabPane>
+        <TabPane tabId="Preview">
+          <PreviewTab
+            allowFilteredHtml={allowFilteredHtml}
+            value={value}
+            skipRender={!showEdit}
+          />
+        </TabPane>
+      </TabContent>
+    </>
+  );
+};
 
-    return (
-      <React.Fragment>
-        <Nav tabs={true} key="Nav">
-          <NavItem>
-            <NavLink
-              active={showEdit}
-              onClick={toggle ? this.handleToggle : this.activateEdit}
-            >
-              Edit
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              active={!showEdit}
-              onClick={toggle ? this.handleToggle : this.deActivateEdit}
-            >
-              Preview
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent
-          key="Content"
-          id={`tabpane_${id}`}
-          activeTab={showEdit ? 'Edit' : 'Preview'}
-        >
-          <TabPane tabId="Edit">
-            <InputTab
-              allowFilteredHtml={allowFilteredHtml}
-              value={value}
-              rows={rows}
-              cols={cols}
-              {...{ onChange, onFocus, onBlur }}
-              {...{ valid, name, invalid, bsSize }}
-              {...{ autoFocus, disabled, maxLength, readOnly, required, wrap }}
-            />
-          </TabPane>
-          <TabPane tabId="Preview">
-            <PreviewTab
-              allowFilteredHtml={allowFilteredHtml}
-              value={value}
-              skipRender={!showEdit}
-            />
-          </TabPane>
-        </TabContent>
-      </React.Fragment>
-    );
-  }
-
-  getFilteredValue() {
-    const { value, whiteList } = this.props;
-    return FormattedText.filterXss({ value, whiteList });
-  }
-}
-
-export default MdTextarea;
+export default React.memo(MdTextarea);

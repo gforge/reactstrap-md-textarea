@@ -1,10 +1,8 @@
 import * as React from 'react';
-export interface Props {
-    allowFilteredHtml: boolean;
-    value: string;
+import { InputProps } from 'reactstrap';
+export interface PreviewProps extends Pick<InputProps, 'value'> {
+    allowFilteredHtml: boolean | undefined;
     skipRender: boolean;
 }
-export default class PreviewTabMD extends React.Component<Props> {
-    shouldComponentUpdate(newProps: Props): boolean;
-    render(): JSX.Element;
-}
+declare const _default: React.MemoExoticComponent<(props: PreviewProps) => JSX.Element>;
+export default _default;

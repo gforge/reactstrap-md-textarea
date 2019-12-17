@@ -1,9 +1,9 @@
 import * as React from 'react';
-export interface Props {
+export interface WrapperProps {
     style?: {
         [propName: string]: string;
     };
     children: React.ReactNode;
 }
-declare const wrapper: ({ children, style }: Props) => JSX.Element;
-export default wrapper;
+declare const _default: React.MemoExoticComponent<({ children, style }: WrapperProps) => JSX.Element>;
+export default _default;
