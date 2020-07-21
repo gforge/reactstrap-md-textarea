@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-export interface Props {
+export interface WrapperProps {
   style?: { [propName: string]: string };
   children: React.ReactNode;
 }
 
-const wrapper = ({ children, style = {} }: Props) => (
+const wrapper = ({ children, style = {} }: WrapperProps) => (
   <div
     style={{
       border: '1px solid #ddd',
@@ -23,4 +23,4 @@ const wrapper = ({ children, style = {} }: Props) => (
   </div>
 );
 
-export default wrapper;
+export default React.memo(wrapper);

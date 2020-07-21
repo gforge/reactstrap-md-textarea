@@ -10,20 +10,15 @@
         var children = _a.children, _b = _a.style, style = _b === void 0 ? {} : _b;
         return (React.createElement("div", { style: tslib.__assign({ border: '1px solid #ddd', borderTop: '0px', borderRadius: '5px', borderTopLeftRadius: '0px', borderTopRightRadius: '0px', padding: '10px', backgroundColor: '#fff', textAlign: 'left' }, style) }, children));
     };
+    var InputWrapper = React.memo(wrapper);
 
-    var InputTabMD = (function (_super) {
-        tslib.__extends(InputTabMD, _super);
-        function InputTabMD() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        InputTabMD.prototype.render = function () {
-            var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, other = tslib.__rest(_a, ["allowFilteredHtml"]);
-            return (React.createElement(wrapper, null,
-                allowFilteredHtml && (React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text.")),
-                React.createElement(reactstrap.Input, tslib.__assign({ type: "textarea" }, other))));
-        };
-        return InputTabMD;
-    }(React.PureComponent));
+    var InputTabMD = function (props) {
+        var allowFilteredHtml = props.allowFilteredHtml, other = tslib.__rest(props, ["allowFilteredHtml"]);
+        return (React.createElement(InputWrapper, null,
+            allowFilteredHtml && (React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text.")),
+            React.createElement(reactstrap.Input, tslib.__assign({ type: "textarea" }, other))));
+    };
+    var InputTab = React.memo(InputTabMD);
 
     var immutable = extend;
 
@@ -10961,73 +10956,70 @@
         return FormattedText;
     }(React.PureComponent));
 
-    var PreviewTabMD = (function (_super) {
-        tslib.__extends(PreviewTabMD, _super);
-        function PreviewTabMD() {
-            return _super !== null && _super.apply(this, arguments) || this;
+    var PreviewTabMD = function (props) {
+        var allowFilteredHtml = props.allowFilteredHtml, value = props.value;
+        if (typeof value !== 'string') {
+            return React.createElement(InputWrapper, null, "-");
         }
-        PreviewTabMD.prototype.shouldComponentUpdate = function (newProps) {
-            if (newProps.skipRender)
-                return false;
-            var _a = this.props, value = _a.value, allowFilteredHtml = _a.allowFilteredHtml;
-            if (newProps.value !== value ||
-                newProps.allowFilteredHtml !== allowFilteredHtml) {
-                return true;
-            }
+        return (React.createElement(InputWrapper, null,
+            React.createElement(FormattedText, { value: value, allowFilteredHtml: allowFilteredHtml })));
+    };
+    var PreviewTab = React.memo(PreviewTabMD, function (prevProps, newProps) {
+        if (newProps.skipRender)
             return false;
-        };
-        PreviewTabMD.prototype.render = function () {
-            var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, value = _a.value;
-            return (React.createElement(wrapper, null,
-                React.createElement(FormattedText, { value: value, allowFilteredHtml: allowFilteredHtml })));
-        };
-        return PreviewTabMD;
-    }(React.Component));
-
-    var MdTextarea = (function (_super) {
-        tslib.__extends(MdTextarea, _super);
-        function MdTextarea() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.state = {
-                showEdit: true,
-            };
-            _this.handleToggle = function () { return _this.toggle(); };
-            _this.activateEdit = function () { return _this.toggle(true); };
-            _this.deActivateEdit = function () { return _this.toggle(false); };
-            return _this;
+        var value = prevProps.value, allowFilteredHtml = prevProps.allowFilteredHtml;
+        if (newProps.value !== value ||
+            newProps.allowFilteredHtml !== allowFilteredHtml) {
+            return true;
         }
-        MdTextarea.prototype.toggle = function (show) {
-            if (show === void 0) { show = !this.state.showEdit; }
-            this.setState({ showEdit: show });
-        };
-        MdTextarea.prototype.render = function () {
-            var _a = this.props, id = _a.id, value = _a.value, toggle = _a.toggle, allowFilteredHtml = _a.allowFilteredHtml, rows = _a.rows, cols = _a.cols, onChange = _a.onChange, onFocus = _a.onFocus, onBlur = _a.onBlur, valid = _a.valid, invalid = _a.invalid, bsSize = _a.bsSize, name = _a.name, autoFocus = _a.autoFocus, disabled = _a.disabled, maxLength = _a.maxLength, readOnly = _a.readOnly, required = _a.required, wrap = _a.wrap;
-            var showEdit = this.state.showEdit;
-            return (React.createElement(React.Fragment, null,
-                React.createElement(reactstrap.Nav, { tabs: true, key: "Nav" },
-                    React.createElement(reactstrap.NavItem, null,
-                        React.createElement(reactstrap.NavLink, { active: showEdit, onClick: toggle ? this.handleToggle : this.activateEdit }, "Edit")),
-                    React.createElement(reactstrap.NavItem, null,
-                        React.createElement(reactstrap.NavLink, { active: !showEdit, onClick: toggle ? this.handleToggle : this.deActivateEdit }, "Preview"))),
-                React.createElement(reactstrap.TabContent, { key: "Content", id: "tabpane_" + id, activeTab: showEdit ? 'Edit' : 'Preview' },
-                    React.createElement(reactstrap.TabPane, { tabId: "Edit" },
-                        React.createElement(InputTabMD, tslib.__assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
-                    React.createElement(reactstrap.TabPane, { tabId: "Preview" },
-                        React.createElement(PreviewTabMD, { allowFilteredHtml: allowFilteredHtml, value: value, skipRender: !showEdit })))));
-        };
-        MdTextarea.prototype.getFilteredValue = function () {
-            var _a = this.props, value = _a.value, whiteList = _a.whiteList;
-            return FormattedText.filterXss({ value: value, whiteList: whiteList });
-        };
-        MdTextarea.defaultProps = {
-            allowFilteredHtml: false,
-            id: 'unknown_markdown_id',
-        };
-        return MdTextarea;
-    }(React.PureComponent));
+        return false;
+    });
+
+    var MdTextarea = function (props) {
+        var _a = props.id, id = _a === void 0 ? 'unknown_markdown_id' : _a, value = props.value, toggle = props.toggle, _b = props.allowFilteredHtml, allowFilteredHtml = _b === void 0 ? false : _b, rows = props.rows, cols = props.cols, onChange = props.onChange, onFocus = props.onFocus, onBlur = props.onBlur, valid = props.valid, invalid = props.invalid, bsSize = props.bsSize, name = props.name, autoFocus = props.autoFocus, disabled = props.disabled, maxLength = props.maxLength, readOnly = props.readOnly, required = props.required, wrap = props.wrap, whiteList = props.whiteList, filteredValue = props.filteredValue;
+        var _c = React.useState(true), showEdit = _c[0], setShowEdit = _c[1];
+        var onEditClick = React.useCallback(function () {
+            if (toggle) {
+                setShowEdit(!showEdit);
+            }
+            else {
+                setShowEdit(true);
+            }
+        }, [showEdit]);
+        var onPreviewClick = React.useCallback(function () {
+            if (toggle) {
+                setShowEdit(!showEdit);
+            }
+            else {
+                setShowEdit(false);
+            }
+        }, [showEdit]);
+        React.useEffect(function () {
+            if (!filteredValue) {
+                return;
+            }
+            if (typeof value !== 'string') {
+                filteredValue.current = undefined;
+                return;
+            }
+            filteredValue.current = FormattedText.filterXss({ value: value, whiteList: whiteList });
+        }, [value, whiteList]);
+        return (React.createElement(React.Fragment, null,
+            React.createElement(reactstrap.Nav, { tabs: true, key: "Nav" },
+                React.createElement(reactstrap.NavItem, null,
+                    React.createElement(reactstrap.NavLink, { active: showEdit, onClick: onEditClick }, "Edit")),
+                React.createElement(reactstrap.NavItem, null,
+                    React.createElement(reactstrap.NavLink, { active: !showEdit, onClick: onPreviewClick }, "Preview"))),
+            React.createElement(reactstrap.TabContent, { key: "Content", id: "tabpane_" + id, activeTab: showEdit ? 'Edit' : 'Preview' },
+                React.createElement(reactstrap.TabPane, { tabId: "Edit" },
+                    React.createElement(InputTab, tslib.__assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
+                React.createElement(reactstrap.TabPane, { tabId: "Preview" },
+                    React.createElement(PreviewTab, { allowFilteredHtml: allowFilteredHtml, value: value, skipRender: !showEdit })))));
+    };
+    var index$1 = React.memo(MdTextarea);
 
     exports.FormattedText = FormattedText;
-    exports.Textarea = MdTextarea;
+    exports.Textarea = index$1;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

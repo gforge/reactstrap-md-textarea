@@ -4,13 +4,11 @@ import { Card, CardHeader, CardBody } from 'reactstrap';
 
 import './App.css';
 
-const mdTxt =
-  `## Markdown input
+const mdTxt = `## Markdown input
 Yeah, everything one could ever dream of!
 `;
 
-const htmlTxt =
-  `<h3>Pure html input</h3>
+const htmlTxt = `<h3>Pure html input</h3>
 
 <p>Yeah, everything one could ever dream of!</p>
 
@@ -38,7 +36,6 @@ class App extends React.Component {
           <h1 className="App-title">Test for reactstrap-md-textarea</h1>
         </header>
         <article>
-
           <h1>Some textarea examples</h1>
 
           <Card>
@@ -76,7 +73,8 @@ class App extends React.Component {
                 toggle={true}
               />
               <p>
-                Note that the <code>allowFilteredHtml</code> must be set for the html to be parsed.
+                Note that the <code>allowFilteredHtml</code> must be set for the
+                html to be parsed.
               </p>
             </CardBody>
           </Card>
@@ -85,7 +83,9 @@ class App extends React.Component {
           <h1>The filtered output from the html</h1>
 
           <Card>
-            <CardHeader>Pure output from <code>FormattedText.filterXss</code></CardHeader>
+            <CardHeader>
+              Pure output from <code>FormattedText.filterXss</code>
+            </CardHeader>
             <CardBody>
               <code>
                 <pre>
@@ -99,13 +99,18 @@ class App extends React.Component {
           <Card>
             <CardHeader>The FormattedText component</CardHeader>
             <CardBody>
-              <FormattedText value={this.state.htmlTxt} allowFilteredHtml={true} />
+              <FormattedText
+                value={this.state.htmlTxt}
+                allowFilteredHtml={true}
+              />
             </CardBody>
           </Card>
 
           <br />
           <Card>
-            <CardHeader>The FormattedText component without allowFilteredHtml</CardHeader>
+            <CardHeader>
+              The FormattedText component without allowFilteredHtml
+            </CardHeader>
             <CardBody>
               <FormattedText value={this.state.mdTxt} />
             </CardBody>

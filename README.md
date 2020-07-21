@@ -56,5 +56,6 @@ import { FormattedText } from 'reactstrap-md-textarea';
 
 ## Changelog
 
-2.0.0 Dropped pure input type. The component should only be used when markdown output
-has been requested.
+3.0.0 Changed to React 16.8+ with hooks. Dropped the getFilteredValue in favor of a reference filteredValue.
+
+2.0.0 Dropped pure input type. The component should only be used when markdown output has been requested.
