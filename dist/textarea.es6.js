@@ -44,7 +44,7 @@ var FormattedText = (function (_super) {
             ],
         } : _b;
         var options = {
-            whiteList: __assign({}, getDefaultWhiteList(), whiteList),
+            whiteList: __assign(__assign({}, getDefaultWhiteList()), whiteList),
             stripIgnoreTagBody: ['script'],
         };
         return filterXSS(value, options);

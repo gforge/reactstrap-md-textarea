@@ -4,7 +4,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var tslib_1 = require('tslib');
+var tslib = require('tslib');
 var React = require('react');
 var reactstrap = require('reactstrap');
 var ReactMarkdown = _interopDefault(require('react-markdown'));
@@ -12,25 +12,25 @@ var xss = require('xss');
 
 var wrapper = function (_a) {
     var children = _a.children, _b = _a.style, style = _b === void 0 ? {} : _b;
-    return (React.createElement("div", { style: tslib_1.__assign({ border: '1px solid #ddd', borderTop: '0px', borderRadius: '5px', borderTopLeftRadius: '0px', borderTopRightRadius: '0px', padding: '10px', backgroundColor: '#fff', textAlign: 'left' }, style) }, children));
+    return (React.createElement("div", { style: tslib.__assign({ border: '1px solid #ddd', borderTop: '0px', borderRadius: '5px', borderTopLeftRadius: '0px', borderTopRightRadius: '0px', padding: '10px', backgroundColor: '#fff', textAlign: 'left' }, style) }, children));
 };
 
 var InputTabMD = (function (_super) {
-    tslib_1.__extends(InputTabMD, _super);
+    tslib.__extends(InputTabMD, _super);
     function InputTabMD() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     InputTabMD.prototype.render = function () {
-        var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, other = tslib_1.__rest(_a, ["allowFilteredHtml"]);
+        var _a = this.props, allowFilteredHtml = _a.allowFilteredHtml, other = tslib.__rest(_a, ["allowFilteredHtml"]);
         return (React.createElement(wrapper, null,
             allowFilteredHtml && (React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text.")),
-            React.createElement(reactstrap.Input, tslib_1.__assign({ type: "textarea" }, other))));
+            React.createElement(reactstrap.Input, tslib.__assign({ type: "textarea" }, other))));
     };
     return InputTabMD;
 }(React.PureComponent));
 
 var FormattedText = (function (_super) {
-    tslib_1.__extends(FormattedText, _super);
+    tslib.__extends(FormattedText, _super);
     function FormattedText() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -50,7 +50,7 @@ var FormattedText = (function (_super) {
             ],
         } : _b;
         var options = {
-            whiteList: tslib_1.__assign({}, xss.getDefaultWhiteList(), whiteList),
+            whiteList: tslib.__assign(tslib.__assign({}, xss.getDefaultWhiteList()), whiteList),
             stripIgnoreTagBody: ['script'],
         };
         return xss.filterXSS(value, options);
@@ -69,7 +69,7 @@ var FormattedText = (function (_super) {
 }(React.PureComponent));
 
 var PreviewTabMD = (function (_super) {
-    tslib_1.__extends(PreviewTabMD, _super);
+    tslib.__extends(PreviewTabMD, _super);
     function PreviewTabMD() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -92,7 +92,7 @@ var PreviewTabMD = (function (_super) {
 }(React.Component));
 
 var MdTextarea = (function (_super) {
-    tslib_1.__extends(MdTextarea, _super);
+    tslib.__extends(MdTextarea, _super);
     function MdTextarea() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
@@ -118,7 +118,7 @@ var MdTextarea = (function (_super) {
                     React.createElement(reactstrap.NavLink, { active: !showEdit, onClick: toggle ? this.handleToggle : this.deActivateEdit }, "Preview"))),
             React.createElement(reactstrap.TabContent, { key: "Content", id: "tabpane_" + id, activeTab: showEdit ? 'Edit' : 'Preview' },
                 React.createElement(reactstrap.TabPane, { tabId: "Edit" },
-                    React.createElement(InputTabMD, tslib_1.__assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
+                    React.createElement(InputTabMD, tslib.__assign({ allowFilteredHtml: allowFilteredHtml, value: value, rows: rows, cols: cols }, { onChange: onChange, onFocus: onFocus, onBlur: onBlur }, { valid: valid, name: name, invalid: invalid, bsSize: bsSize }, { autoFocus: autoFocus, disabled: disabled, maxLength: maxLength, readOnly: readOnly, required: required, wrap: wrap }))),
                 React.createElement(reactstrap.TabPane, { tabId: "Preview" },
                     React.createElement(PreviewTabMD, { allowFilteredHtml: allowFilteredHtml, value: value, skipRender: !showEdit })))));
     };

@@ -14,8 +14,8 @@ const shared = {
 };
 
 const nodeResolver = nodeResolve({
-  jsnext: true,
-  main: true,
+  mainFields: ['jsnext:main', 'module', 'main'],
+  browser: true,
 });
 
 const commonJsResolver = commonjs({
