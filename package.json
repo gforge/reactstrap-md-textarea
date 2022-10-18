@@ -5,7 +5,6 @@
   "repository": "git@bitbucket.org:aixray/reactstap-md-textarea.git",
   "author": "Max Gordon <max@gforge.se>",
   "license": "MIT",
-  "private": false,
   "homepage": "https://gforge.github.io/reactstrap-md-textarea",
   "main": "dist/textarea.js",
   "module": "dist/textarea.es6.js",
@@ -89,5 +88,6 @@
       "examples/*"
     ],
     "delay": "2500"
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }

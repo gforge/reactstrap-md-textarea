@@ -67,3 +67,11 @@ yarn.lock
 
 demo/dist
 .cache
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
