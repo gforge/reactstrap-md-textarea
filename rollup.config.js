@@ -2,9 +2,7 @@ import filesize from 'rollup-plugin-filesize';
 import replace from 'rollup-plugin-replace';
 import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import sourceMaps from 'rollup-plugin-sourcemaps';
 import json from 'rollup-plugin-json';
-import { terser } from 'rollup-plugin-terser';
 import builtins from 'rollup-plugin-node-builtins';
 import pkg from './package.json';
 
@@ -70,19 +68,7 @@ export default [
           process.env.NODE_ENV || 'development'
         ),
       }),
-      sourceMaps(),
       process.env.NODE_ENV === 'production' && filesize(),
-      process.env.NODE_ENV === 'production' &&
-        terser({
-          output: { comments: false },
-          compress: {
-            keep_infinity: true,
-            pure_getters: true,
-          },
-          warnings: true,
-          ecma: 6,
-          toplevel: false,
-        }),
     ],
   }),
 
@@ -104,7 +90,6 @@ export default [
     ],
     plugins: [
       ...sharedPlugins,
-      sourceMaps(),
       process.env.NODE_ENV === 'production' && filesize(),
     ],
   }),
