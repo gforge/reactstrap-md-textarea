@@ -10,6 +10,10 @@
   "main": "dist/textarea.js",
   "module": "dist/textarea.es6.js",
   "typings": "dist/index.d.ts",
+  "targets": {
+   "main": false,
+   "module": false
+  },
   "files": [
     "dist"
   ],
