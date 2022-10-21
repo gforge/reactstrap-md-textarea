@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { default as ReactMarkdown } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import { filterXSS as xss, getDefaultWhiteList } from 'xss';
 
 export interface FilterInput {
@@ -47,9 +47,10 @@ export default class FormattedText extends React.PureComponent<Props> {
 
     if (allowFilteredHtml && value.indexOf('<') === 0) {
       const filteredContent = FormattedText.filterXss({ value, whiteList });
+      // eslint-disable-next-line react/no-danger
       return <div dangerouslySetInnerHTML={{ __html: filteredContent }} />;
     }
 
-    return <ReactMarkdown source={value} escapeHtml={false} />;
+    return <ReactMarkdown skipHtml={false}>{value}</ReactMarkdown>;
   }
 }

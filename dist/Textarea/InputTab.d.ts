@@ -3,5 +3,6 @@ import { InputProps } from 'reactstrap';
 export interface InputMdProps extends InputProps {
     allowFilteredHtml: boolean | undefined;
 }
-declare const _default: React.MemoExoticComponent<(props: InputMdProps) => JSX.Element>;
+declare function InputTabMD(props: InputMdProps): JSX.Element;
+declare const _default: React.MemoExoticComponent<typeof InputTabMD>;
 export default _default;
