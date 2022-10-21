@@ -58,7 +58,7 @@ import { FormattedText } from 'reactstrap-md-textarea';
 
 ### 3.1.0
 
-- Updated to React 18
+- Updated to React 18 and other dependencies
 - Dropped Flow support
 - Moved to eslint setup
 

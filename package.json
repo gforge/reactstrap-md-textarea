@@ -73,7 +73,7 @@
     "eslint-config-airbnb": "*",
     "react": "17.x || 18.x",
     "react-dom": "17.x || 18.x",
-    "reactstrap": "7.x || 8.x"
+    "reactstrap": "7.x || 8.x || 9.x"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
