@@ -44731,37 +44731,11 @@ var wrapper = function wrapper(_a) {
   }, children);
 };
 
-exports.default = wrapper;
+exports.default = React.memo(wrapper);
 },{"react":"../node_modules/react/index.js"}],"../src/Textarea/InputTab.tsx":[function(require,module,exports) {
 "use strict";
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-var __extends = this && this.__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -44826,29 +44800,16 @@ var reactstrap_1 = require("reactstrap");
 
 var InputWrapper_1 = __importDefault(require("./InputWrapper"));
 
-var InputTabMD =
-/** @class */
-function (_super) {
-  __extends(InputTabMD, _super);
+var InputTabMD = function InputTabMD(props) {
+  var allowFilteredHtml = props.allowFilteredHtml,
+      other = __rest(props, ["allowFilteredHtml"]);
 
-  function InputTabMD() {
-    return _super !== null && _super.apply(this, arguments) || this;
-  }
+  return /*#__PURE__*/React.createElement(InputWrapper_1.default, null, allowFilteredHtml && /*#__PURE__*/React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text."), /*#__PURE__*/React.createElement(reactstrap_1.Input, _extends({
+    type: "textarea"
+  }, other)));
+};
 
-  InputTabMD.prototype.render = function () {
-    var _a = this.props,
-        allowFilteredHtml = _a.allowFilteredHtml,
-        other = __rest(_a, ["allowFilteredHtml"]);
-
-    return /*#__PURE__*/React.createElement(InputWrapper_1.default, null, allowFilteredHtml && /*#__PURE__*/React.createElement("p", null, "You can input markdown or html (start with < to indicate html) for styling the text."), /*#__PURE__*/React.createElement(reactstrap_1.Input, _extends({
-      type: "textarea"
-    }, other)));
-  };
-
-  return InputTabMD;
-}(React.PureComponent);
-
-exports.default = InputTabMD;
+exports.default = React.memo(InputTabMD);
 },{"react":"../node_modules/react/index.js","reactstrap":"../node_modules/reactstrap/es/index.js","./InputWrapper":"../src/Textarea/InputWrapper.tsx"}],"../node_modules/xtend/immutable.js":[function(require,module,exports) {
 module.exports = extend;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -55327,32 +55288,6 @@ exports.default = FormattedText;
 },{"react":"../node_modules/react/index.js","react-markdown":"../node_modules/react-markdown/lib/react-markdown.js","xss":"../node_modules/xss/lib/index.js"}],"../src/Textarea/PreviewTab.tsx":[function(require,module,exports) {
 "use strict";
 
-var __extends = this && this.__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
-
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
   Object.defineProperty(o, k2, {
@@ -55403,72 +55338,35 @@ var InputWrapper_1 = __importDefault(require("./InputWrapper"));
 
 var FormattedText_1 = __importDefault(require("../FormattedText"));
 
-var PreviewTabMD =
-/** @class */
-function (_super) {
-  __extends(PreviewTabMD, _super);
+var PreviewTabMD = function PreviewTabMD(props) {
+  var allowFilteredHtml = props.allowFilteredHtml,
+      value = props.value;
 
-  function PreviewTabMD() {
-    return _super !== null && _super.apply(this, arguments) || this;
+  if (typeof value !== 'string') {
+    return /*#__PURE__*/React.createElement(InputWrapper_1.default, null, "-");
   }
 
-  PreviewTabMD.prototype.shouldComponentUpdate = function (newProps) {
-    if (newProps.skipRender) return false;
-    var _a = this.props,
-        value = _a.value,
-        allowFilteredHtml = _a.allowFilteredHtml;
+  return /*#__PURE__*/React.createElement(InputWrapper_1.default, null, /*#__PURE__*/React.createElement(FormattedText_1.default, {
+    value: value,
+    allowFilteredHtml: allowFilteredHtml
+  }));
+};
 
-    if (newProps.value !== value || newProps.allowFilteredHtml !== allowFilteredHtml) {
-      return true;
-    }
+exports.default = React.memo(PreviewTabMD, function (prevProps, newProps) {
+  if (newProps.skipRender) return false;
+  var value = prevProps.value,
+      allowFilteredHtml = prevProps.allowFilteredHtml;
 
-    return false;
-  };
+  if (newProps.value !== value || newProps.allowFilteredHtml !== allowFilteredHtml) {
+    return true;
+  }
 
-  PreviewTabMD.prototype.render = function () {
-    var _a = this.props,
-        allowFilteredHtml = _a.allowFilteredHtml,
-        value = _a.value;
-    return /*#__PURE__*/React.createElement(InputWrapper_1.default, null, /*#__PURE__*/React.createElement(FormattedText_1.default, {
-      value: value,
-      allowFilteredHtml: allowFilteredHtml
-    }));
-  };
-
-  return PreviewTabMD;
-}(React.Component);
-
-exports.default = PreviewTabMD;
+  return false;
+});
 },{"react":"../node_modules/react/index.js","./InputWrapper":"../src/Textarea/InputWrapper.tsx","../FormattedText":"../src/FormattedText.tsx"}],"../src/Textarea/index.tsx":[function(require,module,exports) {
 "use strict";
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-var __extends = this && this.__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -55524,128 +55422,110 @@ var PreviewTab_1 = __importDefault(require("./PreviewTab"));
 
 var FormattedText_1 = __importDefault(require("../FormattedText"));
 
-var MdTextarea =
-/** @class */
-function (_super) {
-  __extends(MdTextarea, _super);
+var MdTextarea = function MdTextarea(props) {
+  var _a = props.id,
+      id = _a === void 0 ? 'unknown_markdown_id' : _a,
+      value = props.value,
+      toggle = props.toggle,
+      _b = props.allowFilteredHtml,
+      allowFilteredHtml = _b === void 0 ? false : _b,
+      rows = props.rows,
+      cols = props.cols,
+      onChange = props.onChange,
+      onFocus = props.onFocus,
+      onBlur = props.onBlur,
+      valid = props.valid,
+      invalid = props.invalid,
+      bsSize = props.bsSize,
+      name = props.name,
+      autoFocus = props.autoFocus,
+      disabled = props.disabled,
+      maxLength = props.maxLength,
+      readOnly = props.readOnly,
+      required = props.required,
+      wrap = props.wrap,
+      whiteList = props.whiteList,
+      filteredValue = props.filteredValue;
 
-  function MdTextarea() {
-    var _this = _super !== null && _super.apply(this, arguments) || this;
+  var _c = React.useState(true),
+      showEdit = _c[0],
+      setShowEdit = _c[1];
 
-    _this.state = {
-      showEdit: true
-    };
-
-    _this.handleToggle = function () {
-      return _this.toggle();
-    };
-
-    _this.activateEdit = function () {
-      return _this.toggle(true);
-    };
-
-    _this.deActivateEdit = function () {
-      return _this.toggle(false);
-    };
-
-    return _this;
-  }
-
-  MdTextarea.prototype.toggle = function (show) {
-    if (show === void 0) {
-      show = !this.state.showEdit;
+  var onEditClick = React.useCallback(function () {
+    if (toggle) {
+      setShowEdit(!showEdit);
+    } else {
+      setShowEdit(true);
+    }
+  }, [showEdit]);
+  var onPreviewClick = React.useCallback(function () {
+    if (toggle) {
+      setShowEdit(!showEdit);
+    } else {
+      setShowEdit(false);
+    }
+  }, [showEdit]);
+  React.useEffect(function () {
+    if (!filteredValue) {
+      return;
     }
 
-    this.setState({
-      showEdit: show
-    });
-  };
+    if (typeof value !== 'string') {
+      filteredValue.current = undefined;
+      return;
+    }
 
-  MdTextarea.prototype.render = function () {
-    var _a = this.props,
-        id = _a.id,
-        value = _a.value,
-        toggle = _a.toggle,
-        allowFilteredHtml = _a.allowFilteredHtml,
-        rows = _a.rows,
-        cols = _a.cols,
-        onChange = _a.onChange,
-        onFocus = _a.onFocus,
-        onBlur = _a.onBlur,
-        valid = _a.valid,
-        invalid = _a.invalid,
-        bsSize = _a.bsSize,
-        name = _a.name,
-        autoFocus = _a.autoFocus,
-        disabled = _a.disabled,
-        maxLength = _a.maxLength,
-        readOnly = _a.readOnly,
-        required = _a.required,
-        wrap = _a.wrap;
-    var showEdit = this.state.showEdit;
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(reactstrap_1.Nav, {
-      tabs: true,
-      key: "Nav"
-    }, /*#__PURE__*/React.createElement(reactstrap_1.NavItem, null, /*#__PURE__*/React.createElement(reactstrap_1.NavLink, {
-      active: showEdit,
-      onClick: toggle ? this.handleToggle : this.activateEdit
-    }, "Edit")), /*#__PURE__*/React.createElement(reactstrap_1.NavItem, null, /*#__PURE__*/React.createElement(reactstrap_1.NavLink, {
-      active: !showEdit,
-      onClick: toggle ? this.handleToggle : this.deActivateEdit
-    }, "Preview"))), /*#__PURE__*/React.createElement(reactstrap_1.TabContent, {
-      key: "Content",
-      id: "tabpane_" + id,
-      activeTab: showEdit ? 'Edit' : 'Preview'
-    }, /*#__PURE__*/React.createElement(reactstrap_1.TabPane, {
-      tabId: "Edit"
-    }, /*#__PURE__*/React.createElement(InputTab_1.default, _extends({
-      allowFilteredHtml: allowFilteredHtml,
-      value: value,
-      rows: rows,
-      cols: cols
-    }, {
-      onChange: onChange,
-      onFocus: onFocus,
-      onBlur: onBlur
-    }, {
-      valid: valid,
-      name: name,
-      invalid: invalid,
-      bsSize: bsSize
-    }, {
-      autoFocus: autoFocus,
-      disabled: disabled,
-      maxLength: maxLength,
-      readOnly: readOnly,
-      required: required,
-      wrap: wrap
-    }))), /*#__PURE__*/React.createElement(reactstrap_1.TabPane, {
-      tabId: "Preview"
-    }, /*#__PURE__*/React.createElement(PreviewTab_1.default, {
-      allowFilteredHtml: allowFilteredHtml,
-      value: value,
-      skipRender: !showEdit
-    }))));
-  };
-
-  MdTextarea.prototype.getFilteredValue = function () {
-    var _a = this.props,
-        value = _a.value,
-        whiteList = _a.whiteList;
-    return FormattedText_1.default.filterXss({
+    filteredValue.current = FormattedText_1.default.filterXss({
       value: value,
       whiteList: whiteList
     });
-  };
+  }, [value, whiteList]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(reactstrap_1.Nav, {
+    tabs: true,
+    key: "Nav"
+  }, /*#__PURE__*/React.createElement(reactstrap_1.NavItem, null, /*#__PURE__*/React.createElement(reactstrap_1.NavLink, {
+    active: showEdit,
+    onClick: onEditClick
+  }, "Edit")), /*#__PURE__*/React.createElement(reactstrap_1.NavItem, null, /*#__PURE__*/React.createElement(reactstrap_1.NavLink, {
+    active: !showEdit,
+    onClick: onPreviewClick
+  }, "Preview"))), /*#__PURE__*/React.createElement(reactstrap_1.TabContent, {
+    key: "Content",
+    id: "tabpane_" + id,
+    activeTab: showEdit ? 'Edit' : 'Preview'
+  }, /*#__PURE__*/React.createElement(reactstrap_1.TabPane, {
+    tabId: "Edit"
+  }, /*#__PURE__*/React.createElement(InputTab_1.default, _extends({
+    allowFilteredHtml: allowFilteredHtml,
+    value: value,
+    rows: rows,
+    cols: cols
+  }, {
+    onChange: onChange,
+    onFocus: onFocus,
+    onBlur: onBlur
+  }, {
+    valid: valid,
+    name: name,
+    invalid: invalid,
+    bsSize: bsSize
+  }, {
+    autoFocus: autoFocus,
+    disabled: disabled,
+    maxLength: maxLength,
+    readOnly: readOnly,
+    required: required,
+    wrap: wrap
+  }))), /*#__PURE__*/React.createElement(reactstrap_1.TabPane, {
+    tabId: "Preview"
+  }, /*#__PURE__*/React.createElement(PreviewTab_1.default, {
+    allowFilteredHtml: allowFilteredHtml,
+    value: value,
+    skipRender: !showEdit
+  }))));
+};
 
-  MdTextarea.defaultProps = {
-    allowFilteredHtml: false,
-    id: 'unknown_markdown_id'
-  };
-  return MdTextarea;
-}(React.PureComponent);
-
-exports.default = MdTextarea;
+exports.default = React.memo(MdTextarea);
 },{"react":"../node_modules/react/index.js","reactstrap":"../node_modules/reactstrap/es/index.js","./InputTab":"../src/Textarea/InputTab.tsx","./PreviewTab":"../src/Textarea/PreviewTab.tsx","../FormattedText":"../src/FormattedText.tsx"}],"../src/index.tsx":[function(require,module,exports) {
 "use strict";
 
@@ -55664,7 +55544,7 @@ Object.defineProperty(exports, "Textarea", {
 Object.defineProperty(exports, "TextareaProps", {
   enumerable: true,
   get: function get() {
-    return Textarea_1.Props;
+    return Textarea_1.TextareaProps;
   }
 });
 
@@ -55918,7 +55798,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35795" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43265" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
