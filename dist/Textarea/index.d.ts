@@ -11,5 +11,6 @@ export interface TextareaProps extends InputProps {
     };
     filteredValue?: React.MutableRefObject<string | undefined>;
 }
-declare const _default: React.MemoExoticComponent<(props: TextareaProps) => JSX.Element>;
+declare function MdTextarea(props: TextareaProps): JSX.Element;
+declare const _default: React.MemoExoticComponent<typeof MdTextarea>;
 export default _default;

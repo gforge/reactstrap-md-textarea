@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 import InputTab from './InputTab';
 import PreviewTab from './PreviewTab';
-import { default as FormattedText } from '../FormattedText';
+import FormattedText from '../FormattedText';
 
 export interface State {
   showEdit: boolean;
@@ -22,7 +22,7 @@ export interface TextareaProps extends InputProps {
   filteredValue?: React.MutableRefObject<string | undefined>;
 }
 
-const MdTextarea = (props: TextareaProps) => {
+function MdTextarea(props: TextareaProps) {
   const {
     id = 'unknown_markdown_id',
     value,
@@ -77,7 +77,7 @@ const MdTextarea = (props: TextareaProps) => {
 
   return (
     <>
-      <Nav tabs={true} key="Nav">
+      <Nav tabs key="Nav">
         <NavItem>
           <NavLink active={showEdit} onClick={onEditClick}>
             Edit
@@ -101,8 +101,20 @@ const MdTextarea = (props: TextareaProps) => {
             rows={rows}
             cols={cols}
             {...{ onChange, onFocus, onBlur }}
-            {...{ valid, name, invalid, bsSize }}
-            {...{ autoFocus, disabled, maxLength, readOnly, required, wrap }}
+            {...{
+              valid,
+              name,
+              invalid,
+              bsSize,
+            }}
+            {...{
+              autoFocus,
+              disabled,
+              maxLength,
+              readOnly,
+              required,
+              wrap,
+            }}
           />
         </TabPane>
         <TabPane tabId="Preview">
@@ -115,6 +127,6 @@ const MdTextarea = (props: TextareaProps) => {
       </TabContent>
     </>
   );
-};
+}
 
 export default React.memo(MdTextarea);

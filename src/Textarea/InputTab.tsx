@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import { Input, InputProps } from 'reactstrap';
 import InputWrapper from './InputWrapper';
@@ -6,7 +7,7 @@ export interface InputMdProps extends InputProps {
   allowFilteredHtml: boolean | undefined;
 }
 
-const InputTabMD = (props: InputMdProps) => {
+function InputTabMD(props: InputMdProps) {
   const { allowFilteredHtml, ...other } = props;
 
   return (
@@ -20,6 +21,6 @@ const InputTabMD = (props: InputMdProps) => {
       <Input type="textarea" {...other} />
     </InputWrapper>
   );
-};
+}
 
 export default React.memo(InputTabMD);

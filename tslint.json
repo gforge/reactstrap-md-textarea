@@ -1,8 +1,0 @@
-{
-  "extends": ["tslint-react", "tslint-config-airbnb", "tslint-config-prettier"],
-  "rules": {
-    "jsx-no-multiline-js": false,
-    "jsx-no-lambda": false,
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
-  }
-}
